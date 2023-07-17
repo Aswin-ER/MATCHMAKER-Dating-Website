@@ -1,13 +1,14 @@
-import  React,{FC} from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { FC } from 'react';
+import ProtectedPage from '../Components/Navbar/protectedPage';
 
- const Home:FC = ()=> {
+const Home: FC = () => {
 
   return (
     <div>
-       <h1>Welcome to React System</h1>
+     <ProtectedPage/>
     </div>
   );
-}
+};
 
 export default Home;
-
