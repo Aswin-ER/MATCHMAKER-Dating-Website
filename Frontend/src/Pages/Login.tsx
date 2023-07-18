@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axiosInstance';
+import { userBaseUrl } from '../utils/Const';
+import GoogleButton from 'react-google-button';
 
 const Login: FC = () => {
 
@@ -58,6 +62,10 @@ const Login: FC = () => {
       }
     }, [emailErr,passErr]);
 
+    const googleAuth = ()=> {
+      window.open(`${userBaseUrl}/auth/google/callback`, '_self');
+      
+    }
 
   return (
 
@@ -66,7 +74,7 @@ const Login: FC = () => {
         MATCH<span className="text-3xl md:text-5xl font-bold text-center text-pink-700 mt-6 md:mt-16">MAKER</span>
       </h1>
       <div className="container md:w-8/12 lg:w-6/12 xl:w-4/12 mx-auto px-4 mt-6 md:mt-16 bg-pink-100 p-8 rounded-lg shadow-lg">
-        <h1 className="text-2xl md:text-4xl font-semibold text-center text-pink-700 underline decoration-solid uppercase mb-10">
+        <h1 className="text-2xl md:text-4xl font-semibold text-center text-pink-700 underline decoration-solid uppercase">
           Sign in
         </h1>
         <form className="flex flex-col items-center">
@@ -74,7 +82,7 @@ const Login: FC = () => {
             <label htmlFor='email' className="block text-base md:text-lg font-medium text-gray-800 mb-2">Email</label>
             <input
               type="email"
-              className="block w-full px-4 py-2 mt-1 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full px-4 py-2 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
               value={email}
               onChange={(e)=> setEmail(e.target.value)}
               name='email'
@@ -85,7 +93,7 @@ const Login: FC = () => {
             <label htmlFor='password' className="block text-base md:text-lg font-medium text-gray-800 mb-2">Password</label>
             <input
               type="password"
-              className="block w-full px-4 py-2 mt-1 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full px-4 py-2 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
               value={password}
               onChange={(e)=> setPassword(e.target.value)}
               name='password'
@@ -99,9 +107,13 @@ const Login: FC = () => {
           <div className="w-1/2 mt-5">
           <div className='text-base text-center mb-4 font-semibold text-red-700'>{emailErr ? emailErr : ""}</div>
           <div className='text-base text-center mb-4 font-semibold text-red-700'>{passErr ? passErr : ""}</div>
-            <button type='button' onClick={handleClick} className="w-full px-6 py-3 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
+            <button type='button' onClick={handleClick} className="w-full px-1 py-2 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
               Login
             </button>
+            <p className='text-lg text-center py-3'>OR</p>
+            <GoogleButton onClick={googleAuth} className='ml-1'>
+              Signin With Google
+            </GoogleButton>
           </div>
         </form>
         <p className="mt-6 text-sm md:text-base text-center text-gray-700">

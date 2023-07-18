@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 module.exports = {
 
     signup: async (req, res) => {
-
         const { name, email, password } = req.body;
     
         try {
@@ -66,7 +65,6 @@ module.exports = {
     },
 
     getUser: async (req, res) => {
-        
       console.log("working....", req.body.userId);
 
       try {
@@ -84,7 +82,6 @@ module.exports = {
           })
       }
   },
-  
 
 }
 

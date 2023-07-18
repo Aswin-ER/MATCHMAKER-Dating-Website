@@ -30,7 +30,7 @@ import { Link } from 'react-router-dom';
           </div> */}
 
           <div className="w-1/2">
-            <button className="w-full px-6 py-3 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
+            <button className="w-full px-1 py-2 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
               Send
             </button>
           </div>

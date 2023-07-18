@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React,{FC, useEffect, useState} from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance } from '../../api/axiosInstance';
 import { UserCred, userDet } from '../../Redux/slice';
@@ -10,7 +11,6 @@ import RootState from '../../Redux/rootState';
 const ProtectedPage:FC = ()=> {
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -137,8 +137,7 @@ const ProtectedPage:FC = ()=> {
                 >
                   Logout
                 </a>
-                
-                : 
+                :
                 <Link to={'/login'}> <a
                   href="#"
                   className="block py-2 pl-3 pr-4 md:text-lg text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-pink-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
