@@ -1,8 +1,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import  React,{FC} from 'react';
+import  React,{FC, useState} from 'react';
 import { Link } from 'react-router-dom';
+import { axiosInstance } from '../api/axiosInstance';
 
  const Forgot:FC = ()=> {
+
+  const [email, setEmail] = useState<string>('');
+
+  const handleClick = ()=> {
+
+    axiosInstance.post('/password', { email: email }).then((res)=> {
+      console.log(res,"email response")
+    }).catch((err)=> {
+      console.log(err,"Email error");
+      
+    })
+  }
 
   return (
     <div>
@@ -15,10 +28,14 @@ import { Link } from 'react-router-dom';
         </h1>
         <form className="flex flex-col items-center">
           <div className="mb-6 w-4/5">
-            <label className="block text-base md:text-lg font-medium text-gray-800 mb-2">Email</label>
+            <label htmlFor='email' className="block text-base md:text-lg font-medium text-gray-800 mb-2">Email</label>
             <input
               type="email"
               className="block w-full px-4 py-2 mt-1 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              value={email}
+              onChange={(e)=> setEmail(e.target.value)}
+              name='email'
+              id='email'
             />
           </div>
           {/* <div className="mb-6 w-full">
@@ -30,7 +47,7 @@ import { Link } from 'react-router-dom';
           </div> */}
 
           <div className="w-1/2">
-            <button className="w-full px-1 py-2 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
+            <button className="w-full px-1 py-2 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600" onClick={handleClick} type='button'>
               Send
             </button>
           </div>

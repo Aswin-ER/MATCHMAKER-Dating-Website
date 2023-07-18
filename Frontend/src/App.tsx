@@ -5,6 +5,7 @@ import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import Home from './Pages/Home';
 import Forgot from './Pages/Forgot';
+import NewPass from './Pages/NewPass';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
     <Route path='/signUp' element={<SignUp/>}></Route>
     <Route path='/login' element={<Login/>}></Route>
     <Route path='/forgot' element={<Forgot/>}></Route>
+    <Route path="/password-reset/:userId/:token" Component={NewPass} />
    </Routes>
    </BrowserRouter>
    </>

@@ -5,8 +5,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axiosInstance';
 import { userBaseUrl } from '../utils/Const';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-
+import { GoogleOAuthProvider, GoogleLogin  } from '@react-oauth/google';
 
 
 const SignUp: FC = () => {
@@ -97,19 +96,27 @@ const SignUp: FC = () => {
             </button>
             <p className='text-lg text-center py-3'>OR</p>
 
-            <GoogleLogin
+            <GoogleLogin 
               onSuccess={credentialResponse => {
                 axiosInstance.post('/google', credentialResponse).then((res)=> {
                   console.log(res,"loged in");
+                  navigate('/login')
                   
                 }).catch((err)=> {
                   console.log("login error");
-                  
+                  setErr(err)
                 })
               }}
               onError={() => {
-                console.log('Login Failed');
+                console.log('');
+                setErr("Login Failed")
               }}
+              type='standard'
+              theme='filled_black'
+              size='large'
+              text='continue_with'
+              shape='square'
+              width='265'
             />
 
           </div>

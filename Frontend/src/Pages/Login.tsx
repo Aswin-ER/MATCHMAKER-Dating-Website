@@ -4,8 +4,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axiosInstance';
-import { userBaseUrl } from '../utils/Const';
-import GoogleButton from 'react-google-button';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const Login: FC = () => {
 
@@ -62,13 +61,11 @@ const Login: FC = () => {
       }
     }, [emailErr,passErr]);
 
-    const googleAuth = ()=> {
-      window.open(`${userBaseUrl}/auth/google/callback`, '_self');
-      
-    }
+    
 
   return (
 
+    <GoogleOAuthProvider clientId="684475057007-2abci7ht9ppi3313g5duloq7um38qlp3.apps.googleusercontent.com" >
     <div>
       <h1 className="text-3xl md:text-5xl font-bold text-center mt-10">
         MATCH<span className="text-3xl md:text-5xl font-bold text-center text-pink-700 mt-6 md:mt-16">MAKER</span>
@@ -111,9 +108,34 @@ const Login: FC = () => {
               Login
             </button>
             <p className='text-lg text-center py-3'>OR</p>
-            <GoogleButton onClick={googleAuth} className='ml-1'>
-              Signin With Google
-            </GoogleButton>
+
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                axiosInstance.post('/google/login', credentialResponse).then((res)=> {
+                  if(res.data.success){
+                    localStorage.setItem('jwtToken', JSON.stringify(res.data.token));
+                    window.location.href ='/'
+                  }else{
+                    navigate('/signUp');
+                  }
+                  
+                }).catch((err)=> {
+                  console.log("login error");
+                  setemailErr("login error");
+                })
+              }}
+              onError={() => {
+                console.log('login error');
+                setemailErr("login error");
+              }}
+              type='standard'
+              theme='filled_black'
+              size='medium'
+              text='continue_with'
+              shape='square'
+              width='265'
+            />
+            
           </div>
         </form>
         <p className="mt-6 text-sm md:text-base text-center text-gray-700">
@@ -126,6 +148,7 @@ const Login: FC = () => {
         </p>
       </div>
     </div>
+    </GoogleOAuthProvider>
   );
 };
 

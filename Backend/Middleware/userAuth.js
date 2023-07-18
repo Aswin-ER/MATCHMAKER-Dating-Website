@@ -1,25 +1,25 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-module.exports = (req, res, next)=> {
+const userAuth = (req, res, next) => {
+  try {
+    console.log(req.header('authorization'), "auth");
 
-    try {
-      console.log(req.header('authorization'),"auth");
+    let token = req.header('authorization').split(' ')[1];
+    token = token.replaceAll('"', '');
+    console.log("Token:", token);
 
-        let token = req.header('authorization').split(' ')[1];
-        token = token.replaceAll('"', '');
-        console.log("Token:", token);
-      
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(decodedToken,"decodedToken");
-        req.body.userId = decodedToken.userId;
-        console.log(req.body.userId);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decodedToken, "decodedToken");
+    req.body.userId = decodedToken.userId;
+    console.log(req.body.userId);
 
-        next();
+    next();
+  } catch (err) {
+    res.send({
+      success: false,
+      message: err.message
+    });
+  }
+};
 
-      } catch (err) {
-        res.send({
-          success: false,
-          message: err.message
-        });
-    }
-}
+export default userAuth;
