@@ -1,4 +1,12 @@
 {
+  "name": "matchmaker",
+  "version": "1.0.0",
+  "description": "Your project description",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+
   "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.0",

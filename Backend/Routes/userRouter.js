@@ -10,10 +10,15 @@ import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
+// Login and signup
 router.post('/signup', userControllers.signup);
 router.post('/login', userControllers.login);
+
+// HomePage
 router.get('/', userAuth, userControllers.getUser);
 
+
+//Login and Signup with Google Account
 router.post('/google', (req, res) => {
     console.log(req.body);
     const token = req.body.credential;
@@ -53,7 +58,7 @@ router.post('/google/login', async (req, res) => {
         } else {
             let token;
             token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
-            res.send({success: true, token: token})
+            res.status(200).send({success: true, token: token})
         }
     }catch (error) {
         console.error('Error during login:', error);
@@ -62,16 +67,18 @@ router.post('/google/login', async (req, res) => {
     });
 
 
-//Forgot password
+//Forgot password reset using email
 router.post("/password", async (req, res) => {
     try {
 
+       // Find the user based on the userId
         const user = await User.findOne({ email: req.body.email });
         console.log(user,"user here");
 
         if (!user)
             return res.status(400).send("user with given email doesn't exist");
-
+        
+         // Find the token associated with the user
         let token = await Token.findOne({ userId: user._id });
         console.log(token,"token here");
 
@@ -80,13 +87,16 @@ router.post("/password", async (req, res) => {
                 userId: user._id,
                 token: crypto.randomBytes(32).toString("hex"),
             }).save();
-            console.log(token,"token ethi da monu");
+            console.log(token,"token here");
         }
 
+        // url for the reset password
         const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
-        await sendEmail(user.email, "Password reset", link);
 
-        res.send("password reset link sent to your email account");
+        //Nodemailer function will be called
+        await sendEmail(user.email, "MATCHMAKER Password reset", link);
+
+        res.status(200).send("password reset link sent to your email account");
 
     } catch (error) {
         res.send("An error occured");
@@ -112,7 +122,7 @@ router.get("/password-reset/:userId/:token", async (req, res) => {
       if (!resetToken)
         return res.status(400).send("Invalid password reset link");
   
-      // Here you can render a form for the user to enter their new password
+      // Send the response to the server
       res.json({ userId, token });
   
     } catch (error) {
@@ -121,7 +131,7 @@ router.get("/password-reset/:userId/:token", async (req, res) => {
     }
   });
 
-  router.post("/password-reset", async (req, res) => {
+router.post("/password-reset", async (req, res) => {
     try {
       const { userId, token } = req.body;
 
@@ -155,7 +165,7 @@ router.get("/password-reset/:userId/:token", async (req, res) => {
       // Delete the used token
       await resetToken.deleteOne({ userId: user._id, token: token });
   
-      res.send("Password reset successful");
+      res.status(200).send("Password reset successful");
   
     } catch (error) {
       res.status(500).send("An error occurred");
@@ -163,7 +173,5 @@ router.get("/password-reset/:userId/:token", async (req, res) => {
     }
 
   });
-
-
 
 export default router;

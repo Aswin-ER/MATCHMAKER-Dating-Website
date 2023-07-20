@@ -22,7 +22,7 @@ const userController = {
       });
 
       console.log(newUser.name);
-      res.send({ message: 'User registered successfully' });
+      res.status(200).send({ message: 'User registered successfully' });
     } catch (error) {
       console.log(error);
       res.status(500).send({ error: 'Internal server error' });
@@ -42,7 +42,7 @@ const userController = {
           let token;
           token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-          res.send({ success: true, token: token });
+          res.status(200).send({ success: true, token: token });
         } else {
           res.send({ passErr: 'Invalid password' });
         }
@@ -60,7 +60,7 @@ const userController = {
     try {
       const user = await userModel.findById(req.body.userId);
       console.log(user);
-      res.send({
+      res.status(200).send({
         success: true,
         message: "user fetched success",
         data: user
@@ -73,5 +73,6 @@ const userController = {
     }
   }
 };
+
 
 export default userController;
