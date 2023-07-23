@@ -2,6 +2,7 @@
 import  React,{FC, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { axiosInstance } from '../api/axiosInstance';
+import { toast } from 'react-toastify';
 
  const Forgot:FC = ()=> {
 
@@ -10,8 +11,10 @@ import { axiosInstance } from '../api/axiosInstance';
   const handleClick = ()=> {
 
     axiosInstance.post('/password', { email: email }).then((res)=> {
+      toast.success('Email sent successfully');
       console.log(res,"email response")
     }).catch((err)=> {
+      toast.error('Invalid email')
       console.log(err,"Email error");
       
     })

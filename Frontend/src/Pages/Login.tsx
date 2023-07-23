@@ -5,10 +5,17 @@ import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../api/axiosInstance';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useSelector } from 'react-redux';
+import RootState from '../Redux/rootState';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as Yup from 'yup';
 
 const Login: FC = () => {
 
   const navigate = useNavigate();
+  const user: any = useSelector((state:RootState) => state.userCred.userCred?.name);
+  console.log(user,"user here");
 
   useEffect(()=> {
     if(localStorage.getItem('jwtToken')){
@@ -20,21 +27,36 @@ const Login: FC = () => {
     const [password, setPassword] = useState<string>('');
     const [emailErr, setemailErr] = useState<string>('');
     const [passErr, setpassErr] = useState<string>('');
+    const [err, setErr] = useState<string>('');
+
+    const validationSchema = Yup.object().shape({
+      email: Yup.string().email('Invalid email').required('Email is required'),
+      password: Yup.string().required('Password is required'),
+    });
 
     const handleClick = ()=> {
+
+      validationSchema.validate({ email, password }, { abortEarly: false }).then(()=> {
+
         axiosInstance.post('/login', {email: email, password: password}).then((res)=> {
           console.log(res);
 
             if(res.data.success) {
               localStorage.setItem('jwtToken', JSON.stringify(res.data.token));
-              window.location.href ='/'
+              toast.success("Loged In successfully",{autoClose: 2000})
+              setTimeout(()=> {
+                window.location.href='/'
+              }, 2000)
+
             }
 
             if(res.data.emailErr) {
+              toast.error("User not found",{autoClose: 3000});
               setemailErr(res.data.emailErr);
             }
 
             if(res.data.passErr){
+              toast.error("Invalid password",{autoClose: 3000});
               setpassErr(res.data.passErr);
             }
             
@@ -42,9 +64,16 @@ const Login: FC = () => {
             console.log(err, "Login Error");
             
         })
+      }).catch((validationErrors)=> {
+        console.log(validationErrors.errors,"errors here")
+        const errorMessage = validationErrors.errors.join('\n')
+        setErr(errorMessage);
+        toast.error(errorMessage, {position: toast.POSITION.TOP_RIGHT});
+      })
     }
+    
 
-
+    
     //passErr and emailErr
     useEffect (()=> {
       const emailTimer = setTimeout(()=> {
@@ -61,25 +90,23 @@ const Login: FC = () => {
       }
     }, [emailErr,passErr]);
 
-    
-
   return (
-
+    
     <GoogleOAuthProvider clientId="684475057007-2abci7ht9ppi3313g5duloq7um38qlp3.apps.googleusercontent.com" >
     <div>
-      <h1 className="text-3xl md:text-5xl font-bold text-center mt-10">
-        MATCH<span className="text-3xl md:text-5xl font-bold text-center text-pink-700 mt-6 md:mt-16">MAKER</span>
+      <h1 className="text-3xl lg:text-5xl font-bold text-center mt-10 mobile:text-2xl">
+        MATCH<span className="text-3xl lg:text-5xl font-bold text-center text-pink-700 mt-6 lg:mt-16 mobile:text-2xl">MAKER</span>
       </h1>
-      <div className="container md:w-8/12 lg:w-6/12 xl:w-4/12 mx-auto px-4 mt-6 md:mt-16 bg-pink-100 p-8 rounded-lg shadow-lg">
-        <h1 className="text-2xl md:text-4xl font-semibold text-center text-pink-700 underline decoration-solid uppercase">
+      <div className="container mobile:w-10/12 lg:w-8/12  xl:w-4/12 mx-auto px-4 mt-6 lg:mt-16 bg-pink-100 p-8 rounded-lg shadow-lg ">
+        <h1 className="text-2xl lg:text-4xl font-semibold text-center text-pink-700 underline decoration-solid uppercase">
           Sign in
         </h1>
         <form className="flex flex-col items-center">
           <div className="mb-6 w-4/5">
-            <label htmlFor='email' className="block text-base md:text-lg font-medium text-gray-800 mb-2">Email</label>
+            <label htmlFor='email' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Email</label>
             <input
               type="email"
-              className="block w-full px-4 py-2 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full lg:px-4 lg:py-2 text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
               value={email}
               onChange={(e)=> setEmail(e.target.value)}
               name='email'
@@ -87,10 +114,10 @@ const Login: FC = () => {
             />
           </div>
           <div className="mb-6 w-4/5">
-            <label htmlFor='password' className="block text-base md:text-lg font-medium text-gray-800 mb-2">Password</label>
+            <label htmlFor='password' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Password</label>
             <input
               type="password"
-              className="block w-full px-4 py-2 text-lg md:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full lg:px-4 lg:py-2 text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
               value={password}
               onChange={(e)=> setPassword(e.target.value)}
               name='password'
@@ -102,19 +129,20 @@ const Login: FC = () => {
           </a>
           </Link>
           <div className="w-1/2 mt-5">
-          <div className='text-base text-center mb-4 font-semibold text-red-700'>{emailErr ? emailErr : ""}</div>
-          <div className='text-base text-center mb-4 font-semibold text-red-700'>{passErr ? passErr : ""}</div>
-            <button type='button' onClick={handleClick} className="w-full px-1 py-2 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
+            <button type='button' onClick={handleClick} className="w-full lg:px-1 py-2 mobile:text-sm text-lg lg:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-lg hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
               Login
             </button>
-            <p className='text-lg text-center py-3'>OR</p>
+            <p className='lg:text-lg font-semibold text-center py-3'>OR</p>
 
             <GoogleLogin
               onSuccess={credentialResponse => {
                 axiosInstance.post('/google/login', credentialResponse).then((res)=> {
                   if(res.data.success){
                     localStorage.setItem('jwtToken', JSON.stringify(res.data.token));
-                    window.location.href ='/'
+                    toast.success("Loged In successfully",{autoClose: 2000})
+                    setTimeout(()=> {
+                      window.location.href ='/'
+                    }, 2000)
                   }else{
                     navigate('/signUp');
                   }
@@ -138,7 +166,7 @@ const Login: FC = () => {
             
           </div>
         </form>
-        <p className="mt-6 text-sm md:text-base text-center text-gray-700">
+        <p className="mt-6 text-sm lg:text-base text-center text-gray-700">
           Don't have an account?{' '}
           <Link to="/signUp">
             <b className="font-medium text-pink-600 hover:underline cursor-pointer">

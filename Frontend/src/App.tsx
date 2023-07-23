@@ -6,6 +6,8 @@ import SignUp from './Pages/SignUp';
 import Home from './Pages/Home';
 import Forgot from './Pages/Forgot';
 import NewPass from './Pages/NewPass';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
     <Route path="/password-reset/:userId/:token" Component={NewPass} />
    </Routes>
    </BrowserRouter>
+   <ToastContainer theme='dark' autoClose={3000}/>
    </>
   );
 }

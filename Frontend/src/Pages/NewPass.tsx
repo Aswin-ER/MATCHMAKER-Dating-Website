@@ -1,6 +1,7 @@
 import  React,{FC, useState, useEffect} from 'react';
 import { axiosInstance } from '../api/axiosInstance';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const NewPass:FC = ()=> {
 
@@ -10,8 +11,6 @@ const NewPass:FC = ()=> {
     console.log(userId, token);
     
   const [formData, setFormData] = useState({newPassword: '',confirmPassword: ''});
-
-  const [passErr, setPassErr] = useState<string>("");
 
   useEffect(() => {
 
@@ -32,7 +31,7 @@ const NewPass:FC = ()=> {
 
     // Validate form data
     if (formData.newPassword !== formData.confirmPassword) {
-      setPassErr('Passwords does not match');
+      toast.error('Passwords do not match');
       return;
     }
 
@@ -49,7 +48,10 @@ const NewPass:FC = ()=> {
     axiosInstance.post('/password-reset', passwordData).then((response) => {
     const data = response.data;
     console.log(data, "data stored in backend finished");
-    navigate('/login');
+    toast.success("Password reset successfull")
+    setTimeout(()=> {
+      navigate('/login');
+    }, 2000)
   })
   .catch((error) => {
     console.log(error);
@@ -62,16 +64,6 @@ const NewPass:FC = ()=> {
     setFormData({...formData,[e.target.name]: e.target.value});
   };
 
-
-  useEffect(()=> {
-    const passTimer = setTimeout(()=> {
-      setPassErr('');
-    }, 3000);
-
-    return ()=> {
-      clearTimeout(passTimer);
-    }
-  }, [passErr]);
 
     return(
 
@@ -110,7 +102,6 @@ const NewPass:FC = ()=> {
           </div>
 
           <div className="w-1/2 mt-5">
-          <div className='text-base text-center mb-4 font-semibold text-red-700'>{passErr ? passErr : ""}</div>
             <button type='submit' className="w-full px-1 py-2 text-lg md:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-md hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
               Verify
             </button>

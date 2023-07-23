@@ -7,6 +7,7 @@ const userController = {
     const { name, email, password } = req.body;
 
     try {
+
       const existingUser = await userModel.findOne({ email });
       if (existingUser) {
         return res.send({ err: 'User already exists' });
@@ -25,7 +26,7 @@ const userController = {
       res.status(200).send({ message: 'User registered successfully' });
     } catch (error) {
       console.log(error);
-      res.status(500).send({ error: 'Internal server error' });
+      res.status(500).send({ err: 'Internal server error' });
     }
   },
 
