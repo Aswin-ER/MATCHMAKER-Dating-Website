@@ -134,6 +134,7 @@ const Login: FC = () => {
             </button>
             <p className='lg:text-lg font-semibold text-center py-3'>OR</p>
 
+              <div className='flex w-full justify-center items-center'>
             <GoogleLogin
               onSuccess={credentialResponse => {
                 axiosInstance.post('/google/login', credentialResponse).then((res)=> {
@@ -161,8 +162,8 @@ const Login: FC = () => {
               size='medium'
               text='continue_with'
               shape='square'
-              width='265'
             />
+            </div>
             
           </div>
         </form>

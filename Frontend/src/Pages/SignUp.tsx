@@ -44,8 +44,8 @@ const SignUp: FC = () => {
           const errorMessage = response.data.err;
           setErr(errorMessage);
           toast.error(errorMessage)
-        } else {
-          toast.success("Registered successfully",{autoClose: 3000})
+        } else if(response.data.message) {
+          toast.success(response.data.message,{autoClose: 3000})
           setTimeout(() => {
             navigate('/login'); // Navigate after a short delay
           }, 2000);
@@ -118,6 +118,7 @@ const SignUp: FC = () => {
             </button>
             <p className='lg:text-lg font-semibold text-center py-3'>OR</p>
 
+            <div className='flex w-full justify-center items-center'>
             <GoogleLogin 
               onSuccess={credentialResponse => {
                 axiosInstance.post('/google', credentialResponse).then((res)=> {
@@ -138,9 +139,8 @@ const SignUp: FC = () => {
               size='large'
               text='continue_with'
               shape='square'
-              width='265'
             />
-
+            </div>
           </div>
         </form>
         <p className="mt-6 text-sm lg:text-base text-center text-gray-700">

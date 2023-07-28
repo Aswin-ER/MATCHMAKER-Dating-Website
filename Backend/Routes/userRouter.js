@@ -7,7 +7,8 @@ import crypto from "crypto";
 import Token from '../Model/token.js';
 import sendEmail from '../Config/sendEmail.js';
 import bcrypt from 'bcrypt';
-
+import multerConfig from '../Config/multer.js'
+const upload = multerConfig.single('image');
 const router = express.Router();
 
 // Login and signup
@@ -64,7 +65,7 @@ router.post('/google/login', async (req, res) => {
         console.error('Error during login:', error);
         res.status(500).send('Internal server error');
         }
-    });
+});
 
 
 //Forgot password reset using email
@@ -129,7 +130,7 @@ router.get("/password-reset/:userId/:token", async (req, res) => {
       res.status(500).send("An error occurred");
       console.log(error);
     }
-  });
+});
 
 router.post("/password-reset", async (req, res) => {
     try {
@@ -172,6 +173,13 @@ router.post("/password-reset", async (req, res) => {
       console.log(error);
     }
 
-  });
+});
+
+
+//User profile
+router.get('/userProfile', userAuth,  userControllers.getUserProfile);
+
+router.post('/userProfile', upload, userAuth, userControllers.userProfile);
+
 
 export default router;

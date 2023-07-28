@@ -1,8 +1,12 @@
 import userModel from '../Model/user.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import UserProfile from '../Model/userProfile.js';
+import User from '../Model/user.js';
+import cloudinary from '../Config/cloudinary.js';
 
 const userController = {
+
   signup: async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -30,6 +34,7 @@ const userController = {
     }
   },
 
+
   login: async (req, res) => {
     const { email, password } = req.body;
 
@@ -55,6 +60,7 @@ const userController = {
     }
   },
 
+
   getUser: async (req, res) => {
     console.log("working....", req.body.userId);
 
@@ -72,7 +78,104 @@ const userController = {
         message: err.message
       });
     }
+  },
+
+
+  userProfile: async (req, res) => {
+
+    console.log("ivede",req.body,"body")
+    console.log(req.file,"file")
+
+    try {
+
+      const { about, gender, relationshipGoals, passion, age, language, lifeStyle, job, company, school, place, showAge, showDistance } = req.body;
+
+      //First Time error checking
+      if (!about && !gender && !relationshipGoals && !passion && !age && !language && !lifeStyle && !job && !company && !school && !place && !showAge && !showDistance) {
+        res.status(200).send({ message: "Please enter at least one field to update and then save." });
+        return;
+      }
+
+      let cloudImage;
+      const image = req.file;
+
+      if (image) {
+        const result = await cloudinary.uploader.upload(image.path);
+        cloudImage = result.secure_url;
+      }
+
+      console.log(cloudImage,"cloud image herereeeee")
+      
+
+      const existingProfile = await UserProfile.findOne({ user: req.body.userId });
+
+      if (existingProfile) {
+        if (image )existingProfile.image =cloudImage;
+        if (about ) existingProfile.about = about;
+        if (gender) existingProfile.gender = gender;
+        if (relationshipGoals) existingProfile.relationshipGoals = relationshipGoals;
+        if (passion) existingProfile.passion = passion;
+        if (age) existingProfile.age = age;
+        if (language) existingProfile.language = language;
+        if (lifeStyle) existingProfile.lifeStyle = lifeStyle;
+        if (job) existingProfile.job = job;
+        if (company) existingProfile.company = company;
+        if (school) existingProfile.school = school;
+        if (place) existingProfile.place = place;
+        if (showAge) existingProfile.showAge = showAge;
+        if (showDistance) existingProfile.showDistance = showDistance;
+
+        await existingProfile.save();
+        console.log(existingProfile, "Updated user profile");
+        res.status(200).send({ message: "Profile updated successfully" });
+
+      } else {
+
+        const userProfile = new UserProfile({
+          user: req.body.userId,
+          image: cloudImage,
+          about,
+          gender,
+          relationshipGoals,
+          passion,
+          age,
+          language,
+          lifeStyle,
+          job,
+          company,
+          school,
+          place,
+          showAge,
+          showDistance,
+        })
+
+        await userProfile.save();
+        console.log(userProfile, "Created user profile")
+        res.status(200).send({ message: "Profile updated successfully" })
+      }
+    } catch(err) {
+      console.log(err)
+      res.status(500).send({ err: 'Internal Server Error' })
+    }
+  },
+
+
+  getUserProfile: async (req, res)=> {
+    try{
+      console.log(req.body.userId,"getsuer profile")
+      const userProfile = await UserProfile.findOne({user: req.body.userId});
+      if(userProfile){
+        console.log(userProfile,"user profile")
+        res.status(200).json(userProfile)
+      }else{
+        res.status(200).json({message: 'Set user profile'});
+      }
+    }catch{
+      res.status(500).json({err: 'Internal Server Error'});
+    }
   }
+
+
 };
 
 

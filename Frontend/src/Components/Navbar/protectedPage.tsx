@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance } from '../../api/axiosInstance';
 import { UserCred, userDet } from '../../Redux/slice';
 import RootState from '../../Redux/rootState';
-import head from '../../assests/3753095.jpg'
+import head from '../../assests/5856.jpg'
 
 
 const ProtectedPage: FC = () => {
@@ -147,13 +147,14 @@ const ProtectedPage: FC = () => {
             </ul>
           </div>
 
+          <Link to={'/profile'}>
           {
             userName && (
               <div className='flex items-center'>
               <div className="w-10 h-10 mr-4 rounded-full bg-gray-300">
                {user.picture ? (
                 <img src={user.picture} alt="User Profile" className="w-full h-full rounded-full" />
-               ): (
+               ): ( 
                 <img src={head} alt="User Profile" className="w-full h-full rounded-full" />
                )}
               </div>
@@ -161,6 +162,8 @@ const ProtectedPage: FC = () => {
             </div>
             )
           }
+          </Link>
+
         </div>
       </nav>
     </div>

@@ -6,7 +6,24 @@ export const axiosInstance = axios.create({
         'authorization': `Bearer ${localStorage.getItem('jwtToken')}`
         
     }
-
-    
-    
 })
+
+
+axiosInstance.interceptors.response.use(
+    (response) => {
+        console.log(response)
+      if ( response?.data?.message === 'jwt expired') {
+        localStorage.removeItem('jwtToken');
+        window.location.replace('/login');   
+       }
+      return response;
+    },
+    (error) => {
+        console.log(error)
+      if ( error?.response?.data?.message === 'jwt expired') {
+        localStorage.removeItem('jwtToken');
+            window.location.replace('/login');
+          }
+      return Promise.reject(error);
+    }
+  );
