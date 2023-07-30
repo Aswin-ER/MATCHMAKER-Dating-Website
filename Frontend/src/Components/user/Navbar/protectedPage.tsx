@@ -4,10 +4,10 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { axiosInstance } from '../../api/axiosInstance';
-import { UserCred, userDet } from '../../Redux/slice';
-import RootState from '../../Redux/rootState';
-import head from '../../assests/5856.jpg'
+import { axiosInstance } from '../../../api/axiosInstance';
+import { UserCred, userDet } from '../../../Redux/slice';
+import RootState from '../../../Redux/rootState';
+import head from '../../../assests/5856.jpg'
 
 
 const ProtectedPage: FC = () => {
@@ -91,6 +91,7 @@ const ProtectedPage: FC = () => {
           <div className={`w-full lg:block lg:w-auto ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-solid-bg">
             <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-transparent dark:bg-gray-800 lg:dark:bg-transparent dark:border-gray-700">
               <li>
+                <Link to={'/'}>
                 <a
                   href="#"
                   className="block py-2 pl-3 pr-4 lg:text-lg text-white bg-pink-700 rounded lg:bg-transparent lg:text-pink-700 lg:p-0 lg:dark:text-blue-500 dark:bg-blue-600 lg:dark:bg-transparent"
@@ -98,6 +99,7 @@ const ProtectedPage: FC = () => {
                 >
                   Home
                 </a>
+                </Link>
               </li>
               <li>
                 <a

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { FC } from 'react';
-import ProtectedPage from '../Components/Navbar/protectedPage';
-import Body from '../Components/Home/body';
+import ProtectedPage from '../../Components/user/Navbar/protectedPage';
+import Body from '../../Components/user/Home/body';
 
 const Home: FC = () => {
 

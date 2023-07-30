@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './Routes/userRouter.js';
+import adminRouter from './Routes/adminRouter.js';
 
 dotenv.config();
 
@@ -21,5 +22,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/matchmaker')
   });
 
 app.use('/', userRouter);
+app.use('/', adminRouter);
 
 app.listen(PORT, () => console.log('Server listening on port', PORT));

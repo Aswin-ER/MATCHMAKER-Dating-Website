@@ -3,7 +3,7 @@
 
 import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { axiosInstance } from '../api/axiosInstance';
+import { axiosInstance } from '../../api/axiosInstance';
 import { GoogleOAuthProvider, GoogleLogin  } from '@react-oauth/google';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';

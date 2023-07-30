@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const userProfileSchema = new mongoose.Schema({
     
   image: String,
+  name: String,
   about: String,
   gender: String,
   relationshipGoals: String,
@@ -14,8 +15,6 @@ const userProfileSchema = new mongoose.Schema({
   company: String,
   school: String,
   place: String,
-  showAge: Boolean,
-  showDistance: Boolean,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

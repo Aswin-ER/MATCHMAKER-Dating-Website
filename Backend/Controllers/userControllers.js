@@ -83,8 +83,8 @@ const userController = {
 
   userProfile: async (req, res) => {
 
-    console.log("ivede",req.body,"body")
-    console.log(req.file,"file")
+    console.log("ivede", req.body, "body")
+    console.log(req.file, "file")
 
     try {
 
@@ -104,14 +104,14 @@ const userController = {
         cloudImage = result.secure_url;
       }
 
-      console.log(cloudImage,"cloud image herereeeee")
-      
+      console.log(cloudImage, "cloud image herereeeee")
+
 
       const existingProfile = await UserProfile.findOne({ user: req.body.userId });
 
       if (existingProfile) {
-        if (image )existingProfile.image =cloudImage;
-        if (about ) existingProfile.about = about;
+        if (image) existingProfile.image = cloudImage;
+        if (about) existingProfile.about = about;
         if (gender) existingProfile.gender = gender;
         if (relationshipGoals) existingProfile.relationshipGoals = relationshipGoals;
         if (passion) existingProfile.passion = passion;
@@ -131,8 +131,13 @@ const userController = {
 
       } else {
 
+        const user = await User.findOne({_id: req.body.userId});
+        const userName = user.name;
+
+
         const userProfile = new UserProfile({
           user: req.body.userId,
+          userName: userName,
           image: cloudImage,
           about,
           gender,
@@ -145,35 +150,44 @@ const userController = {
           company,
           school,
           place,
-          showAge,
-          showDistance,
         })
 
         await userProfile.save();
         console.log(userProfile, "Created user profile")
         res.status(200).send({ message: "Profile updated successfully" })
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       res.status(500).send({ err: 'Internal Server Error' })
     }
   },
 
 
-  getUserProfile: async (req, res)=> {
-    try{
-      console.log(req.body.userId,"getsuer profile")
-      const userProfile = await UserProfile.findOne({user: req.body.userId});
-      if(userProfile){
-        console.log(userProfile,"user profile")
+  getUserProfile: async (req, res) => {
+    try {
+      console.log(req.body.userId, "getsuer profile")
+      const userProfile = await UserProfile.findOne({ user: req.body.userId });
+      if (userProfile) {
+        console.log(userProfile, "user profile")
         res.status(200).json(userProfile)
-      }else{
-        res.status(200).json({message: 'Set user profile'});
+      } else {
+        res.status(200).json({ message: 'Set user profile' });
       }
-    }catch{
-      res.status(500).json({err: 'Internal Server Error'});
+    } catch {
+      res.status(500).json({ err: 'Internal Server Error' });
     }
-  }
+  },
+
+  getAllUserProfile: async (req, res) => {
+    try {
+      const userDet = await UserProfile.find({});
+      res.status(200).json(userDet);
+    } catch (error) {
+      // If there's an error while fetching user profiles, handle it here.
+      console.error('Error fetching user profiles:', error);
+      res.status(500).json({ error: 'Failed to fetch user profiles.' });
+    }
+  },
 
 
 };

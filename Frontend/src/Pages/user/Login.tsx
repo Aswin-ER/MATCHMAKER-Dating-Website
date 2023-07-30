@@ -3,10 +3,10 @@
 
 import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { axiosInstance } from '../api/axiosInstance';
+import { axiosInstance } from '../../api/axiosInstance';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
-import RootState from '../Redux/rootState';
+import RootState from '../../Redux/rootState';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';

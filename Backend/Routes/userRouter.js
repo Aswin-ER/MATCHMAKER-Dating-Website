@@ -181,5 +181,7 @@ router.get('/userProfile', userAuth,  userControllers.getUserProfile);
 
 router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 
+router.get('/getAllUserProfile', userControllers.getAllUserProfile);
+
 
 export default router;

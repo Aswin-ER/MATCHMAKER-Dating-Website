@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import  React,{FC, useState} from 'react';
 import { Link } from 'react-router-dom';
-import { axiosInstance } from '../api/axiosInstance';
+import { axiosInstance } from '../../api/axiosInstance';
 import { toast } from 'react-toastify';
 
  const Forgot:FC = ()=> {

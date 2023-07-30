@@ -1,9 +1,7 @@
 import React, { FC } from 'react'
-import bodyImage from '../../assests/2760249.jpg'
-import bodyImage2 from '../../assests/3753095.jpg'
+import bodyImage from '../../../assests/2760249.jpg'
+import bodyImage2 from '../../../assests/3753095.jpg'
 import Profile from './profiles';
-
-
 
 const Body: FC = () => {
 
@@ -32,7 +30,7 @@ const Body: FC = () => {
                 <div className="card lg:w-1/4 lg:h-60 md:w-1/2 md:h-1/2 bg-pink-700 text-primary-content lg:mt-8 lg:mx-20 lg:mb-20  md:mt-5 md:mb-5 mobile:mx-10 shadow-2xl hover:bg-pink-600 transition duration-300 ">
                     <div className="card-body lg:mt-1 ">
                         <h2 className=" text-black lg:mb-5 font-bold lg:text-3xl md:text-xl">Smart Blocking</h2>
-                        <p className='text-black'>Thousands of singles find love through our dating site each month, Register today to find that special someone on MatchMaker</p>
+                        <p className='text-black'>Thousands of singles find love through our dating site each month, Register today to find that special someone</p>
                     </div>
                 </div>
             </div>
@@ -60,7 +58,7 @@ const Body: FC = () => {
 
 
 
-            <Profile />
+            <Profile/>
 
         </>
     );
