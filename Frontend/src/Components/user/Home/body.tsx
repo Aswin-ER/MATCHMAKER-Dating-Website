@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import bodyImage from '../../../assests/2760249.jpg'
 import bodyImage2 from '../../../assests/3753095.jpg'
 import Profile from './profiles';
@@ -55,8 +55,6 @@ const Body: FC = () => {
                     src={bodyImage2}
                 />
             </div>
-
-
 
             <Profile/>
 

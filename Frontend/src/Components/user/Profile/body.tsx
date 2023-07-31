@@ -153,7 +153,7 @@ const Body: FC = () => {
     return (
         <>
             <section className="max-w-4xl p-6 lg:mx-auto mobile:mx-6 md:mx-20 bg-gradient-to-r from-gray-900 to-pink-700 rounded-md shadow-md dark:bg-gray-800 mt-20 mb-20">
-                <h1 className="text-2xl font-bold text-white capitalize dark:text-white mb-10">User Profile</h1>
+                <h1 className="text-2xl font-bold text-white capitalize dark:text-white mb-10 flex justify-center">User Profile</h1>
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-white">
                             Profile Picture
@@ -187,6 +187,7 @@ const Body: FC = () => {
                         <div>
                             <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Gender</label>
                             <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleGender} value={gender} required>
+                                <option value='Male'>Select gender</option>
                                 <option value='Male'>Male</option>
                                 <option value='Female'>Female</option>
                             </select>
@@ -195,7 +196,7 @@ const Body: FC = () => {
                         <div>
                             <label className="text-white dark:text-gray-200" htmlFor="password">Relationship Goals</label>
                             <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleLookingFor} value={looking} required>
-                                <option value="">Looking htmlFor</option>
+                                <option value="">Select Relationship Goals</option>
                                 <option value="Long-term partne">Long-term partner</option>
                                 <option value="Short-term fun">Short-term fun</option>
                                 <option value="New friends">New friends</option>

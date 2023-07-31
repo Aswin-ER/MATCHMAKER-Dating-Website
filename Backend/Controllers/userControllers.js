@@ -137,7 +137,7 @@ const userController = {
 
         const userProfile = new UserProfile({
           user: req.body.userId,
-          userName: userName,
+          name: userName,
           image: cloudImage,
           about,
           gender,
