@@ -15,11 +15,11 @@ const userProfileSchema = new mongoose.Schema({
   company: String,
   school: String,
   place: String,
+
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'users',
   },
-
 });
 
 const UserProfile = mongoose.model('UserProfile', userProfileSchema);

@@ -183,5 +183,10 @@ router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
 
+//Liked profile
+router.post('/like', userAuth, userControllers.likedProfile);
+
+router.get('/getLikedProfiles', userAuth, userControllers.getLikedProfile);
+
 
 export default router;

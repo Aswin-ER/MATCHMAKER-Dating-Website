@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import UserProfile from '../Model/userProfile.js';
 import User from '../Model/user.js';
 import cloudinary from '../Config/cloudinary.js';
+import likedProfile from '../Model/liked.js';
+
 
 const userController = {
 
@@ -131,7 +133,7 @@ const userController = {
 
       } else {
 
-        const user = await User.findOne({_id: req.body.userId});
+        const user = await User.findOne({ _id: req.body.userId });
         const userName = user.name;
 
 
@@ -188,6 +190,51 @@ const userController = {
       res.status(500).json({ error: 'Failed to fetch user profiles.' });
     }
   },
+
+
+  likedProfile: async (req, res) => {
+
+    try {
+
+      const userProfileId = req.body._id;
+      console.log(userProfileId, "id here")
+
+      const userId = req.body.userId;
+
+      const likeProfile = new likedProfile({
+        userProfileId: userProfileId,
+        user: userId,
+      })
+
+      await likeProfile.save();
+      console.log(likeProfile, "user profile created");
+
+      const likeProfileArray = likeProfile ? [likeProfile] : [];
+
+      res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+
+    } catch (err) {
+
+      res.status(500).json({ error: "Unable to like profile." });
+
+    }
+  },
+
+  getLikedProfile: async (req, res) => {
+
+    const userId = req.body.userId;
+
+    try {
+      const likeProfile = await likedProfile.findOne({ user: userId });
+      console.log(likeProfile, "liked all users");
+
+      // Convert the likeProfile object to an array containing that object
+      const likeProfileArray = likeProfile ? [likeProfile] : [];
+      res.status(200).json(likeProfileArray);
+    } catch {
+
+    }
+  }
 
 
 };
