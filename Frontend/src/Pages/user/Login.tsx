@@ -54,6 +54,10 @@ const Login: FC = () => {
             if(res.data.passErr){
               toast.error("Invalid password",{autoClose: 3000});
             }
+
+            if(res.data.Blocked){
+              toast.error("Account Blocked",{autoClose: 3000});
+            }
             
         }).catch((err)=> {
             console.log(err, "Login Error");

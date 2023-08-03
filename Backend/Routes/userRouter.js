@@ -31,7 +31,8 @@ router.post('/google', (req, res) => {
         name,
         email,
         picture,
-        jti
+        jti,
+        status: true,
     });
 
     newUser.save()

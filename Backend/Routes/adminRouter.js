@@ -6,8 +6,10 @@ import adminAuth from '../Middleware/adminAuth.js';
 
 router.post('/adminLogin', adminControllers.login);
 
-router.post('/adminHome',adminAuth);
+router.get('/adminHome',adminAuth);
 
-router.post('/users', adminAuth);
+router.get('/users', adminAuth, adminControllers.getUsers);
+
+router.post('/userBlock', adminAuth, adminControllers.userBlock);
 
 export default router;

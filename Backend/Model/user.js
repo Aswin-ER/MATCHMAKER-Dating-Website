@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema({
     jti: {
         type: String,
     },
+    status: {
+        type: Boolean,
+        required: true,
+    },
+    userProfile: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserProfile',
+      },
 });
 
 const User = mongoose.model('user', userSchema);

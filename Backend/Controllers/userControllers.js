@@ -25,7 +25,8 @@ const userController = {
       const newUser = await userModel.create({
         name,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        status: true,
       });
 
       console.log(newUser.name);
@@ -44,6 +45,12 @@ const userController = {
       const user = await userModel.findOne({ email });
 
       if (user) {
+
+        if (!user.status) {
+          res.send({ Blocked: 'Account is Blocked' });
+          return;
+        }
+
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {

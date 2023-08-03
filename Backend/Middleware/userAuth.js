@@ -6,7 +6,7 @@ const userAuth = (req, res, next) => {
 
     let token = req.header('authorization').split(' ')[1];
     token = token.replaceAll('"', '');
-    console.log("userToken:", token);
+    // console.log("userToken:", token);
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     console.log(decodedToken, "UserdecodedToken");
