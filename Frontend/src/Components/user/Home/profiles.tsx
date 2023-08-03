@@ -50,7 +50,7 @@ const Profile: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/getAllUserProfile').then((res) => {
-            console.log(res);
+            // console.log(res);
             setUserDet(res.data)
         })
 
@@ -58,6 +58,7 @@ const Profile: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/getLikedProfiles').then((res) => {
+            // console.log(res.data,"likedProfiles")
             setLikedProfile(res.data || []);
         }).catch((err) => {
             console.log(err)
@@ -66,9 +67,9 @@ const Profile: FC = () => {
 
 
     const isProfileLiked = (userProfileId: string, likedProfile: Array<any>): boolean => {
-        console.log('Liked profiles:', likedProfile);
-        return likedProfile.some((profile) => profile.userProfileId === userProfileId);
-      };
+        // console.log('Liked profiles:', likedProfile);
+        return likedProfile.some((profile) => profile.userProfileId.includes(userProfileId));
+    };
 
     function openModal(userProfile: UserProfile) {
         setSelectedUserProfile(userProfile);
@@ -84,7 +85,7 @@ const Profile: FC = () => {
     }
 
     function closeModalBgClick(e: any) {
-        console.log('clicked anywhere');
+        // console.log('clicked anywhere');
         if (e.target.id === 'modal-bg') {
             console.log('clicked modal bg')
             console.log(e.target);
@@ -94,7 +95,7 @@ const Profile: FC = () => {
 
     const addToLikedCollection = (userProfile: UserProfile) => {
         axiosInstance.post('/like', userProfile).then((res) => {
-            console.log(res.data.likeProfileArray,"its here mannnnnnnnnnnnnnnnnnnnnnn")
+            // console.log(res.data.likeProfileArray,"its here mannnnnnnnnnnnnnnnnnnnnnn")
             setLikedProfile(res.data.likeProfileArray || []);
             toast.success(res.data.message)
         }).catch((err) => {

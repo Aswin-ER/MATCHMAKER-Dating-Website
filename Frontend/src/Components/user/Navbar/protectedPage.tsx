@@ -15,19 +15,20 @@ const ProtectedPage: FC = () => {
   const dispatch = useDispatch();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [image, setImages] = useState<string>('');
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const validateToken = () => {
-    console.log("validateToken");
+    // console.log("validateToken");
 
     axiosInstance.get('/').then((response) => {
       console.log(response);
 
       if (response.data.success) {
-        console.log(response.data.data.name);
+        // console.log(response.data.data.name);
         dispatch(userDet(response.data.data));
 
 
@@ -39,13 +40,7 @@ const ProtectedPage: FC = () => {
   }
 
   const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
-  console.log(user, "user vannuu");
-
   const userName: string | null = user?.name ?? null;
-
-  console.log(userName);
-
-
 
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
@@ -59,11 +54,20 @@ const ProtectedPage: FC = () => {
     window.location.href = '/'
   }
 
+  useEffect(() => {
+    axiosInstance.get('/userProfile').then((res) => {
+      console.log(res.data, "user image here");
+      if (res.data) {
+        setImages((prevState) => res.data.image)
+      }
+    })
+  }, [])
+
   return (
     <div>
       <nav className="border-gray-200 bg-pink-100 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          
+
           <a href="#" className="flex items-center">
             <span className="self-center text-2xl lg:mb-1 lg:text-3xl font-semibold lg:font-bold whitespace-nowrap dark:text-white">MATCH<span className=' text-pink-700'>MAKER</span></span>
           </a>
@@ -92,23 +96,23 @@ const ProtectedPage: FC = () => {
             <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-transparent dark:bg-gray-800 lg:dark:bg-transparent dark:border-gray-700">
               <li>
                 <Link to={'/'}>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 lg:text-lg text-white bg-pink-700 rounded lg:bg-transparent lg:text-pink-700 lg:p-0 lg:dark:text-blue-500 dark:bg-blue-600 lg:dark:bg-transparent"
-                  aria-current="page"
-                >
-                  Home
-                </a>
+                  <a
+                    href="#"
+                    className="block py-2 pl-3 pr-4 lg:text-lg text-white bg-pink-700 rounded lg:bg-transparent lg:text-pink-700 lg:p-0 lg:dark:text-blue-500 dark:bg-blue-600 lg:dark:bg-transparent"
+                    aria-current="page"
+                  >
+                    Home
+                  </a>
                 </Link>
               </li>
               <li>
-               <Link to={'/Liked'}>
-               <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
-                >
-                  Likes
-                </a>
+                <Link to={'/Liked'}>
+                  <a
+                    href="#"
+                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                  >
+                    Likes
+                  </a>
                 </Link>
               </li>
               <li>
@@ -152,20 +156,20 @@ const ProtectedPage: FC = () => {
           </div>
 
           <Link to={'/profile'}>
-          {
-            userName && (
-              <div className='flex items-center'>
-              <div className="w-10 h-10 mr-4 rounded-full bg-gray-300">
-               {user.picture ? (
-                <img src={user.picture} alt="User Profile" className="w-full h-full rounded-full" />
-               ): ( 
-                <img src={head} alt="User Profile" className="w-full h-full rounded-full" />
-               )}
-              </div>
-              <span className="text-lg text-gray-900 mr-2 cursor-pointer">Hello, {userName}</span>
-            </div>
-            )
-          }
+            {
+              userName && (
+                <div className='flex items-center'>
+                  <div className="w-10 h-10 mr-4 rounded-full bg-gray-300">
+                    {image ? (
+                      <img src={image} alt="User Profile" className="w-full h-full rounded-full" />
+                    ) : (
+                      <img src={head} alt="User Profile" className="w-full h-full rounded-full" />
+                    )}
+                  </div>
+                  <span className="text-lg text-gray-900 mr-2 cursor-pointer">Hello, {userName}</span>
+                </div>
+              )
+            }
           </Link>
 
         </div>

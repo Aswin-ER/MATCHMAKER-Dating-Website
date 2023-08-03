@@ -178,15 +178,13 @@ router.post("/password-reset", async (req, res) => {
 
 //User profile
 router.get('/userProfile', userAuth,  userControllers.getUserProfile);
-
 router.post('/userProfile', upload, userAuth, userControllers.userProfile);
-
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
 
 //Liked profile
 router.post('/like', userAuth, userControllers.likedProfile);
-
 router.get('/getLikedProfiles', userAuth, userControllers.getLikedProfile);
+router.get('/getLikedUserProfiles', userAuth, userControllers.getLikedUserProfiles);
 
 
 export default router;

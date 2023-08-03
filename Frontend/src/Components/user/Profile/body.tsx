@@ -187,7 +187,7 @@ const Body: FC = () => {
                         <div>
                             <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Gender</label>
                             <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleGender} value={gender} required>
-                                <option value='Male'>Select gender</option>
+                                <option value=''>Select gender</option>
                                 <option value='Male'>Male</option>
                                 <option value='Female'>Female</option>
                             </select>

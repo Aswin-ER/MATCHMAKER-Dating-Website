@@ -25,9 +25,6 @@ const Login: FC = () => {
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [emailErr, setemailErr] = useState<string>('');
-    const [passErr, setpassErr] = useState<string>('');
-    const [err, setErr] = useState<string>('');
 
     const validationSchema = Yup.object().shape({
       email: Yup.string().email('Invalid email').required('Email is required'),
@@ -52,12 +49,10 @@ const Login: FC = () => {
 
             if(res.data.emailErr) {
               toast.error("User not found",{autoClose: 3000});
-              setemailErr(res.data.emailErr);
             }
 
             if(res.data.passErr){
               toast.error("Invalid password",{autoClose: 3000});
-              setpassErr(res.data.passErr);
             }
             
         }).catch((err)=> {
@@ -67,28 +62,11 @@ const Login: FC = () => {
       }).catch((validationErrors)=> {
         console.log(validationErrors.errors,"errors here")
         const errorMessage = validationErrors.errors.join('\n')
-        setErr(errorMessage);
         toast.error(errorMessage, {position: toast.POSITION.TOP_RIGHT});
       })
     }
     
 
-    
-    //passErr and emailErr
-    useEffect (()=> {
-      const emailTimer = setTimeout(()=> {
-        setemailErr('');
-      }, 3000);
-
-      const passwordTimer = setTimeout(()=> {
-        setpassErr('');
-      }, 3000);
-      
-      return ()=> {
-        clearTimeout(emailTimer);
-        clearTimeout(passwordTimer);
-      }
-    }, [emailErr,passErr]);
 
   return (
     
@@ -150,12 +128,10 @@ const Login: FC = () => {
                   
                 }).catch((err)=> {
                   console.log("login error");
-                  setemailErr("login error");
                 })
               }}
               onError={() => {
                 console.log('login error');
-                setemailErr("login error");
               }}
               type='standard'
               theme='filled_black'

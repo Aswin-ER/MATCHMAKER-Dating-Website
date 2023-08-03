@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Profile from './Pages/user/Profile';
 import Like from './Pages/user/Liked';
 import Admin from './Pages/admin/adminLogin'
+import AdminHome from './Pages/admin/adminDashboard'
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
     <Route path="/password-reset/:userId/:token" Component={NewPass} />
 
     <Route path="/admin" element={<Admin/>} />
+    <Route path="/adminHome" element={<AdminHome/>} />
+
    </Routes>
    </BrowserRouter>
    <ToastContainer theme='dark' autoClose={3000}/>

@@ -1,20 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { axiosInstance } from '../../api/axiosInstance';
+import { adminAxiosInstance } from '../../api/axiosInstance';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Login: FC = () => {
+
+  const navigate = useNavigate();
 
   const loginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string().required('Password is required'),
 
   })
+
+  useEffect(()=> {
+    if(localStorage.getItem('adminToken')){
+      navigate('/adminHome');
+    }
+  }, []);
 
   return (
     <Formik
@@ -26,12 +35,13 @@ const Login: FC = () => {
       onSubmit={(values) => {
         console.log("submitting");
 
-        axiosInstance.post('/adminLogin', values).then((res) => {
+        adminAxiosInstance.post('/admin/adminLogin', values).then((res) => {
           if (res.data.err) {
             toast.error(res.data.err)
           } else if (res.data.pass) {
             toast.error(res.data.err)
           } else {
+            localStorage.setItem('adminToken', JSON.stringify(res.data.token));
             toast.success(res.data.success)
             setTimeout(() => {
               window.location.href = '/adminHome'

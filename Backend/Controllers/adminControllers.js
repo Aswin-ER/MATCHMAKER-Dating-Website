@@ -1,4 +1,5 @@
 import AdminModel from '../Model/admin.js';
+import jwt from 'jsonwebtoken';
 
 const adminControllers = {
 
@@ -9,7 +10,10 @@ const adminControllers = {
 
         if (admin) {
             if (admin.password === password) {
-                res.status(200).send({ success: "Login successful" })
+                let token;
+                token = jwt.sign({ adminId: admin.id, email: admin.email}, process.env.JWT_SECRET, { expiresIn: "1h" });
+                
+                res.status(200).send({ success: "Login successful", token: token });
             } else {
                 res.send({ err: "Invalid password" })
             }

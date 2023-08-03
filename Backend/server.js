@@ -25,6 +25,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/matchmaker')
   });
 
 app.use('/', userRouter);
-app.use('/', adminRouter);
+app.use('/admin', adminRouter);
 
 app.listen(PORT, () => console.log('Server listening on port', PORT));

@@ -68,7 +68,7 @@ const userController = {
 
     try {
       const user = await userModel.findById(req.body.userId);
-      console.log(user);
+      // console.log(user);
       res.status(200).send({
         success: true,
         message: "user fetched success",
@@ -85,8 +85,8 @@ const userController = {
 
   userProfile: async (req, res) => {
 
-    console.log("ivede", req.body, "body")
-    console.log(req.file, "file")
+    // console.log("ivede", req.body, "body")
+    // console.log(req.file, "file")
 
     try {
 
@@ -106,7 +106,7 @@ const userController = {
         cloudImage = result.secure_url;
       }
 
-      console.log(cloudImage, "cloud image herereeeee")
+      // console.log(cloudImage, "cloud image herereeeee")
 
 
       const existingProfile = await UserProfile.findOne({ user: req.body.userId });
@@ -128,7 +128,7 @@ const userController = {
         if (showDistance) existingProfile.showDistance = showDistance;
 
         await existingProfile.save();
-        console.log(existingProfile, "Updated user profile");
+        // console.log(existingProfile, "Updated user profile");
         res.status(200).send({ message: "Profile updated successfully" });
 
       } else {
@@ -155,7 +155,7 @@ const userController = {
         })
 
         await userProfile.save();
-        console.log(userProfile, "Created user profile")
+        // console.log(userProfile, "Created user profile")
         res.status(200).send({ message: "Profile updated successfully" })
       }
     } catch (err) {
@@ -170,7 +170,7 @@ const userController = {
       console.log(req.body.userId, "getsuer profile")
       const userProfile = await UserProfile.findOne({ user: req.body.userId });
       if (userProfile) {
-        console.log(userProfile, "user profile")
+        // console.log(userProfile, "user profile")
         res.status(200).json(userProfile)
       } else {
         res.status(200).json({ message: 'Set user profile' });
@@ -193,7 +193,6 @@ const userController = {
 
 
   likedProfile: async (req, res) => {
-
     try {
 
       const userProfileId = req.body._id;
@@ -201,18 +200,40 @@ const userController = {
 
       const userId = req.body.userId;
 
-      const likeProfile = new likedProfile({
-        userProfileId: userProfileId,
-        user: userId,
-      })
+      const profile = await likedProfile.findOne({user: userId});
 
-      await likeProfile.save();
-      console.log(likeProfile, "user profile created");
+      // console.log(profile,"profile found")
 
-      const likeProfileArray = likeProfile ? [likeProfile] : [];
+      if(profile){
 
-      res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+        const existingProfileIndex = profile.userProfileId.indexOf(userProfileId);
 
+        if(existingProfileIndex === -1){
+          profile.userProfileId.push(userProfileId);
+          await profile.save();
+          const likeProfileArray = profile ? [profile] : [];
+          res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+        }else{
+          const likeProfileArray = profile ? [profile] : [];
+          res.status(200).json({ message: 'Profile Already Liked', likeProfileArray });
+        }
+
+      }else{
+
+        const likeProfile = new likedProfile({
+          userProfileId: userProfileId,
+          user: userId,
+
+        })
+  
+        await likeProfile.save();
+        // console.log(likeProfile, "user profile created");
+  
+        const likeProfileArray = likeProfile ? [likeProfile] : [];
+  
+        res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+
+      }
     } catch (err) {
 
       res.status(500).json({ error: "Unable to like profile." });
@@ -226,13 +247,26 @@ const userController = {
 
     try {
       const likeProfile = await likedProfile.findOne({ user: userId });
-      console.log(likeProfile, "liked all users");
+      // console.log(likeProfile, "liked all users");
 
       // Convert the likeProfile object to an array containing that object
       const likeProfileArray = likeProfile ? [likeProfile] : [];
       res.status(200).json(likeProfileArray);
     } catch {
 
+    }
+  },
+
+  getLikedUserProfiles: async (req, res)=> {
+    const userId = req.body.userId;
+    try {
+      const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
+
+      // console.log(likeProfile,"here is like profile")
+
+      res.status(200).json(likeProfile.userProfileId);
+    } catch (err) {
+      console.log(err,"error")
     }
   }
 

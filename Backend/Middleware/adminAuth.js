@@ -1,19 +1,19 @@
 import jwt from 'jsonwebtoken';
 
-const userAuth = (req, res, next) => {
+const adminAuth = (req, res, next) => {
   try {
-    console.log(req.header('authorization'), "userAuth");
+    console.log(req.header('authorization'), "adminAuth");
 
     let token = req.header('authorization').split(' ')[1];
     token = token.replaceAll('"', '');
-    console.log("userToken:", token);
+    console.log("adminToken:", token);
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decodedToken, "UserdecodedToken");
-    req.body.userId = decodedToken.userId;
-    console.log(req.body.userId);
-
+    console.log(decodedToken, "admindecodedToken");
+    req.body.adminId = decodedToken.adminId;
+    console.log(req.body.adminId,"adminId here");
     next();
+    
   } catch (err) {
     res.send({
       success: false,
@@ -22,4 +22,4 @@ const userAuth = (req, res, next) => {
   }
 };
 
-export default userAuth;
+export default adminAuth;

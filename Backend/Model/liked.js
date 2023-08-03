@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const likedProfileSchema = new mongoose.Schema({
 
-    userProfileId: {
+    userProfileId: [{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'userProfiles',
-    },
+        ref: 'UserProfile',
+    }],
     user: {
         type: String,
         required: true,
