@@ -33,6 +33,7 @@ const Profile: FC = () => {
     const [showModal, setShowModal] = useState<Boolean>(false);
     const [userDet, setUserDet] = useState([])
     const [likedProfile, setLikedProfile] = useState<string[]>([])
+    const [verify, setVerify] = useState<boolean>();
 
 
     //Logged in userDetails
@@ -64,6 +65,15 @@ const Profile: FC = () => {
             console.log(err)
         })
     }, []);
+
+    useEffect(() => {
+        axiosInstance.get('/verifyProfile', user).then((res) => {
+            console.log(res.data);
+            if (res.data.message) {
+                setVerify(true);
+            }
+        })
+    })
 
 
     const isProfileLiked = (userProfileId: string, likedProfile: Array<any>): boolean => {
@@ -121,14 +131,25 @@ const Profile: FC = () => {
 
                                 <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                     <div className="h-98 w-82">
-                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile.image} alt="" />
+                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
                                     </div>
                                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
                                     <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
                                         <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
                                         <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
-                                        <Button handleClick={() => openModal(userProfile)} text="View More" />
-                                        <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                        {
+                                            verify ?
+                                                <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
+                                                :
+                                                <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                        }
+                                        
+                                        {
+                                            verify ?
+                                                ""
+                                                :
+                                                <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                        }
                                     </div>
                                 </div>
 
@@ -140,7 +161,7 @@ const Profile: FC = () => {
 
                                 <div key={index} className="group relative blur-sm cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30" onClick={handleButton}>
                                     <div className="h-98 w-82">
-                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile.image} alt="" />
+                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
                                     </div>
                                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
                                     <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
@@ -166,8 +187,10 @@ const Profile: FC = () => {
                             </a>
                             <h1 className="text-3xl pb-8 text-center">{selectedUserProfile.name} {selectedUserProfile.age}</h1>
 
-                            <div className='flex justify-center items-center mb-5'>
-                                <img src={selectedUserProfile.image} alt='' className='w-50 h-50'></img>
+                            <div className='flex justify-center items-center gap-5 mb-5'>
+                                <img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img>
+                                <img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img>
+                                <img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img>
                             </div>
                             <div className="grid grid-cols-2 gap-4 ml-10">
                                 <h4 className="text-xl italic pb-4">Gender: {selectedUserProfile.gender}</h4>

@@ -8,7 +8,7 @@ import Token from '../Model/token.js';
 import sendEmail from '../Config/sendEmail.js';
 import bcrypt from 'bcrypt';
 import multerConfig from '../Config/multer.js'
-const upload = multerConfig.single('image');
+const upload = multerConfig.array('image');
 const router = express.Router();
 
 // Login and signup
@@ -58,6 +58,11 @@ router.post('/google/login', async (req, res) => {
         if (!user) {
             res.send('User not found');
         } else {
+
+          if(user.status === false){
+            res.status(200).send({message:"User Blocked"})
+          }
+
             let token;
             token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
             res.status(200).send({success: true, token: token})
@@ -181,6 +186,8 @@ router.post("/password-reset", async (req, res) => {
 router.get('/userProfile', userAuth,  userControllers.getUserProfile);
 router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
+
+router.get('/verifyProfile',userAuth, userControllers.verifyProfile);
 
 //Liked profile
 router.post('/like', userAuth, userControllers.likedProfile);

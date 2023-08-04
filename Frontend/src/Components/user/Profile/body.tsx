@@ -8,14 +8,42 @@ const Body: FC = () => {
 
     // Images of user
     const [image, setImages] = useState<string>('');
+    const [selectedImage, setSelectedImage] = useState<any>()
+
+    const [image1, setImages1] = useState<string>('');
+    const [selectedImage1, setSelectedImage1] = useState<any>()
+
+    const [image2, setImages2] = useState<string>('');
+    const [selectedImage2, setSelectedImage2] = useState<any>()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file: any = e.target.files[0];
             console.log(file)
             setImages(file);
+            setSelectedImage(URL.createObjectURL(file));
         }
     };
+
+    const handleChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file: any = e.target.files[0];
+            console.log(file)
+            setImages1(file);
+            setSelectedImage1(URL.createObjectURL(file));
+        }
+    };
+
+    const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file: any = e.target.files[0];
+            console.log(file)
+            setImages2(file);
+            setSelectedImage2(URL.createObjectURL(file));
+        }
+    };
+
+
 
 
     //Username 
@@ -91,11 +119,31 @@ const Body: FC = () => {
         console.log(text, "text here")
     }
 
+    // State for validation
+    const [emptyFields, setEmptyFields] = useState<string[]>([]);
 
     const handleData = () => {
-        console.log('vannu ivede')
-        const formData = new FormData();
 
+        // Reset previous empty fields
+        setEmptyFields([]);
+
+        // Check for empty fields
+        const requiredFields = [
+            'image',
+            'about',
+            'gender',
+            'relationshipGoals',
+            'passion',
+            'age',
+            'language',
+            'lifeStyle',
+            'job',
+            'company',
+            'school',
+            'place'
+        ];
+
+        const formData = new FormData();
         function appendField(fieldName: string, fieldValue: any): any {
             if (fieldValue) {
                 formData.append(fieldName, fieldValue);
@@ -103,6 +151,8 @@ const Body: FC = () => {
         }
 
         appendField('image', image);
+        appendField('image', image1);
+        appendField('image', image2);
         appendField('about', text);
         appendField('gender', gender);
         appendField('relationshipGoals', looking);
@@ -117,14 +167,29 @@ const Body: FC = () => {
 
         console.log(formData, "formdata here")
 
+        const emptyFieldsList: string[] = [];
+        requiredFields.forEach(field => {
+            if (!formData.get(field)) {
+                emptyFieldsList.push(field);
+            }
+        });
+
+        if (emptyFieldsList.length > 0) {
+            setEmptyFields(emptyFieldsList); // Update empty fields state with the list of empty fields
+            toast.info("Please verify all fields");
+            return;
+        }
+
         axiosInstance.post('/userProfile', formData).then((res) => {
-            console.log(res)
+            console.log(res,"response")
             if (res.data.message) {
                 toast.success(res.data.message)
             } else {
                 toast.error(res.data.message)
             }
         })
+
+
     }
 
 
@@ -132,7 +197,9 @@ const Body: FC = () => {
         axiosInstance.get('/userProfile').then((res) => {
             console.log(res.data, "user data hereeeeeeeeeeeeeeeeeeee");
             if (res.data) {
-                setImages((prevState) => res.data.image)
+                setImages((prevState) => res.data?.image?.[0])
+                setImages1((prevState) => res.data?.image?.[1])
+                setImages2((prevState) => res.data?.image?.[2])
                 setText((prevState) => res.data.about)
                 setAge((prevState: any) => res.data.age);
                 setGender((prevState) => res.data.gender);
@@ -153,101 +220,164 @@ const Body: FC = () => {
     return (
         <>
             <section className="max-w-4xl p-6 lg:mx-auto mobile:mx-6 md:mx-20 bg-gradient-to-r from-gray-900 to-pink-700 rounded-md shadow-md dark:bg-gray-800 mt-20 mb-20">
-                <h1 className="text-2xl font-bold text-white capitalize dark:text-white mb-10 flex justify-center">User Profile</h1>
-                    <div className="mb-6">
-                        <label className="block text-sm font-medium text-white">
-                            Profile Picture
-                        </label>
-                        <div className="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-4 border-dashed border-white rounded-md">
-                            <div className="space-y-1 text-center">
-                                <svg className="mx-auto h-12 w-12 text-white" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div className="flex text-sm text-gray-300 flex-col">
-                                    <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                        <span className="block">Upload Profile Pic</span>
-                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleChange} />
-                                    </label>
-                                    <div className='mt-10'>
-                                        <img src={image} alt='' className='w-50 h-50'></img>
+                <h1 className="text-2xl font-semibold text-white capitalize dark:text-white mb-10 flex justify-center">USER PROFILE</h1>
+                <div className="mb-6">
+                    <h1 className="block text-lg font-medium text-white">
+                       Fill all the details and verify your profile
+                    </h1>
+                    <div className="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-2 border-solid border-white rounded-md">
+                        <div className="space-y-1 text-center">
+                            {
+                                image?
+                                <h1 className='text-2xl text-white font-medium font-mono'>Uploaded Profile Pics</h1>
+                                :
+                                <h1 className='text-2xl text-white font-medium font-mono'>Upload Profile Pics</h1>
+                            }
+                            <div className="flex text-sm text-gray-300 flex-col">
+                                <div className='flex gap-2'>
+
+                                    <div className='mt-5 border-white border-2 border-dashed'>
+                                        {
+                                            selectedImage ?
+                                                <img src={selectedImage} alt='' className='w-50 h-50'></img>
+                                                :
+                                                <img src={image} alt='' className='w-50 h-50'></img>
+                                        }
+
+{
+                                            image ?
+                                                ""
+                                                :
+                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                    <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange} />
+                                                </label>
+                                        }
+
+                                    </div>
+
+                                    <div className='mt-5 border-white border-2 border-dashed'>
+                                        {
+                                            selectedImage1 ?
+                                                <img src={selectedImage1} alt='' className='w-50 h-50'></img>
+                                                :
+                                                <img src={image1} alt='' className='w-50 h-50'></img>
+
+                                        }
+
+                                        {
+                                            image1 ?
+
+                                                ""
+                                                :
+                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                    <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange1} />
+                                                </label>
+                                        }
+
+                                    </div>
+
+                                    <div className='mt-5 border-2 border-dashed'>
+                                        {
+                                            selectedImage2 ?
+                                                <img src={selectedImage2} alt='' className='w-50 h-50'></img>
+                                                :
+                                                <img src={image2} alt='' className='w-50 h-50'></img>
+
+                                        }
+
+{
+                                            image2 ?
+
+                                                ""
+                                                :
+
+                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                    <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange2} />
+                                                </label>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
-                    <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">About {userName ? userName : 'you'}</label>
-                            <textarea id="textarea" typeof="textarea" cols={30} rows={5} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleTextarea} value={text} required></textarea>
-                        </div>
-
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Gender</label>
-                            <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleGender} value={gender} required>
-                                <option value=''>Select gender</option>
-                                <option value='Male'>Male</option>
-                                <option value='Female'>Female</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="password">Relationship Goals</label>
-                            <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleLookingFor} value={looking} required>
-                                <option value="">Select Relationship Goals</option>
-                                <option value="Long-term partne">Long-term partner</option>
-                                <option value="Short-term fun">Short-term fun</option>
-                                <option value="New friends">New friends</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="passion">Passions</label>
-                            <input id="passion" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handlePassion} value={passion} required />
-                        </div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="age">Age</label>
-                            <input id="age" type="number" min={18} max={50} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleAge} value={age} required />
-                        </div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="language">Language I know</label>
-                            <input id="language" typeof="textarea" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleLanguage} value={language} required></input>
-                        </div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="lifestyle">Life style</label>
-                            <input id="lifestyle" typeof="textarea" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleLifeStyle} value={lifeStyle} required></input></div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="jobTitle">Job title</label>
-                            <input id="jobTitle" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleJob} value={job} required />
-                        </div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="company">Company</label>
-                            <input id="company" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleCompany} value={company} required />
-                        </div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="education">Education</label>
-                            <input id="education" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handleSchool} value={school} required />
-                        </div>
-                        <div>
-                            <label className="text-white dark:text-gray-200" htmlFor="place">Place</label>
-                            <input id="place" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                                onChange={handlePlace} value={place} required />
-                        </div>
-
+                <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">About {userName ? userName : 'you'}</label>
+                        <textarea id="textarea" typeof="textarea" cols={30} rows={5} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleTextarea} value={text} required></textarea>
                     </div>
 
-                    <div className="flex justify-end mt-6">
-                        <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-600 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-pink-800" onClick={handleData}>Save</button>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="passwordConfirmation">Gender</label>
+                        <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleGender} value={gender} required>
+                            <option value=''>Select gender</option>
+                            <option value='Male'>Male</option>
+                            <option value='Female'>Female</option>
+                        </select>
                     </div>
+
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="password">Relationship Goals</label>
+                        <select className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" onChange={handleLookingFor} value={looking} required>
+                            <option value="">Select Relationship Goals</option>
+                            <option value="Long-term partne">Long-term partner</option>
+                            <option value="Short-term fun">Short-term fun</option>
+                            <option value="New friends">New friends</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="passion">Passions</label>
+                        <input id="passion" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handlePassion} value={passion} required />
+                    </div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="age">Age</label>
+                        <input id="age" type="number" min={18} max={50} className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleAge} value={age} required />
+                    </div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="language">Language I know</label>
+                        <input id="language" typeof="textarea" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleLanguage} value={language} required></input>
+                    </div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="lifestyle">Life style</label>
+                        <input id="lifestyle" typeof="textarea" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleLifeStyle} value={lifeStyle} required></input></div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="jobTitle">Job title</label>
+                        <input id="jobTitle" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleJob} value={job} required />
+                    </div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="company">Company</label>
+                        <input id="company" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleCompany} value={company} required />
+                    </div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="education">Education</label>
+                        <input id="education" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handleSchool} value={school} required />
+                    </div>
+                    <div>
+                        <label className="text-white dark:text-gray-200" htmlFor="place">Place</label>
+                        <input id="place" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                            onChange={handlePlace} value={place} required />
+                    </div>
+
+                </div>
+
+                <div className="flex justify-end mt-6">
+                    <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-pink-600 rounded-md hover:bg-pink-700 focus:outline-none focus:bg-pink-800" onClick={handleData}>Save</button>
+                </div>
             </section>
 
         </>

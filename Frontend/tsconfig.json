@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "types": ["node"],
+    "types": ["node", "@types/faker"],
     "lib": [
       "dom",
       "dom.iterable",

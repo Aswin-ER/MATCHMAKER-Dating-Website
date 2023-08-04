@@ -91,35 +91,42 @@ const userController = {
 
 
   userProfile: async (req, res) => {
+    console.log("ivede", req.body, "body")
+    console.log(req.files, "file")
 
-    // console.log("ivede", req.body, "body")
-    // console.log(req.file, "file")
+    req.files.forEach((file, index) => {
+      console.log(`File ${index + 1}:`, file);
+      // Handle the uploaded file as needed
+  });
 
     try {
 
-      const { about, gender, relationshipGoals, passion, age, language, lifeStyle, job, company, school, place, showAge, showDistance } = req.body;
+      const { image, about, gender, relationshipGoals, passion, age, language, lifeStyle, job, company, school, place, showAge, showDistance } = req.body;
 
-      //First Time error checking
-      if (!about && !gender && !relationshipGoals && !passion && !age && !language && !lifeStyle && !job && !company && !school && !place && !showAge && !showDistance) {
-        res.status(200).send({ message: "Please enter at least one field to update and then save." });
-        return;
-      }
+      // //First Time error checking
+      // if (!about && !gender && !relationshipGoals && !passion && !age && !language && !lifeStyle && !job && !company && !school && !place && !showAge && !showDistance) {
+      //   res.status(200).send({ message: "Please enter at least one field to update and then save." });
+      //   return;
+      // }
 
-      let cloudImage;
-      const image = req.file;
+      let cloudImageUrls=[];
+      const images = req.files;
+      console.log(images,"all image indo avo?");
 
-      if (image) {
-        const result = await cloudinary.uploader.upload(image.path);
-        cloudImage = result.secure_url;
-      }
+      if (images && images.length > 0) {
+        // Loop through each uploaded image
+        for (const image of images) {
+            const result = await cloudinary.uploader.upload(image.path); // Upload image to Cloudinary
+            cloudImageUrls.push(result.secure_url); // Store the secure URL
+        }
+    }
 
-      // console.log(cloudImage, "cloud image herereeeee")
+      console.log(cloudImageUrls, "cloud image herereeeee")
 
 
       const existingProfile = await UserProfile.findOne({ user: req.body.userId });
-
       if (existingProfile) {
-        if (image) existingProfile.image = cloudImage;
+        existingProfile.image = cloudImageUrls;
         if (about) existingProfile.about = about;
         if (gender) existingProfile.gender = gender;
         if (relationshipGoals) existingProfile.relationshipGoals = relationshipGoals;
@@ -147,7 +154,7 @@ const userController = {
         const userProfile = new UserProfile({
           user: req.body.userId,
           name: userName,
-          image: cloudImage,
+          image: cloudImageUrls,
           about,
           gender,
           relationshipGoals,
@@ -275,6 +282,24 @@ const userController = {
     } catch (err) {
       console.log(err,"error")
     }
+  },
+
+  verifyProfile: async (req, res)=> {
+    try{
+
+      const profile = await UserProfile.findById(req.body.userId)
+      if(profile){
+        res.status(200).send();
+      }else{
+        res.status(200).send({message: "Verify your profile to see"});
+      }
+
+    }catch(err){
+      console.log(err,"Error")
+      res.status(500).send({message: "Server error"});
+    }
+
+
   }
 
 

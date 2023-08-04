@@ -58,7 +58,7 @@ const ProtectedPage: FC = () => {
     axiosInstance.get('/userProfile').then((res) => {
       console.log(res.data, "user image here");
       if (res.data) {
-        setImages((prevState) => res.data.image)
+        setImages((prevState) => res?.data?.image?.[0])
       }
     })
   }, [])

@@ -37,7 +37,7 @@ const AdminUsers: FC = () => {
     return (
         <>
             <div className='mt-16 mb-8'>
-                <h1 className='text-4xl font-semibold text-center'>User <span className='text-4xl font-semibold text-pink-700'>Management</span></h1>
+                <h1 className='text-4xl font-semibold text-center'>USER <span className='text-4xl font-semibold text-pink-700'>MANAGEMENT</span></h1>
             </div>
             <div className="flex flex-col mx-50">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -57,8 +57,8 @@ const AdminUsers: FC = () => {
                                     {
                                         users.map((user: any, index: number) => (
                                             <tr key={index} className="border-b dark:border-neutral-900 border-2 border-pink-200">
-                                                <td className="whitespace-nowrap  px-6 py-4 font-medium text-lg">{user.email}</td>
                                                 <td className="whitespace-nowrap  px-6 py-4 font-medium text-lg">{user.name}</td>
+                                                <td className="whitespace-nowrap  px-6 py-4 font-medium text-lg">{user.email}</td>
                                                 <td className="whitespace-nowrap  px-6 py-4 font-medium text-lg" onClick={()=> handleClick(user)}>
                                                     {
                                                         user.status === true ?

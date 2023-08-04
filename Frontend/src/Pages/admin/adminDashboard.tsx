@@ -2,6 +2,7 @@
 
 import React, { FC } from 'react';
 import AdminNavbar from '../../Components/admin/adminNavbar/adminNavbar';
+import AdminDash1 from '../../Components/admin/adminDashboard/adminDash1';
 
 const AdminDashboard: FC = () => {
 
@@ -9,6 +10,7 @@ const AdminDashboard: FC = () => {
     return (
         <>
         <AdminNavbar/>
+        <AdminDash1/>
         </>
     )
 };
