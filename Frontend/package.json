@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fancyapps/ui": "^5.0.20",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -27,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-google-button": "^0.7.2",
     "react-icons": "^4.10.1",
+    "react-modal": "^3.16.1",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
@@ -62,6 +64,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/react-modal": "^3.16.0",
     "crypto-browserify": "^3.12.0",
     "daisyui": "^3.2.1",
     "dotenv": "^16.3.1",

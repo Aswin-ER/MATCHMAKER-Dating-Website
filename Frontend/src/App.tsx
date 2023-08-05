@@ -6,13 +6,14 @@ import SignUp from './Pages/user/SignUp';
 import Home from './Pages/user/Home';
 import Forgot from './Pages/user/Forgot';
 import NewPass from './Pages/user/NewPass';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Profile from './Pages/user/Profile';
 import Like from './Pages/user/Liked';
 import Admin from './Pages/admin/adminLogin'
 import AdminHome from './Pages/admin/adminDashboard'
 import AdminUsers from './Pages/admin/adminUsers';
+import UserProfiles from './Pages/user/UserProfiles';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
     <Route path='/forgot' element={<Forgot/>}></Route>
     <Route path='/profile' element={<Profile/>}></Route>
     <Route path='/liked' element={<Like/>}></Route>
+    <Route path='/userProfile' element={<UserProfiles/>}></Route>
     <Route path="/password-reset/:userId/:token" Component={NewPass} />
 
     <Route path="/admin" element={<Admin/>} />

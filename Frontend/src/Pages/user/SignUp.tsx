@@ -26,6 +26,7 @@ const SignUp: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [err, setErr] = useState<string>('');
+  console.log(err)
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),

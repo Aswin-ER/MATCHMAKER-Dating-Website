@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
@@ -7,6 +8,7 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '../../../api/axiosInstance';
 import Button from '../../common/button';
 import LoveIcon from '../../common/loveIcon';
+import Fancybox from '../../common/fancyBox';
 
 interface UserProfile {
     _id: string;
@@ -68,12 +70,13 @@ const Profile: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/verifyProfile', user).then((res) => {
+
             console.log(res.data);
             if (res.data.message) {
-                setVerify(true);
+                setVerify((prev) => !prev);
             }
         })
-    })
+    }, []);
 
 
     const isProfileLiked = (userProfileId: string, likedProfile: Array<any>): boolean => {
@@ -119,7 +122,7 @@ const Profile: FC = () => {
         <>
 
             <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
-                <h3 className='text-white lg:text-6xl font-semibold italic lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Find your <span className='text-pink-700 italic'>Match Here</span></h3>
+                <h3 className='text-white lg:text-6xl font-semibold  lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Find your <span className='text-pink-700'>Match Here</span></h3>
 
 
                 <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-50 mobile:mt-40 mobile:gap-16">
@@ -131,7 +134,7 @@ const Profile: FC = () => {
 
                                 <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                     <div className="h-98 w-82">
-                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt=""/>
                                     </div>
                                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
                                     <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
@@ -143,7 +146,7 @@ const Profile: FC = () => {
                                                 :
                                                 <Button handleClick={() => openModal(userProfile)} text="View More" />
                                         }
-                                        
+
                                         {
                                             verify ?
                                                 ""
@@ -188,9 +191,33 @@ const Profile: FC = () => {
                             <h1 className="text-3xl pb-8 text-center">{selectedUserProfile.name} {selectedUserProfile.age}</h1>
 
                             <div className='flex justify-center items-center gap-5 mb-5'>
-                                <img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img>
-                                <img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img>
-                                <img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img>
+                                {
+                                    selectedUserProfile?.image?.[0] ?
+                                    <Fancybox>
+                                       <a data-fancybox="gallery" href={selectedUserProfile?.image?.[0]} ><img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img></a> 
+                                        </Fancybox>
+                                        :
+                                        ""
+                                }
+
+                                {
+                                    selectedUserProfile?.image?.[1] ?
+                                    <Fancybox>
+                                    <a data-fancybox="gallery" href={selectedUserProfile?.image?.[1]} ><img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img></a> 
+                                     </Fancybox>
+                                        :
+                                        ""
+                                }
+
+                                {
+                                    selectedUserProfile?.image?.[2] ?
+                                    <Fancybox>
+                                    <a data-fancybox="gallery" href={selectedUserProfile?.image?.[2]} ><img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img></a> 
+                                     </Fancybox>
+                                        :
+                                        ""
+                                }
+
                             </div>
                             <div className="grid grid-cols-2 gap-4 ml-10">
                                 <h4 className="text-xl italic pb-4">Gender: {selectedUserProfile.gender}</h4>

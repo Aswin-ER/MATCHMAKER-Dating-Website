@@ -90,8 +90,13 @@ module.exports = {
       '156': '39rem',
       '158': '39.5rem',
       '160': '40rem',
-      }
+      },
+
+      fontFamily: {
+        Poppins: ["Roboto", "sans-serif"],
+       },
     },
+   
     
   },
   plugins: [require("daisyui")],

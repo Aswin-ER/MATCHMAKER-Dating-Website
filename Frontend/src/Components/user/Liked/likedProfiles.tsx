@@ -2,6 +2,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import Button from '../../common/button';
 import { axiosInstance } from '../../../api/axiosInstance';
+import { Link } from 'react-router-dom';
 
 interface UserProfile {
     _id: string;
@@ -59,35 +60,54 @@ const LikedProfiles: FC = () => {
         }
     }
 
+
     return (
         <>
             <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
-                <h3 className='text-white lg:text-6xl font-semibold italic lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Liked <span className='text-pink-700 italic'>Profiles</span></h3>
 
 
-                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-50 mobile:mt-40 mobile:gap-16">
-                    {
-                        likedProfile.map((profile:any, index: number) => {
-                            return (
+                {
+                    likedProfile.length > 0 ?
 
-                                <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
-                                    <div className="h-98 w-82">
-                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={profile?.image?.[0]} alt="" />
-                                    </div>
-                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-                                    <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                                        <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
-                                        <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
-                                        <Button handleClick={() => openModal(profile)} text="View More" />
-                                    </div>
+                        (
+                            <>
+                                <h3 className='text-white lg:text-6xl font-semibold lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Liked <span className='text-pink-700 italic'>Profiles</span></h3>
+                                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-50 mobile:mt-40 mobile:gap-16">
+                                    {
+                                        likedProfile?.map((profile: any, index: number) => {
+                                            return (
+                                                <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                                    <div className="h-98 w-82">
+                                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={profile?.image?.[0]} alt="" />
+                                                    </div>
+                                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                                    <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                        <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
+                                                        <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
+                                                        <Button handleClick={() => openModal(profile)} text="View More" />
+                                                    </div>
+                                                </div>
+
+                                            );
+                                        })
+                                    }
                                 </div>
+                            </>
+                        )
+                        :
 
-                            );
-                        })
-                    }
+                        (
+                            <>
+                            <div className='flex-col text-center'>
+                                <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                <p className='text-md font-normal font-serif text-white text-center mt-5'>Yours likes will appear here. Start liking people right away.</p>
+                               <Link to={'/userProfile'}><p className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>Start Liking</p></Link>
+                            </div>
+                            </>
+                        )
+                }
 
-                </div>
-
+                User Profile
                 {selectedUserProfile && showModal && (
 
                     <div
@@ -101,9 +121,27 @@ const LikedProfiles: FC = () => {
                             <h1 className="text-3xl pb-8 text-center">{selectedUserProfile.name} {selectedUserProfile.age}</h1>
 
                             <div className='flex justify-center items-center gap-5 mb-5'>
-                                <img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img>
-                                <img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img>
-                                <img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img>
+                                {
+                                    selectedUserProfile?.image?.[0] ?
+                                        <img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img>
+                                        :
+                                        ""
+                                }
+
+                                {
+                                    selectedUserProfile?.image?.[1] ?
+                                        <img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img>
+                                        :
+                                        ""
+                                }
+
+                                {
+                                    selectedUserProfile?.image?.[2] ?
+                                        <img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img>
+                                        :
+                                        ""
+                                }
+
                             </div>
                             <div className="grid grid-cols-2 gap-4 ml-10">
                                 <h4 className="text-xl italic pb-4">Gender: {selectedUserProfile.gender}</h4>

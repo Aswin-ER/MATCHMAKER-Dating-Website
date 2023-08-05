@@ -3,17 +3,21 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import RootState from '../../../Redux/rootState';
 import { axiosInstance } from '../../../api/axiosInstance';
+import { AiFillEdit } from 'react-icons/ai'
 
 const Body: FC = () => {
 
     // Images of user
     const [image, setImages] = useState<string>('');
+    const [img, setImg] = useState<string>('');
     const [selectedImage, setSelectedImage] = useState<any>()
 
     const [image1, setImages1] = useState<string>('');
+    const [img1, setImg1] = useState<string>('');
     const [selectedImage1, setSelectedImage1] = useState<any>()
 
     const [image2, setImages2] = useState<string>('');
+    const [img2, setImg2] = useState<string>('');
     const [selectedImage2, setSelectedImage2] = useState<any>()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,8 +26,11 @@ const Body: FC = () => {
             console.log(file)
             setImages(file);
             setSelectedImage(URL.createObjectURL(file));
+            setVerify((prev) => !prev);
+
         }
     };
+
 
     const handleChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -31,15 +38,17 @@ const Body: FC = () => {
             console.log(file)
             setImages1(file);
             setSelectedImage1(URL.createObjectURL(file));
+            setVerify1((prev) => !prev);
         }
     };
 
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            const file: any = e.target.files[0];
-            console.log(file)
-            setImages2(file);
-            setSelectedImage2(URL.createObjectURL(file));
+            const file2: any = e.target.files[0];
+            console.log(file2)
+            setImages2(file2);
+            setSelectedImage2(URL.createObjectURL(file2));
+            setVerify2((prev) => !prev);
         }
     };
 
@@ -121,6 +130,7 @@ const Body: FC = () => {
 
     // State for validation
     const [emptyFields, setEmptyFields] = useState<string[]>([]);
+    console.log(emptyFields)
 
     const handleData = () => {
 
@@ -181,7 +191,7 @@ const Body: FC = () => {
         }
 
         axiosInstance.post('/userProfile', formData).then((res) => {
-            console.log(res,"response")
+            console.log(res, "response")
             if (res.data.message) {
                 toast.success(res.data.message)
             } else {
@@ -198,8 +208,11 @@ const Body: FC = () => {
             console.log(res.data, "user data hereeeeeeeeeeeeeeeeeeee");
             if (res.data) {
                 setImages((prevState) => res.data?.image?.[0])
+                setImg((prevState)=> res.data?.image?.[0])
                 setImages1((prevState) => res.data?.image?.[1])
+                setImg1((prevState)=> res.data?.image?.[1])
                 setImages2((prevState) => res.data?.image?.[2])
+                setImg2((prevState)=> res.data?.image?.[2])
                 setText((prevState) => res.data.about)
                 setAge((prevState: any) => res.data.age);
                 setGender((prevState) => res.data.gender);
@@ -216,6 +229,21 @@ const Body: FC = () => {
         })
     }, [])
 
+    const [verify, setVerify] = useState<boolean>();
+    const [verify1, setVerify1] = useState<boolean>();
+    const [verify2, setVerify2] = useState<boolean>();
+
+    const handlePic = () => {
+        setVerify((prev) => !prev);
+    }
+
+    const handlePic1 = () => {
+        setVerify1((prev) => !prev);
+    }
+
+    const handlePic2 = () => {
+        setVerify2((prev) => !prev);
+    }
 
     return (
         <>
@@ -223,18 +251,18 @@ const Body: FC = () => {
                 <h1 className="text-2xl font-semibold text-white capitalize dark:text-white mb-10 flex justify-center">USER PROFILE</h1>
                 <div className="mb-6">
                     <h1 className="block text-lg font-medium text-white">
-                       Fill all the details and verify your profile
+                        Fill all the details and verify your profile
                     </h1>
                     <div className="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-2 border-solid border-white rounded-md">
                         <div className="space-y-1 text-center">
                             {
-                                image?
-                                <h1 className='text-2xl text-white font-medium font-mono'>Uploaded Profile Pics</h1>
-                                :
-                                <h1 className='text-2xl text-white font-medium font-mono'>Upload Profile Pics</h1>
+                                image ?
+                                    <h1 className='text-2xl text-white font-medium font-mono'>Uploaded Profile Pics</h1>
+                                    :
+                                    <h1 className='text-2xl text-white font-medium font-mono'>Upload Profile Pics</h1>
                             }
                             <div className="flex text-sm text-gray-300 flex-col">
-                                <div className='flex gap-2'>
+                                <div className='flex gap-5'>
 
                                     <div className='mt-5 border-white border-2 border-dashed'>
                                         {
@@ -244,17 +272,35 @@ const Body: FC = () => {
                                                 <img src={image} alt='' className='w-50 h-50'></img>
                                         }
 
-{
-                                            image ?
-                                                ""
-                                                :
+
+                                        {
+                                            img?.length > 0 ?
+                                                <>
+                                                    <AiFillEdit className='bg-black' onClick={handlePic} />
+                                                </>
+                                                : selectedImage?.length > 0 ?
+                                                   ""
+                                                    :
+                                                    <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                        <span className="block bg-white">Upload Profile Pic</span>
+                                                        <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange} />
+                                                    </label>
+
+                                        }
+
+                                        {
+                                            (img && verify) ?
                                                 <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                                     <span className="block bg-white">Upload Profile Pic</span>
                                                     <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange} />
                                                 </label>
+                                                :
+                                                ""
                                         }
 
+
                                     </div>
+
 
                                     <div className='mt-5 border-white border-2 border-dashed'>
                                         {
@@ -262,21 +308,32 @@ const Body: FC = () => {
                                                 <img src={selectedImage1} alt='' className='w-50 h-50'></img>
                                                 :
                                                 <img src={image1} alt='' className='w-50 h-50'></img>
-
                                         }
 
                                         {
-                                            image1 ?
+                                            img1?.length > 0 ?
+                                                <AiFillEdit className='bg-black' onClick={handlePic1} />
+                                                : selectedImage1?.length > 0 ?
+                                                    ""
+                                                    :
+                                                    <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                        <span className="block bg-white">Upload Profile Pic</span>
+                                                        <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange1} />
+                                                    </label>
+                                        }
 
-                                                ""
-                                                :
+                                        {
+                                            (img1 && verify1) ?
                                                 <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                                     <span className="block bg-white">Upload Profile Pic</span>
                                                     <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange1} />
                                                 </label>
+                                                :
+                                                ""
                                         }
 
                                     </div>
+
 
                                     <div className='mt-5 border-2 border-dashed'>
                                         {
@@ -287,20 +344,32 @@ const Body: FC = () => {
 
                                         }
 
-{
-                                            image2 ?
+                                        {
+                                            img2?.length > 0 ?
 
+                                                <AiFillEdit className='bg-black' onClick={handlePic2} />
+                                                : selectedImage2?.length > 0 ?
                                                 ""
                                                 :
-
                                                 <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                                     <span className="block bg-white">Upload Profile Pic</span>
                                                     <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange2} />
                                                 </label>
                                         }
 
+                                        {
+                                            (img2 && verify2) ?
+                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                    <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange2} />
+                                                </label>
+                                                :
+                                                ""
+                                        }
+
                                     </div>
                                 </div>
+                                <h1 className='mt-5 text-md'>Upload image size less than or upto 10MB</h1>
                             </div>
                         </div>
                     </div>

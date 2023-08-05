@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "types": ["node", "@types/faker"],
+    "types": ["node"],
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@fancyapps/ui": ["path/to/node_modules/@fancyapps/ui"],
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

@@ -277,8 +277,13 @@ const userController = {
       const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
 
       // console.log(likeProfile,"here is like profile")
+      if(likeProfile){
+        res.status(200).json(likeProfile.userProfileId);
+      }else{
+        res.status(200).send();
+      }
 
-      res.status(200).json(likeProfile.userProfileId);
+
     } catch (err) {
       console.log(err,"error")
     }
