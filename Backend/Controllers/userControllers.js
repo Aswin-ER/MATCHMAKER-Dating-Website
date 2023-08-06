@@ -71,7 +71,7 @@ const userController = {
 
 
   getUser: async (req, res) => {
-    console.log("working....", req.body.userId);
+    // console.log("working....", req.body.userId);
 
     try {
       const user = await userModel.findById(req.body.userId);
@@ -91,8 +91,8 @@ const userController = {
 
 
   userProfile: async (req, res) => {
-    console.log("ivede", req.body, "body")
-    console.log(req.files, "file")
+    // console.log("ivede", req.body, "body")
+    // console.log(req.files, "file")
 
     req.files.forEach((file, index) => {
       console.log(`File ${index + 1}:`, file);
@@ -103,15 +103,8 @@ const userController = {
 
       const { image, about, gender, relationshipGoals, passion, age, language, lifeStyle, job, company, school, place, showAge, showDistance } = req.body;
 
-      // //First Time error checking
-      // if (!about && !gender && !relationshipGoals && !passion && !age && !language && !lifeStyle && !job && !company && !school && !place && !showAge && !showDistance) {
-      //   res.status(200).send({ message: "Please enter at least one field to update and then save." });
-      //   return;
-      // }
-
       let cloudImageUrls=[];
       const images = req.files;
-      console.log(images,"all image indo avo?");
 
       if (images && images.length > 0) {
         // Loop through each uploaded image
@@ -121,7 +114,7 @@ const userController = {
         }
     }
 
-      console.log(cloudImageUrls, "cloud image herereeeee")
+      // console.log(cloudImageUrls, "cloud image herereeeee")
 
 
       const existingProfile = await UserProfile.findOne({ user: req.body.userId });
@@ -170,6 +163,14 @@ const userController = {
 
         await userProfile.save();
         // console.log(userProfile, "Created user profile")
+
+        const updatedUser = await User.findByIdAndUpdate(
+          req.body.userId,
+          { $set: { profile: true } },
+          { new: true }
+        );
+        // console.log(updatedUser,"Updated user here")
+
         res.status(200).send({ message: "Profile updated successfully" })
       }
     } catch (err) {
@@ -181,7 +182,6 @@ const userController = {
 
   getUserProfile: async (req, res) => {
     try {
-      console.log(req.body.userId, "getsuer profile")
       const userProfile = await UserProfile.findOne({ user: req.body.userId });
       if (userProfile) {
         // console.log(userProfile, "user profile")
@@ -292,11 +292,13 @@ const userController = {
   verifyProfile: async (req, res)=> {
     try{
 
-      const profile = await UserProfile.findById(req.body.userId)
-      if(profile){
-        res.status(200).send();
-      }else{
+      const profile = await UserProfile.find({user:req.body.userId})
+      // console.log(profile)
+
+      if(profile.length === 0){
         res.status(200).send({message: "Verify your profile to see"});
+      }else{
+        console.log("ok")
       }
 
     }catch(err){

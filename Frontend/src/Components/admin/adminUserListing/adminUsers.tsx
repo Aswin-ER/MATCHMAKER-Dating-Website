@@ -7,14 +7,13 @@ import { toast } from 'react-toastify';
 
 const AdminUsers: FC = () => {
 
-    // const navigate = useNavigate();
 
     const [users, setUsers] = useState<any>([]);
 
 
     useEffect(() => {
         adminAxiosInstance.get('/admin/users').then((res) => {
-            console.log(res.data);
+            console.log(res.data,"user details here");
             setUsers(res.data);
         }).catch((err)=> {
             console.log(err,"Error")

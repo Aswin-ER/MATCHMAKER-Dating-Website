@@ -44,7 +44,7 @@ const ProtectedPage: FC = () => {
 
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
-      console.log(localStorage.getItem('jwtToken'));
+      // console.log(localStorage.getItem('jwtToken'));
       validateToken();
     }
   }, []);
@@ -66,17 +66,17 @@ const ProtectedPage: FC = () => {
 
   return (
     <div>
-      <nav className="border-gray-200 bg-pink-100 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="border-gray-200 bg-pink-100 ">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
           <a href="#" className="flex items-center">
-            <span className="self-center text-2xl lg:mb-1 lg:text-3xl font-semibold lg:font-bold whitespace-nowrap dark:text-white">MATCH<span className=' text-pink-700'>MAKER</span></span>
+            <span className="self-center text-2xl lg:mb-1 lg:text-3xl text-black font-semibold lg:font-bold whitespace-nowrap ">MATCH<span className=' text-pink-700'>MAKER</span></span>
           </a>
 
           <button
             data-collapse-toggle="navbar-solid-bg"
             type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 "
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-controls="navbar-solid-bg"
             aria-expanded={isMenuOpen}
             onClick={toggleMenu}>
@@ -93,7 +93,7 @@ const ProtectedPage: FC = () => {
           </button>
 
           <div className={`w-full lg:block lg:w-auto ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-solid-bg">
-            <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-transparent dark:bg-gray-800 lg:dark:bg-transparent dark:border-gray-700">
+            <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-transparent">
               <li className='mt-1'>
                 <NavLink to={'/'} style={({ isActive }) => {
                   return {
@@ -102,7 +102,7 @@ const ProtectedPage: FC = () => {
                 }} >
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg bg-pink-700 rounded lg:bg-transparent lg:p-0 lg:dark:text-blue-500 dark:bg-blue-600 lg:dark:bg-transparent"
+                    className="block py-2 pl-3 pr-4 lg:text-lg bg-pink-700 rounded lg:bg-transparent lg:p-0"
                     aria-current="page">
                     Home
                   </a>
@@ -117,7 +117,7 @@ const ProtectedPage: FC = () => {
                   }}>
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg  rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                    className="block py-2 pl-3 pr-4 lg:text-lg rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 "
                   >
                     Profiles
                   </a>
@@ -132,7 +132,7 @@ const ProtectedPage: FC = () => {
                   }}>
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg  rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                    className="block py-2 pl-3 pr-4 lg:text-lg  rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                   >
                     Likes
                   </a>
@@ -141,7 +141,7 @@ const ProtectedPage: FC = () => {
               <li className='mt-1'>
                 <a
                   href="#"
-                  className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                  className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                 >
                   Matches
                 </a>
@@ -149,7 +149,7 @@ const ProtectedPage: FC = () => {
               <li className='mt-1'>
                 <a
                   href="#"
-                  className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                  className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                 >
                   Settings
                 </a>
@@ -159,7 +159,7 @@ const ProtectedPage: FC = () => {
 
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                     onClick={handleClick}
                   >
                     Logout
@@ -167,7 +167,7 @@ const ProtectedPage: FC = () => {
                   :
                   <NavLink to={'/login'}> <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                   >
                     Login
                   </a>

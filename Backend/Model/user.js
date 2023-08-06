@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
+    profile: {
+        type: Boolean,
+    },
     userProfile: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserProfile',

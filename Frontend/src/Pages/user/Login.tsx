@@ -5,8 +5,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../api/axiosInstance';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { useSelector } from 'react-redux';
-import RootState from '../../Redux/rootState';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
@@ -14,8 +12,6 @@ import * as Yup from 'yup';
 const Login: FC = () => {
 
   const navigate = useNavigate();
-  const user: any = useSelector((state: RootState) => state.userCred.userCred?.name);
-  console.log(user, "user here");
 
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
@@ -76,7 +72,7 @@ const Login: FC = () => {
 
     <GoogleOAuthProvider clientId="684475057007-2abci7ht9ppi3313g5duloq7um38qlp3.apps.googleusercontent.com" >
       <div>
-        <h1 className="text-3xl lg:text-5xl font-bold text-center mt-10 mobile:text-2xl">
+        <h1 className="text-3xl lg:text-5xl font-bold text-center mt-10 mobile:text-2xl dark:text-white">
           MATCH<span className="text-3xl lg:text-5xl font-bold text-center text-pink-700 mt-6 lg:mt-16 mobile:text-2xl">MAKER</span>
         </h1>
         <div className="container mobile:w-10/12 lg:w-8/12  xl:w-4/12 mx-auto px-4 mt-6 lg:mt-16 bg-pink-100 p-8 rounded-lg shadow-lg ">
@@ -88,7 +84,7 @@ const Login: FC = () => {
               <label htmlFor='email' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Email</label>
               <input
                 type="email"
-                className="block w-full lg:px-4 lg:py-2 text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+                className="block w-full lg:px-4 lg:py-2 text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500 dark:text-black"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 name='email'
@@ -99,7 +95,7 @@ const Login: FC = () => {
               <label htmlFor='password' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Password</label>
               <input
                 type="password"
-                className="block w-full lg:px-4 lg:py-2 text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+                className="block w-full lg:px-4 lg:py-2 text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500 dark:text-black"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 name='password'
@@ -114,7 +110,7 @@ const Login: FC = () => {
               <button type='button' onClick={handleClick} className="w-full lg:px-1 py-2 mobile:text-sm text-lg lg:text-xl font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-lg hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
                 Login
               </button>
-              <p className='lg:text-lg font-semibold text-center py-3'>OR</p>
+              <p className='lg:text-lg font-semibold text-center py-3 dark:text-black'>OR</p>
 
               <div className='flex w-full justify-center items-center'>
                 <GoogleLogin

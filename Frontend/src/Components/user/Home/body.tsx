@@ -36,7 +36,7 @@ const Body: FC = () => {
             </div>
 
 
-            <div className='lg:flex lg:items-center'>
+            <div className='lg:flex lg:items-center bg-pink-100'>
                 <div className='lg:w-1/2 lg:pr-16'>
                     <h3 className='text-black lg:text-6xl lg:mt-24 lg:ml-16 md:text-4xl mobile:text-2xl mobile:ml-5 mobile:mt-10 italic font-semibold tracking-wide'>
                         What our <span className='text-pink-700 italic'>Users Say</span>

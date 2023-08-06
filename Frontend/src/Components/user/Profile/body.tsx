@@ -198,8 +198,6 @@ const Body: FC = () => {
                 toast.error(res.data.message)
             }
         })
-
-
     }
 
 
@@ -208,11 +206,11 @@ const Body: FC = () => {
             console.log(res.data, "user data hereeeeeeeeeeeeeeeeeeee");
             if (res.data) {
                 setImages((prevState) => res.data?.image?.[0])
-                setImg((prevState)=> res.data?.image?.[0])
+                setImg((prevState) => res.data?.image?.[0])
                 setImages1((prevState) => res.data?.image?.[1])
-                setImg1((prevState)=> res.data?.image?.[1])
+                setImg1((prevState) => res.data?.image?.[1])
                 setImages2((prevState) => res.data?.image?.[2])
-                setImg2((prevState)=> res.data?.image?.[2])
+                setImg2((prevState) => res.data?.image?.[2])
                 setText((prevState) => res.data.about)
                 setAge((prevState: any) => res.data.age);
                 setGender((prevState) => res.data.gender);
@@ -261,10 +259,10 @@ const Body: FC = () => {
                                     :
                                     <h1 className='text-2xl text-white font-medium font-mono'>Upload Profile Pics</h1>
                             }
-                            <div className="flex text-sm text-gray-300 flex-col">
-                                <div className='flex gap-5'>
+                            <div className="text-sm text-gray-300 flex-col">
+                                <div className='flex gap-5 mobile:flex-col lg:flex-row lg:justify-center md:flex-row md:justify-center'>
 
-                                    <div className='mt-5 border-white border-2 border-dashed'>
+                                    <div className='mt-5 border-white border-2 border-dashed w-50 mobile:flex-col'>
                                         {
                                             selectedImage ?
                                                 <img src={selectedImage} alt='' className='w-50 h-50'></img>
@@ -276,13 +274,16 @@ const Body: FC = () => {
                                         {
                                             img?.length > 0 ?
                                                 <>
-                                                    <AiFillEdit className='bg-black' onClick={handlePic} />
+                                                    <div className='flex bg-black cursor-pointer' onClick={handlePic} >
+                                                        <AiFillEdit className='bg-black w-8 h-5' />
+                                                        <p className='bg-black ml-11'>Edit pic</p>
+                                                    </div>
                                                 </>
                                                 : selectedImage?.length > 0 ?
-                                                   ""
+                                                    ""
                                                     :
-                                                    <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                        <span className="block bg-white">Upload Profile Pic</span>
+                                                    <label htmlFor="file-upload1" className="relative cursor-pointer rounded-md font-medium">
+                                                        <span className="block bg-pink-800 hover:bg-pink-500 text-white">Upload Profile Pic</span>
                                                         <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange} />
                                                     </label>
 
@@ -291,7 +292,7 @@ const Body: FC = () => {
                                         {
                                             (img && verify) ?
                                                 <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                    <span className="block bg-pink-800 hover:bg-pink-500 text-white">Upload Profile Pic</span>
                                                     <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange} />
                                                 </label>
                                                 :
@@ -302,7 +303,7 @@ const Body: FC = () => {
                                     </div>
 
 
-                                    <div className='mt-5 border-white border-2 border-dashed'>
+                                    <div className='mt-5 border-white border-2 border-dashed w-50'>
                                         {
                                             selectedImage1 ?
                                                 <img src={selectedImage1} alt='' className='w-50 h-50'></img>
@@ -312,20 +313,25 @@ const Body: FC = () => {
 
                                         {
                                             img1?.length > 0 ?
-                                                <AiFillEdit className='bg-black' onClick={handlePic1} />
+                                                <>
+                                                    <div className='flex bg-black cursor-pointer' onClick={handlePic1} >
+                                                        <AiFillEdit className='bg-black w-8 h-5' />
+                                                        <p className='bg-black ml-11'>Edit pic</p>
+                                                    </div>
+                                                </>
                                                 : selectedImage1?.length > 0 ?
                                                     ""
                                                     :
-                                                    <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                        <span className="block bg-white">Upload Profile Pic</span>
+                                                    <label htmlFor="file-upload1" className="relative cursor-pointer rounded-md font-medium">
+                                                        <span className="block bg-pink-800 hover:bg-pink-500 text-white">Upload Profile Pic</span>
                                                         <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange1} />
                                                     </label>
                                         }
 
                                         {
                                             (img1 && verify1) ?
-                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                <label htmlFor="file-upload1" className="relative cursor-pointerrounded-md font-medium">
+                                                    <span className="block bg-pink-800 hover:bg-pink-500 text-white">Upload Profile Pic</span>
                                                     <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange1} />
                                                 </label>
                                                 :
@@ -335,7 +341,7 @@ const Body: FC = () => {
                                     </div>
 
 
-                                    <div className='mt-5 border-2 border-dashed'>
+                                    <div className='mt-5 border-2 border-dashed w-50'>
                                         {
                                             selectedImage2 ?
                                                 <img src={selectedImage2} alt='' className='w-50 h-50'></img>
@@ -346,21 +352,25 @@ const Body: FC = () => {
 
                                         {
                                             img2?.length > 0 ?
-
-                                                <AiFillEdit className='bg-black' onClick={handlePic2} />
+                                                <>
+                                                    <div className='flex bg-black cursor-pointer' onClick={handlePic2} >
+                                                        <AiFillEdit className='bg-black w-8 h-5' />
+                                                        <p className='bg-black ml-11'>Edit pic</p>
+                                                    </div>
+                                                </>
                                                 : selectedImage2?.length > 0 ?
-                                                ""
-                                                :
-                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                    <span className="block bg-white">Upload Profile Pic</span>
-                                                    <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange2} />
-                                                </label>
+                                                    ""
+                                                    :
+                                                    <label htmlFor="file-upload1" className="relative cursor-pointer rounded-md font-medium">
+                                                        <span className="block bg-pink-800 hover:bg-pink-500 text-white">Upload Profile Pic</span>
+                                                        <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange2} />
+                                                    </label>
                                         }
 
                                         {
                                             (img2 && verify2) ?
-                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                    <span className="block bg-white">Upload Profile Pic</span>
+                                                <label htmlFor="file-upload1" className="relative cursor-pointer bg-white rounded-md font-medium">
+                                                    <span className="block bg-pink-800 hover:bg-pink-500 text-white">Upload Profile Pic</span>
                                                     <input id="file-upload1" name="image" type="file" className="sr-only" onChange={handleChange2} />
                                                 </label>
                                                 :

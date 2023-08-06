@@ -31,16 +31,17 @@ interface UserProfile {
 
 const Profile: FC = () => {
 
+    const verify:boolean | any = useSelector((state: RootState)=> state.userCred.userCred?.profile);
+    // console.log(verify,"userprofileCreated here")
+
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
     const [showModal, setShowModal] = useState<Boolean>(false);
     const [userDet, setUserDet] = useState([])
     const [likedProfile, setLikedProfile] = useState<string[]>([])
-    const [verify, setVerify] = useState<boolean>();
-
 
     //Logged in userDetails
     const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
-    console.log(user)
+    // console.log(user)
 
     const handleButton = () => {
         toast.info('Login to see Profiles');
@@ -49,35 +50,6 @@ const Profile: FC = () => {
     const handleSeeMore = () => {
         toast.info('Verify Your Profile to see others Profile')
     }
-
-
-    useEffect(() => {
-        axiosInstance.get('/getAllUserProfile').then((res) => {
-            // console.log(res);
-            setUserDet(res.data)
-        })
-
-    }, [])
-
-    useEffect(() => {
-        axiosInstance.get('/getLikedProfiles').then((res) => {
-            // console.log(res.data,"likedProfiles")
-            setLikedProfile(res.data || []);
-        }).catch((err) => {
-            console.log(err)
-        })
-    }, []);
-
-    useEffect(() => {
-        axiosInstance.get('/verifyProfile', user).then((res) => {
-
-            console.log(res.data);
-            if (res.data.message) {
-                setVerify((prev) => !prev);
-            }
-        })
-    }, []);
-
 
     const isProfileLiked = (userProfileId: string, likedProfile: Array<any>): boolean => {
         // console.log('Liked profiles:', likedProfile);
@@ -114,15 +86,33 @@ const Profile: FC = () => {
         }).catch((err) => {
             console.log(err)
         });
-
     }
+
+    
+
+    useEffect(() => {
+        axiosInstance.get('/getAllUserProfile').then((res) => {
+            console.log(res,"all profile here mannnnnnn");
+            setUserDet(res.data)
+        })
+
+    }, [])
+
+    useEffect(() => {
+        axiosInstance.get('/getLikedProfiles').then((res) => {
+            // console.log(res.data,"likedProfiles")
+            setLikedProfile(res.data || []);
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, []);
 
 
     return (
         <>
 
             <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
-                <h3 className='text-white lg:text-6xl font-semibold  lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Find your <span className='text-pink-700'>Match Here</span></h3>
+                <h3 className='text-white lg:text-6xl font-semibold  lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Find Your <span className='text-pink-700'>Match Here</span></h3>
 
 
                 <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-50 mobile:mt-40 mobile:gap-16">
@@ -134,7 +124,7 @@ const Profile: FC = () => {
 
                                 <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                     <div className="h-98 w-82">
-                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt=""/>
+                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
                                     </div>
                                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
                                     <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
@@ -142,16 +132,12 @@ const Profile: FC = () => {
                                         <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
                                         {
                                             verify ?
+                                                <>
+                                                    <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                    <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                                </>
+                                                :
                                                 <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
-                                                :
-                                                <Button handleClick={() => openModal(userProfile)} text="View More" />
-                                        }
-
-                                        {
-                                            verify ?
-                                                ""
-                                                :
-                                                <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
                                         }
                                     </div>
                                 </div>
@@ -193,8 +179,8 @@ const Profile: FC = () => {
                             <div className='flex justify-center items-center gap-5 mb-5'>
                                 {
                                     selectedUserProfile?.image?.[0] ?
-                                    <Fancybox>
-                                       <a data-fancybox="gallery" href={selectedUserProfile?.image?.[0]} ><img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img></a> 
+                                        <Fancybox>
+                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[0]} ><img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img></a>
                                         </Fancybox>
                                         :
                                         ""
@@ -202,18 +188,18 @@ const Profile: FC = () => {
 
                                 {
                                     selectedUserProfile?.image?.[1] ?
-                                    <Fancybox>
-                                    <a data-fancybox="gallery" href={selectedUserProfile?.image?.[1]} ><img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img></a> 
-                                     </Fancybox>
+                                        <Fancybox>
+                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[1]} ><img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img></a>
+                                        </Fancybox>
                                         :
                                         ""
                                 }
 
                                 {
                                     selectedUserProfile?.image?.[2] ?
-                                    <Fancybox>
-                                    <a data-fancybox="gallery" href={selectedUserProfile?.image?.[2]} ><img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img></a> 
-                                     </Fancybox>
+                                        <Fancybox>
+                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[2]} ><img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img></a>
+                                        </Fancybox>
                                         :
                                         ""
                                 }

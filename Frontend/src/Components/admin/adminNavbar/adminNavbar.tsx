@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { FC, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
 const AdminNavbar: FC = () => {
@@ -19,7 +19,7 @@ const AdminNavbar: FC = () => {
     useEffect(() => {
         const adminToken = localStorage.getItem('adminToken');
         if (adminToken) {
-            console.log(adminToken,"adminToken here");
+            console.log(adminToken, "adminToken here");
         } else {
             navigate('/admin');
         }
@@ -32,7 +32,7 @@ const AdminNavbar: FC = () => {
 
     return (
         <div>
-            <nav className="border-gray-200 bg-pink-100 dark:bg-gray-800 dark:border-gray-700">
+            <nav className="border-gray-200 bg-pink-100">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
                     <a href="#" className="flex items-center">
@@ -60,31 +60,39 @@ const AdminNavbar: FC = () => {
                     </button>
 
                     <div className={`w-full lg:block lg:w-auto ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-solid-bg">
-                        <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-transparent dark:bg-gray-800 lg:dark:bg-transparent dark:border-gray-700">
+                        <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0 lg:bg-transparent">
                             <li>
-                                <Link to={'/adminHome'}>
+                                <NavLink to={'/adminHome'} style={({ isActive }) => {
+                                    return {
+                                        color: isActive ? "darkred" : "black",
+                                    };
+                                }}>
                                     <a
                                         href="#"
-                                        className="block py-2 pl-3 pr-4 lg:text-lg text-white bg-pink-700 rounded lg:bg-transparent lg:text-pink-700 lg:p-0 lg:dark:text-blue-500 dark:bg-blue-600 lg:dark:bg-transparent"
+                                        className="block py-2 pl-3 pr-4 lg:text-lg  bg-pink-700 rounded lg:bg-transparent lg:p-0 "
                                         aria-current="page">
                                         AdminDashboard
                                     </a>
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link to={'/users'}>
+                                <NavLink to={'/users'} style={({ isActive }) => {
+                                    return {
+                                        color: isActive ? "darkred" : "black",
+                                    };
+                                }}>
                                     <a
                                         href="#"
-                                        className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                                        className="block py-2 pl-3 pr-4 lg:text-lg rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                                     >
                                         Users
                                     </a>
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
                                 <a
                                     href="#"
-                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                                 >
                                     Membership
                                 </a>
@@ -92,7 +100,7 @@ const AdminNavbar: FC = () => {
                             <li>
                                 <a
                                     href="#"
-                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                                 >
                                     Banner
                                 </a>
@@ -100,7 +108,7 @@ const AdminNavbar: FC = () => {
                             <li>
                                 <a
                                     href="#"
-                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
+                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                                     onClick={handleClick}>
                                     Logout
                                 </a>

@@ -66,8 +66,9 @@ const AdminDash1: FC = () => {
 
     return (
         <>
-            <div className='mt-14 mb-8'>
-                <h1 className='text-4xl font-semibold text-center'>ADMIN <span className='text-4xl font-semibold text-pink-700'>DASHBOARD</span></h1>
+        <div className='bg-white'>
+            <div className='mt-14 mb-8 '>
+                <h1 className='text-4xl font-semibold text-center text-black'>ADMIN <span className='text-4xl font-semibold text-pink-700'>DASHBOARD</span></h1>
             </div>
             <div className="mt-10 mx-20">
                 <div className="flex flex-wrap">
@@ -192,6 +193,7 @@ const AdminDash1: FC = () => {
                 <div className='w-2/4 h-140 mt-16 mb-16'>
                     <Pie data={data} />
                 </div>
+            </div>
             </div>
         </>
     )

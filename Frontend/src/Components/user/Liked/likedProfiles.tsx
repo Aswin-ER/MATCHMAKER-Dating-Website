@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import Button from '../../common/button';
 import { axiosInstance } from '../../../api/axiosInstance';
 import { Link } from 'react-router-dom';
+import Fancybox from 'Components/common/fancyBox';
 
 interface UserProfile {
     _id: string;
@@ -72,7 +73,7 @@ const LikedProfiles: FC = () => {
                         (
                             <>
                                 <h3 className='text-white lg:text-6xl font-semibold lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Liked <span className='text-pink-700 italic'>Profiles</span></h3>
-                                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-50 mobile:mt-40 mobile:gap-16">
+                                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
                                     {
                                         likedProfile?.map((profile: any, index: number) => {
                                             return (
@@ -98,16 +99,15 @@ const LikedProfiles: FC = () => {
 
                         (
                             <>
-                            <div className='flex-col text-center'>
-                                <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
-                                <p className='text-md font-normal font-serif text-white text-center mt-5'>Yours likes will appear here. Start liking people right away.</p>
-                               <Link to={'/userProfile'}><p className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>Start Liking</p></Link>
-                            </div>
+                                <div className='flex-col text-center'>
+                                    <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                    <p className='text-md font-normal font-serif text-white text-center mt-5'>Yours likes will appear here. Start liking people right away.</p>
+                                    <Link to={'/userProfile'}><p className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>Start Liking</p></Link>
+                                </div>
                             </>
                         )
                 }
 
-                User Profile
                 {selectedUserProfile && showModal && (
 
                     <div
@@ -123,21 +123,27 @@ const LikedProfiles: FC = () => {
                             <div className='flex justify-center items-center gap-5 mb-5'>
                                 {
                                     selectedUserProfile?.image?.[0] ?
-                                        <img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img>
+                                        <Fancybox>
+                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[0]} ><img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50'></img></a>
+                                        </Fancybox>
                                         :
                                         ""
                                 }
 
                                 {
                                     selectedUserProfile?.image?.[1] ?
-                                        <img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img>
+                                        <Fancybox>
+                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[1]} ><img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50'></img></a>
+                                        </Fancybox>
                                         :
                                         ""
                                 }
 
                                 {
                                     selectedUserProfile?.image?.[2] ?
-                                        <img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img>
+                                        <Fancybox>
+                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[2]} ><img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50'></img></a>
+                                        </Fancybox>
                                         :
                                         ""
                                 }

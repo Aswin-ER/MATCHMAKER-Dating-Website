@@ -27,6 +27,7 @@ const adminControllers = {
 
         try {
             const users = await User.find();
+            console.log(users, "admin users found");
             res.status(200).send(users);
 
         } catch {

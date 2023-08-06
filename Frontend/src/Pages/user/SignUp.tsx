@@ -69,7 +69,7 @@ const SignUp: FC = () => {
   return (
 <GoogleOAuthProvider clientId="684475057007-2abci7ht9ppi3313g5duloq7um38qlp3.apps.googleusercontent.com">
     <div>
-      <h1 className="text-3xl lg:text-5xl font-bold text-center mt-5">
+      <h1 className="text-3xl lg:text-5xl font-bold text-center mt-5 dark:text-white">
         MATCH<span className="text-3xl lg:text-5xl font-bold text-center text-pink-700 mt-6 lg:mt-16">MAKER</span>
       </h1>
       <div className="container lg:w-8/12 mobile:w-10/12  xl:w-4/12 mx-auto px-4 mt-6 lg:mt-10 bg-pink-100 p-8 rounded-lg shadow-lg">
@@ -81,7 +81,7 @@ const SignUp: FC = () => {
             <label htmlFor='name' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Name</label>
             <input
               type="text"
-              className="block w-full lg:px-4 lg:py-2 text-lg lg:text-lg bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full lg:px-4 lg:py-2 text-lg lg:text-lg bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500 dark:text-black"
               value={name}
               onChange={(e) => setName(e.target.value)}
               id='name'
@@ -92,7 +92,7 @@ const SignUp: FC = () => {
             <label htmlFor='email' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Email</label>
             <input
               type="email"
-              className="block w-full lg:px-4 lg:py-2  text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full lg:px-4 lg:py-2  text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500 dark:text-black"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               id='email'
@@ -104,7 +104,7 @@ const SignUp: FC = () => {
             <label htmlFor='password' className="block text-base lg:text-lg font-medium text-gray-800 mb-2">Password</label>
             <input
               type="password"
-              className="block w-full lg:px-4 lg:py-2  text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500"
+              className="block w-full lg:px-4 lg:py-2  text-lg lg:text-xl bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:ring-pink-500 focus:border-pink-500 dark:text-black"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               id='password'
@@ -117,7 +117,7 @@ const SignUp: FC = () => {
             <button onClick={handleSubmit} type='button' className="w-full lg:px-1 py-2 text-sm lg:text-lg font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-lg hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
               Create Account
             </button>
-            <p className='lg:text-lg font-semibold text-center py-3'>OR</p>
+            <p className='lg:text-lg font-semibold text-center py-3 dark:text-black'>OR</p>
 
             <div className='flex w-full justify-center items-center'>
             <GoogleLogin 
