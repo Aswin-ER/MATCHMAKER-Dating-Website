@@ -139,12 +139,19 @@ const ProtectedPage: FC = () => {
                 </NavLink>
               </li>
               <li className='mt-1'>
+              <NavLink to={'/matches'}
+                  style={({ isActive }) => {
+                    return {
+                      color: isActive ? "darkred" : "black",
+                    };
+                  }}>
                 <a
                   href="#"
                   className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                 >
                   Matches
                 </a>
+                </NavLink>
               </li>
               <li className='mt-1'>
                 <a

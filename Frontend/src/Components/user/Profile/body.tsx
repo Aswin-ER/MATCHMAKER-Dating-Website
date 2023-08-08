@@ -259,10 +259,10 @@ const Body: FC = () => {
                                     :
                                     <h1 className='text-2xl text-white font-medium font-mono'>Upload Profile Pics</h1>
                             }
-                            <div className="text-sm text-gray-300 flex-col">
-                                <div className='flex gap-5 mobile:flex-col lg:flex-row lg:justify-center md:flex-row md:justify-center'>
+                            <div className="text-sm text-gray-300">
+                                <div className='gap-5 mobile:grid mobile:grid-cols-1 mobile:ml-5 md:grid-cols-3'>
 
-                                    <div className='mt-5 border-white border-2 border-dashed w-50 mobile:flex-col'>
+                                    <div className='mt-5 border-white border-2 border-dashed w-50 '>
                                         {
                                             selectedImage ?
                                                 <img src={selectedImage} alt='' className='w-50 h-50'></img>

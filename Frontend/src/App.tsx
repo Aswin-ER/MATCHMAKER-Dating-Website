@@ -14,21 +14,26 @@ import Admin from './Pages/admin/adminLogin'
 import AdminHome from './Pages/admin/adminDashboard'
 import AdminUsers from './Pages/admin/adminUsers';
 import UserProfiles from './Pages/user/UserProfiles';
+import Matches from 'Pages/user/Match';
 
 function App() {
   return (
    <>
    <BrowserRouter>
    <Routes>
+
+    {/* User side */}
     <Route path='/' element={<Home/>}></Route>
     <Route path='/signUp' element={<SignUp/>}></Route>
     <Route path='/login' element={<Login/>}></Route>
     <Route path='/forgot' element={<Forgot/>}></Route>
     <Route path='/profile' element={<Profile/>}></Route>
     <Route path='/liked' element={<Like/>}></Route>
+    <Route path='/matches' element={<Matches/>}></Route>
     <Route path='/userProfile' element={<UserProfiles/>}></Route>
     <Route path="/password-reset/:userId/:token" Component={NewPass} />
 
+    {/* Admin side  */}
     <Route path="/admin" element={<Admin/>} />
     <Route path="/adminHome" element={<AdminHome/>} />
     <Route path="/users" element={<AdminUsers/>} />

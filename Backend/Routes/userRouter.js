@@ -194,5 +194,11 @@ router.post('/like', userAuth, userControllers.likedProfile);
 router.get('/getLikedProfiles', userAuth, userControllers.getLikedProfile);
 router.get('/getLikedUserProfiles', userAuth, userControllers.getLikedUserProfiles);
 
+// Filtered users
+router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
+
+// Matched Profiles 
+router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
+
 
 export default router;

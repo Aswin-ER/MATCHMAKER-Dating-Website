@@ -5,6 +5,8 @@ import UserProfile from '../Model/userProfile.js';
 import User from '../Model/user.js';
 import cloudinary from '../Config/cloudinary.js';
 import likedProfile from '../Model/liked.js';
+import Match from '../Model/match.js';
+import mongoose from 'mongoose';
 
 
 const userController = {
@@ -97,22 +99,22 @@ const userController = {
     req.files.forEach((file, index) => {
       console.log(`File ${index + 1}:`, file);
       // Handle the uploaded file as needed
-  });
+    });
 
     try {
 
       const { image, about, gender, relationshipGoals, passion, age, language, lifeStyle, job, company, school, place, showAge, showDistance } = req.body;
 
-      let cloudImageUrls=[];
+      let cloudImageUrls = [];
       const images = req.files;
 
       if (images && images.length > 0) {
         // Loop through each uploaded image
         for (const image of images) {
-            const result = await cloudinary.uploader.upload(image.path); // Upload image to Cloudinary
-            cloudImageUrls.push(result.secure_url); // Store the secure URL
+          const result = await cloudinary.uploader.upload(image.path); // Upload image to Cloudinary
+          cloudImageUrls.push(result.secure_url); // Store the secure URL
         }
-    }
+      }
 
       // console.log(cloudImageUrls, "cloud image herereeeee")
 
@@ -209,44 +211,111 @@ const userController = {
   likedProfile: async (req, res) => {
     try {
 
+      const currentUser = req.body.userId;
+
+      // Match concept Here
       const userProfileId = req.body._id;
-      console.log(userProfileId, "id here")
+      // console.log(userProfileId, "id here")
+      const user = await UserProfile.findById(userProfileId);
+      const matchUser = user.user;
+      // console.log(matchUser,"matchUser");
 
-      const userId = req.body.userId;
+      const matchLikedProfile = await likedProfile.findOne({ user: matchUser });
+      console.log(matchLikedProfile, "matchLikedProfile");
 
-      const profile = await likedProfile.findOne({user: userId});
+      if (!matchLikedProfile) {
+        console.log("no matching profile found")
+      } else {
 
-      // console.log(profile,"profile found")
+        const currentUserProfile = await UserProfile.findOne({ user: currentUser });
 
-      if(profile){
+        // const usersAlreadyMatched = await Match.find({ user1: currentUser, user2: userProfileId});
 
-        const existingProfileIndex = profile.userProfileId.indexOf(userProfileId);
+        if (currentUserProfile) {
+          var usersMatched = matchLikedProfile.userProfileId.includes(currentUserProfile._id);
+          if (usersMatched) {
 
-        if(existingProfileIndex === -1){
-          profile.userProfileId.push(userProfileId);
-          await profile.save();
-          const likeProfileArray = profile ? [profile] : [];
-          res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
-        }else{
-          const likeProfileArray = profile ? [profile] : [];
-          res.status(200).json({ message: 'Profile Already Liked', likeProfileArray });
+            const profile = await likedProfile.findOne({ user: currentUser });
+
+            if (profile) {
+
+              const existingProfileIndex = profile.userProfileId.indexOf(userProfileId);
+
+              if (existingProfileIndex === -1) {
+                profile.userProfileId.push(userProfileId);
+                await profile.save();
+                var likeProfileArray = profile ? [profile] : [];
+              } else {
+                var likeProfileArray = profile ? [profile] : [];
+              }
+
+
+            } else {
+
+              const likeProfile = new likedProfile({
+                userProfileId: userProfileId,
+                user: currentUser,
+
+              })
+
+              await likeProfile.save();
+              console.log(likeProfile, "user profile created");
+              var likeProfileArray = likeProfile ? [likeProfile] : [];
+            }
+
+            console.log("its a Match");
+
+            const match = await User.findByIdAndUpdate(currentUser, { $push: { matches: matchUser } });
+            const opomatch = await User.findByIdAndUpdate(matchUser, { $push: { matches: currentUser } });
+
+            console.log(match,opomatch, "user profile updated");
+
+            res.status(200).send({ match: "Congratulations, it's a match!🎉 Let the sparks fly✨", likeProfileArray });
+
+          } else {
+            console.log("no match")
+          }
+        } else {
+          console.log("No user profile found")
         }
+      }
 
-      }else{
+      if (!usersMatched) {
 
-        const likeProfile = new likedProfile({
-          userProfileId: userProfileId,
-          user: userId,
+        const userId = req.body.userId;
+        const profile = await likedProfile.findOne({ user: userId });
+        console.log(profile, "profile found")
 
-        })
-  
-        await likeProfile.save();
-        // console.log(likeProfile, "user profile created");
-  
-        const likeProfileArray = likeProfile ? [likeProfile] : [];
-  
-        res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+        if (profile) {
 
+          const existingProfileIndex = profile.userProfileId.indexOf(userProfileId);
+
+          if (existingProfileIndex === -1) {
+            profile.userProfileId.push(userProfileId);
+            await profile.save();
+            const likeProfileArray = profile ? [profile] : [];
+            res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+          } else {
+            const likeProfileArray = profile ? [profile] : [];
+            res.status(200).json({ message: 'Profile Already Liked', likeProfileArray });
+          }
+
+        } else {
+
+          const likeProfile = new likedProfile({
+            userProfileId: userProfileId,
+            user: userId,
+
+          })
+
+          await likeProfile.save();
+          console.log(likeProfile, "user profile created");
+
+          const likeProfileArray = likeProfile ? [likeProfile] : [];
+
+          res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+
+        }
       }
     } catch (err) {
 
@@ -271,42 +340,99 @@ const userController = {
     }
   },
 
-  getLikedUserProfiles: async (req, res)=> {
+  getLikedUserProfiles: async (req, res) => {
     const userId = req.body.userId;
     try {
       const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
 
       // console.log(likeProfile,"here is like profile")
-      if(likeProfile){
+      if (likeProfile) {
         res.status(200).json(likeProfile.userProfileId);
-      }else{
+      } else {
         res.status(200).send();
       }
 
 
     } catch (err) {
-      console.log(err,"error")
+      console.log(err, "error")
     }
   },
 
-  verifyProfile: async (req, res)=> {
-    try{
+  verifyProfile: async (req, res) => {
+    try {
 
-      const profile = await UserProfile.find({user:req.body.userId})
+      const profile = await UserProfile.find({ user: req.body.userId })
       // console.log(profile)
 
-      if(profile.length === 0){
-        res.status(200).send({message: "Verify your profile to see"});
-      }else{
+      if (profile.length === 0) {
+        res.status(200).send({ message: "Verify your profile to see" });
+      } else {
         console.log("ok")
       }
 
-    }catch(err){
-      console.log(err,"Error")
-      res.status(500).send({message: "Server error"});
+    } catch (err) {
+      console.log(err, "Error")
+      res.status(500).send({ message: "Server error" });
     }
+  },
 
 
+  getFilteredUsers: async (req, res) => {
+    try {
+
+      const gender = req.body?.gender?.toString();
+      const ageRange = req.body?.age;
+      const relationshipGoals = req.body?.relationship?.toString();
+
+      const query = {};
+
+      if (gender) {
+        query.gender = gender;
+      }
+
+      if (ageRange) {
+        const [lowerBound, upperBound] = ageRange.split('-').map(Number);
+        query.age = { $gte: lowerBound, $lte: upperBound };
+      }
+
+      if (relationshipGoals) {
+        query.relationshipGoals = relationshipGoals;
+      }
+
+
+      const matchingUsers = await UserProfile.find(query)
+
+      console.log(matchingUsers, "filtered user getting here")
+      res.status(200).send(matchingUsers);
+
+    } catch (err) {
+      console.log(err, "error Here")
+    }
+  },
+
+  getMatchedUserProfiles: async (req, res)=> {
+
+    try{
+
+      const userId = new mongoose.Types.ObjectId(req.body.userId);
+
+      const matchedUsers = await userModel.find({matches: userId});
+      console.log(matchedUsers, "matched user")
+
+      const matchedUserIds = matchedUsers.map(matchedUser => matchedUser._id);
+
+      const matchedUserProfiles = await UserProfile.find({ user: { $in: matchedUserIds } });
+          
+      
+      console.log(matchedUserProfiles,"matched user here");
+      res.status(200).send(matchedUserProfiles);
+      
+    }catch(err){
+      // const matchId = new mongoose.Types.ObjectId(matchedUser._id);
+
+      console.log(err, "error here");
+
+    }
   }
 
 
