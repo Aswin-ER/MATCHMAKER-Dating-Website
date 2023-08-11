@@ -70,48 +70,47 @@ const LikedProfiles: FC = () => {
     return (
         <>
             <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
-
-
                 {
-                    likedProfile.length > 0 ?
-
-                        (
-                            <>
-                                <h3 className='text-white lg:text-6xl font-semibold lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Liked <span className='text-pink-700 italic'>Profiles</span></h3>
-                                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
-                                    {
-                                        likedProfile?.filter((profile:any)=> !user?.matches?.includes(profile.user)).map((profile: any, index: number) => {
-                                            return (
-                                                <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
-                                                    <div className="h-98 w-82">
-                                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={profile?.image?.[0]} alt="" />
-                                                    </div>
-                                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-                                                    <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                                                        <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
-                                                        <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
-                                                        <Button handleClick={() => openModal(profile)} text="View More" />
-                                                    </div>
-                                                </div>
-
-                                            );
-                                        })
-                                    }
-                                </div>
-                            </>
-                        )
+                    likedProfile?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ?
+                        <h3 className='text-white lg:text-6xl font-semibold lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Liked <span className='text-pink-700'>Profiles</span></h3>
                         :
-
-                        (
-                            <>
-                                <div className='flex-col text-center'>
-                                    <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
-                                    <p className='text-md font-normal font-serif text-white text-center mt-5'>Yours likes will appear here. Start liking people right away.</p>
-                                    <Link to={'/userProfile'}><p className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>Start Liking</p></Link>
-                                </div>
-                            </>
-                        )
+                        ""
                 }
+                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
+
+                    {
+                        likedProfile?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ? (
+
+                            likedProfile.filter((profile: any) => !user?.matches?.includes(profile.user)).map((profile: any, index: number) => {
+                                return (
+                                    <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                        <div className="h-98 w-82">
+                                            <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={profile?.image?.[0]} alt="" />
+                                        </div>
+                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                        <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                            <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
+                                            <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
+                                            <Button handleClick={() => openModal(profile)} text="View More" />
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        ) : (
+                            <div className='flex items-center justify-center h-full w-full lg:mx-150'>
+                                <div className='flex flex-col items-center'>
+                                    <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                    <p className='text-md font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
+                                    <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
+                                        Start Liking
+                                    </Link>
+                                </div>
+                            </div>
+
+
+                        )}
+
+                </div>
 
                 {selectedUserProfile && showModal && (
 
@@ -155,7 +154,7 @@ const LikedProfiles: FC = () => {
 
                             </div>
                             <div className="grid grid-cols-2 gap-4 ml-10">
-                            <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Gender: </span>{selectedUserProfile.gender}</h4>
+                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Gender: </span>{selectedUserProfile.gender}</h4>
                                 <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Relationship Goals: </span> {selectedUserProfile.relationshipGoals}</h4>
                                 <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Life Style: </span> {selectedUserProfile.lifeStyle}</h4>
                                 <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Passion: </span> {selectedUserProfile.passion}</h4>

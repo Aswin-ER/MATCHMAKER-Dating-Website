@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './Routes/userRouter.js';
 import adminRouter from './Routes/adminRouter.js';
+import chatRouter from './Routes/chatRouter.js';
+import messageRouter from './Routes/messageRouter.js';
 
 dotenv.config();
 
@@ -28,5 +30,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/matchmaker')
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
+app.use('/chat', chatRouter);
+app.use('/message', messageRouter);
 
 app.listen(PORT, () => console.log('Server listening on port', PORT));

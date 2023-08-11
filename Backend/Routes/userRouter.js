@@ -8,6 +8,7 @@ import Token from '../Model/token.js';
 import sendEmail from '../Config/sendEmail.js';
 import bcrypt from 'bcrypt';
 import multerConfig from '../Config/multer.js'
+import chatControllers from '../Controllers/chatControllers.js';
 const upload = multerConfig.array('image');
 const router = express.Router();
 
@@ -199,6 +200,13 @@ router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
 
 // Matched Profiles 
 router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
+
+router.post('/getChatId', userAuth, chatControllers.getChatId);
+
+router.post('/message', userAuth, chatControllers.getMessage);
+
+router.get('/message/:id', userAuth, chatControllers.getAllMessages);
+
 
 
 export default router;

@@ -15,6 +15,7 @@ import AdminHome from './Pages/admin/adminDashboard'
 import AdminUsers from './Pages/admin/adminUsers';
 import UserProfiles from './Pages/user/UserProfiles';
 import Matches from 'Pages/user/Match';
+import ChatPage from 'Pages/user/Chat';
 
 function App() {
   return (
@@ -27,11 +28,14 @@ function App() {
     <Route path='/signUp' element={<SignUp/>}></Route>
     <Route path='/login' element={<Login/>}></Route>
     <Route path='/forgot' element={<Forgot/>}></Route>
+    <Route path="/password-reset/:userId/:token" Component={NewPass} />
+
     <Route path='/profile' element={<Profile/>}></Route>
     <Route path='/liked' element={<Like/>}></Route>
     <Route path='/matches' element={<Matches/>}></Route>
     <Route path='/userProfile' element={<UserProfiles/>}></Route>
-    <Route path="/password-reset/:userId/:token" Component={NewPass} />
+    <Route path='/chat' element={<ChatPage/>}></Route>
+
 
     {/* Admin side  */}
     <Route path="/admin" element={<Admin/>} />

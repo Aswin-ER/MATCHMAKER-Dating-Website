@@ -20,6 +20,8 @@ const userProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
   },
+  matched: Boolean,
+
 });
 
 const UserProfile = mongoose.model('UserProfile', userProfileSchema);

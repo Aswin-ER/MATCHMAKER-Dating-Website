@@ -5,7 +5,6 @@ import UserProfile from '../Model/userProfile.js';
 import User from '../Model/user.js';
 import cloudinary from '../Config/cloudinary.js';
 import likedProfile from '../Model/liked.js';
-import Match from '../Model/match.js';
 import mongoose from 'mongoose';
 
 
@@ -263,7 +262,7 @@ const userController = {
               var likeProfileArray = likeProfile ? [likeProfile] : [];
             }
 
-            console.log("its a Match");
+            console.log("its a Match"); 
 
             const match = await User.findByIdAndUpdate(currentUser, { $push: { matches: matchUser } });
             const opomatch = await User.findByIdAndUpdate(matchUser, { $push: { matches: currentUser } });
@@ -343,11 +342,13 @@ const userController = {
   getLikedUserProfiles: async (req, res) => {
     const userId = req.body.userId;
     try {
-      const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
 
-      // console.log(likeProfile,"here is like profile")
-      if (likeProfile) {
-        res.status(200).json(likeProfile.userProfileId);
+      
+      const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
+      console.log(likeProfile,"here is like profile")
+
+      if (!likeProfile?.matched) {
+        res.status(200).json(likeProfile?.userProfileId);
       } else {
         res.status(200).send();
       }
@@ -428,7 +429,6 @@ const userController = {
       res.status(200).send(matchedUserProfiles);
       
     }catch(err){
-      // const matchId = new mongoose.Types.ObjectId(matchedUser._id);
 
       console.log(err, "error here");
 
