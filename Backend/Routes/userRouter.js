@@ -9,6 +9,7 @@ import sendEmail from '../Config/sendEmail.js';
 import bcrypt from 'bcrypt';
 import multerConfig from '../Config/multer.js'
 import chatControllers from '../Controllers/chatControllers.js';
+import messageControllers from '../Controllers/messageControllers.js';
 const upload = multerConfig.array('image');
 const router = express.Router();
 
@@ -201,11 +202,12 @@ router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
 // Matched Profiles 
 router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
 
-router.post('/getChatId', userAuth, chatControllers.getChatId);
+//Chat
+router.post('/getChatId', userAuth, chatControllers.accessChat);
 
-router.post('/message', userAuth, chatControllers.getMessage);
+router.post('/message', userAuth, messageControllers.sendMessage);
 
-router.get('/message/:id', userAuth, chatControllers.getAllMessages);
+router.get('/message/:id', userAuth, messageControllers.allMessage);
 
 
 

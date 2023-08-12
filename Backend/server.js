@@ -5,8 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './Routes/userRouter.js';
 import adminRouter from './Routes/adminRouter.js';
-import chatRouter from './Routes/chatRouter.js';
-import messageRouter from './Routes/messageRouter.js';
+import { Server } from "socket.io";
 
 dotenv.config();
 
@@ -30,7 +29,42 @@ mongoose.connect('mongodb://127.0.0.1:27017/matchmaker')
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
-app.use('/chat', chatRouter);
-app.use('/message', messageRouter);
 
-app.listen(PORT, () => console.log('Server listening on port', PORT));
+const server = app.listen(PORT, () => console.log('Server listening on port', PORT));
+
+const io = new Server(server, {
+  pingTimeout: 3000,
+   cors: {
+    origin: "http://localhost:3000",
+   },
+});
+
+io.on('connection', (socket)=> {
+  console.log("connected to socket.io");
+
+  socket.on('setup', (userData)=> {
+    socket.join(userData);
+    socket.emit('connected');
+  });
+
+  socket.on('join chat', (room)=> {
+    socket.join(room);
+    console.log("user joined room "+ room);
+  });
+
+  socket.on('new message', (newMessageRecieved)=> {
+    console.log(newMessageRecieved.content,"new Message")
+    const chat = newMessageRecieved.chat;
+
+    console.log("Chat ID:", chat);
+
+    if(!chat.users) return console.log("chat.user is not defined");
+
+    chat.users.forEach(user => {
+      // console.log(newMessageRecieved.sender._id,"id hereeeee", user)
+      if(user == newMessageRecieved.sender._id) return
+      socket.in(user).emit("message received", newMessageRecieved)
+    })
+  })
+
+})

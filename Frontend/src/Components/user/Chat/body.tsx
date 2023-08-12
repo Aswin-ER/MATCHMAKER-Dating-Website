@@ -1,44 +1,62 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
+import RootState from 'Redux/rootState';
+import { UserCred } from 'Redux/slice';
 import { axiosInstance } from 'api/axiosInstance';
 import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import io from 'socket.io-client';
 
+const ENDPOINT = 'http://localhost:3001';
+
+var socket: any, selectedChatCompare: any;
 
 const Chat: FC = () => {
 
-    // const [newMessage, setNewmessage] = useState<string[]>([]);
+
+    const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
+    const userID = user?._id;
+    console.log(userID, "userid in chat")
 
     const [messages, setMessages] = useState<string[]>([]);
 
     const [input, setInput] = useState<string>();
 
+    const [oppoId, setOppoId] = useState<string>();
+
     const [matched, setMatched] = useState<any>();
 
-    const [chatId, setChatId] = useState<string>();
+    const [chatId, setChatId] = useState<string>('');
 
-    // const handleMessage = (message: any) => {
-    //     if (message.trim() !== '') {
-    //         setNewmessage([...newMessage, message]);
-    //     }
-    // };
+    const [isSocket, isSocketConnected] = useState<boolean>();
+
+    useEffect(() => {
+        console.log("reached user")
+        socket = io(ENDPOINT);
+        console.log(userID, "user in the house")
+
+        socket.emit('setup', userID);
+        socket.on('connection', () => isSocketConnected(true));
+
+    }, [userID]);
+
 
     const handleInput = (e: any) => {
         setInput((prev) => e.target.value);
     }
 
     const sendMessage = async () => {
-        console.log("worked sendMessage")
         if (input) {
             try {
-                console.log(input, "input")
-                const res = await axiosInstance.post('/message', { content: input, chatId: chatId });
-                const newMessage = res.data;
-                console.log(newMessage,"sended message")
-                const newContentArray = newMessage.map((message: { content: any; }) => message.content);
-                setMessages(prevMessages => [...prevMessages, ...newContentArray]);
+                const res = await axiosInstance.post('/message', { content: input, chatId: chatId, oppoId: oppoId });
+                const message: any = res;
                 setInput("");
+                socket.emit("new message", res.data)
+                // console.log(message.data, "sendMessage")
+                setMessages([...messages, message.data.content]);
+
 
             } catch (error) {
                 console.error("Error sending message:", error);
@@ -47,16 +65,13 @@ const Chat: FC = () => {
         }
     }
 
-    // console.log(messages,"vanuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
-
     const handleChat = (id: any) => {
-
         const oppoId = id;
-        console.log(oppoId, "asas")
+        setOppoId(oppoId)
+
         try {
             axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
-                console.log(res.data, "chatId here")
-                setChatId((prev) => res.data)
+                setChatId((prev) => res.data._id)
 
             }).catch((err) => {
                 console.log(err, "error")
@@ -67,33 +82,59 @@ const Chat: FC = () => {
         }
     }
 
+    console.log(oppoId, "oppoId")
+
     useEffect(() => {
         axiosInstance.get('/getMatchedUserProfiles').then((res) => {
-            console.log(res.data, "matched users")
             setMatched(res.data);
         })
     }, []);
 
-
-    // const fetchMessage = ()=> {
-
-    //     try{
-    //         axiosInstance.get(`/message/${chatId}`).then((res)=> {
-    //             console.log(res.data);
-    //             setMessages((prev)=> res.data);
-    //         }).catch((err) => {
-    //             console.log(err,"Unexpected error")
-    //         })
-    //     }catch(err){
-    //         console.log(err, "message");
-    //     }
-    // }
-
-    // useEffect(()=> {
-    //     fetchMessage()
-    // }, [])
+    console.log(chatId, "chatId");
 
 
+    const fetchMessage = () => {
+        try {
+            const id = chatId;
+            axiosInstance.get(`/message/${id}`).then((res) => {
+                console.log(res.data, "all messages")
+                const contentArray = res.data.map((obj: { content: any; }) => obj.content);
+                // console.log(contentArray, "setmessage");
+
+                setMessages((prev) => [...prev, ...contentArray]);
+
+                socket.emit('join chat', chatId)
+
+            }).catch((err) => {
+                console.log(err, "Unexpected error")
+            })
+        } catch (err) {
+            console.log(err, "message");
+        }
+    }
+
+
+    useEffect(() => {
+        if (chatId){
+            fetchMessage();
+            selectedChatCompare = chatId;
+        }
+    }, [chatId])
+
+    useEffect(() => {
+        socket.on('message received', (newMessageRecieved: any) => {
+
+            if (!chatId || chatId !== newMessageRecieved.chat._id) {
+                console.log("bihahaha", newMessageRecieved);
+            } else {
+                console.log("perfect ok", newMessageRecieved);
+                setMessages([...messages, newMessageRecieved.content]);
+            }
+        })
+    })
+
+
+    console.log(messages, "full message")
 
     return (
         <>
@@ -158,12 +199,11 @@ const Chat: FC = () => {
 
                     {/* Messaging area here */}
                     <div className="flex flex-col flex-auto h-full p-6">
-                        <div
-                            className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4"
-                        >
+                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+
                             <div className="flex flex-col h-full overflow-x-auto mb-4">
                                 {
-                                    messages?.map((message, index) => {
+                                    messages?.map((message: any, index) => {
                                         return (
 
                                             <div className="flex flex-col h-full" key={index}>
@@ -175,15 +215,11 @@ const Chat: FC = () => {
                                                             >
                                                                 {/* <img src={}></img> */}
                                                             </div>
-                                                            <div
-                                                                className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl"
-                                                            >
+                                                            <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
                                                                 <div>
                                                                     {message}
                                                                 </div>
-                                                                <div
-                                                                    className="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500"
-                                                                >
+                                                                <div className="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500">
                                                                     Seen
                                                                 </div>
                                                             </div>
@@ -195,6 +231,8 @@ const Chat: FC = () => {
                                     })
                                 }
                             </div>
+
+
                             <div
                                 className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
                             >
