@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import Button from '../../common/button';
 import { axiosInstance } from '../../../api/axiosInstance';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Fancybox from 'Components/common/fancyBox';
 
 
@@ -26,6 +26,8 @@ interface UserProfile {
 
 
 const Match: FC = () => {
+
+    const navigate  = useNavigate();
 
     const [matchedProfiles, setMatchedProfile] = useState<string[]>([])
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
@@ -72,8 +74,8 @@ const Match: FC = () => {
                             <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
                                 {
                                     matchedProfiles.map((match: any, index: number) => (
-                                        
 
+                                        <div>
                                         <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                             <div className="h-98 w-82">
                                                 <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={match?.image?.[0]} alt="" />
@@ -84,6 +86,8 @@ const Match: FC = () => {
                                                 <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{match.about}</p>
                                                 <Button handleClick={() => openModal(match)} text="View More" />
                                             </div>
+                                        </div>
+                                            <button className='bg-pink-800 text-white font-semibold text-lg w-full h-10 cursor-pointer hover:bg-pink-500' onClick={() => navigate('/chat')}>Click Here to Message...</button>
                                         </div>
                                     ))};
                             </div>

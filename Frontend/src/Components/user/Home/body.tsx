@@ -56,7 +56,7 @@ const Body: FC = () => {
                 />
             </div>
 
-            <Profile/>
+            <Profile />
 
         </>
     );

@@ -29,17 +29,21 @@ interface UserProfile {
 
 const LikedProfiles: FC = () => {
 
+    const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
+
     const [likedProfile, setLikedProfile] = useState<string[]>([])
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
     const [showModal, setShowModal] = useState<Boolean>(false);
 
     useEffect(() => {
-        axiosInstance.get('/getLikedUserProfiles').then((res) => {
-            // console.log(res.data,"likedProfiles")
-            setLikedProfile(res.data || []);
-        }).catch((err) => {
-            console.log(err)
-        })
+        if (user) {
+            axiosInstance.get('/getLikedUserProfiles').then((res) => {
+                // console.log(res.data,"likedProfiles")
+                setLikedProfile(res.data || []);
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
     }, []);
 
     function openModal(userProfile: UserProfile) {
@@ -63,9 +67,6 @@ const LikedProfiles: FC = () => {
         }
     }
 
-    const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
-
-
 
     return (
         <>
@@ -76,41 +77,55 @@ const LikedProfiles: FC = () => {
                         :
                         ""
                 }
-                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
 
-                    {
-                        likedProfile?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ? (
+                {
+                    user ?
+                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
 
-                            likedProfile.filter((profile: any) => !user?.matches?.includes(profile.user)).map((profile: any, index: number) => {
-                                return (
-                                    <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
-                                        <div className="h-98 w-82">
-                                            <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={profile?.image?.[0]} alt="" />
-                                        </div>
-                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-                                        <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                                            <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
-                                            <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
-                                            <Button handleClick={() => openModal(profile)} text="View More" />
+                            {
+                                likedProfile?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ? (
+
+                                    likedProfile.filter((profile: any) => !user?.matches?.includes(profile.user)).map((profile: any, index: number) => {
+                                        return (
+                                            <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                                <div className="h-98 w-82">
+                                                    <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={profile?.image?.[0]} alt="" />
+                                                </div>
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                                <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                    <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
+                                                    <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
+                                                    <Button handleClick={() => openModal(profile)} text="View More" />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                ) : (
+                                    <div className='flex items-center justify-center h-full w-full lg:mx-150'>
+                                        <div className='flex flex-col items-center'>
+                                            <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                            <p className='text-md font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
+                                            <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
+                                                Start Liking
+                                            </Link>
                                         </div>
                                     </div>
-                                )
-                            })
-                        ) : (
-                            <div className='flex items-center justify-center h-full w-full lg:mx-150'>
-                                <div className='flex flex-col items-center'>
-                                    <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
-                                    <p className='text-md font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
-                                    <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
-                                        Start Liking
-                                    </Link>
-                                </div>
+
+
+                                )}
+
+                        </div>
+                        :
+                        <div className='flex items-center justify-center h-full w-full lg:mx-150'>
+                            <div className='flex flex-col items-center'>
+                                <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                <p className='text-md font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
+                                <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
+                                    Start Liking
+                                </Link>
                             </div>
-
-
-                        )}
-
-                </div>
+                        </div>
+                }
 
                 {selectedUserProfile && showModal && (
 

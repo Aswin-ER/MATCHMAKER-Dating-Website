@@ -11,7 +11,7 @@ import io from 'socket.io-client';
 
 const ENDPOINT = 'http://localhost:3001';
 
-var socket: any, selectedChatCompare: any;
+var socket: any;
 
 const Chat: FC = () => {
 
@@ -33,9 +33,7 @@ const Chat: FC = () => {
     const [isSocket, isSocketConnected] = useState<boolean>();
 
     useEffect(() => {
-        console.log("reached user")
         socket = io(ENDPOINT);
-        console.log(userID, "user in the house")
 
         socket.emit('setup', userID);
         socket.on('connection', () => isSocketConnected(true));
@@ -48,14 +46,15 @@ const Chat: FC = () => {
     }
 
     const sendMessage = async () => {
+
         if (input) {
             try {
                 const res = await axiosInstance.post('/message', { content: input, chatId: chatId, oppoId: oppoId });
                 const message: any = res;
                 setInput("");
-                socket.emit("new message", res.data)
                 // console.log(message.data, "sendMessage")
-                setMessages([...messages, message.data.content]);
+                socket.emit("new message", res.data)
+                setMessages([...messages, message.data]);
 
 
             } catch (error) {
@@ -65,12 +64,19 @@ const Chat: FC = () => {
         }
     }
 
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    };
+
     const handleChat = (id: any) => {
         const oppoId = id;
         setOppoId(oppoId)
 
         try {
             axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
+                // console.log(res.data.users,"ddddddd")
                 setChatId((prev) => res.data._id)
 
             }).catch((err) => {
@@ -97,17 +103,16 @@ const Chat: FC = () => {
         try {
             const id = chatId;
             axiosInstance.get(`/message/${id}`).then((res) => {
-                console.log(res.data, "all messages")
-                const contentArray = res.data.map((obj: { content: any; }) => obj.content);
-                // console.log(contentArray, "setmessage");
+                // console.log(res.data, "all messages")
 
-                setMessages((prev) => [...prev, ...contentArray]);
+                setMessages([...res.data]);
 
                 socket.emit('join chat', chatId)
 
             }).catch((err) => {
                 console.log(err, "Unexpected error")
             })
+
         } catch (err) {
             console.log(err, "message");
         }
@@ -115,9 +120,9 @@ const Chat: FC = () => {
 
 
     useEffect(() => {
-        if (chatId){
+        if (chatId) {
+            setMessages([]);
             fetchMessage();
-            selectedChatCompare = chatId;
         }
     }, [chatId])
 
@@ -128,7 +133,7 @@ const Chat: FC = () => {
                 console.log("bihahaha", newMessageRecieved);
             } else {
                 console.log("perfect ok", newMessageRecieved);
-                setMessages([...messages, newMessageRecieved.content]);
+                setMessages([...messages, newMessageRecieved]);
             }
         })
     })
@@ -138,52 +143,56 @@ const Chat: FC = () => {
 
     return (
         <>
-            <div className="flex h-screen antialiased text-gray-800">
-                <div className="flex flex-row h-3/4  w-full overflow-x-hidden">
-                    <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
-                        <div className="flex flex-row items-center justify-center h-12 w-full">
-                            <div
-                                className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10"
-                            >
+            <div className="flex h-screen antialiased text-gray-800 overflow-hidden">
+                <div className="flex flex-row h-3/4  w-full overflow-hidden">
+                    <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0 overflow-hidden">
+                        <div className="flex flex-row items-center justify-center h-12 w-full overflow-hidden">
+                            <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
                                 <svg
                                     className="w-6 h-6"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                    fill="pink"
+                                    stroke="black"
+                                    viewBox="0 0 28 24"
                                     xmlns="http://www.w3.org/2000/svg"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
+                                        fill='pink'
                                         d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
                                     ></path>
                                 </svg>
                             </div>
-                            <div className="ml-2 font-bold text-2xl">Matched Users</div>
+                            <div className="ml-2 font-bold text-2xl text-pink-700">Matched Users</div>
                         </div>
 
                         {/* User listing area */}
 
-                        <div className="flex flex-col mt-8">
+                        <div className="flex flex-col mt-8 h-1/2">
                             <div className="flex flex-col space-y-1 mt-4 -mx-2 h-100 overflow-y-auto">
 
                                 {
+                                    user?
+
                                     matched?.map((match: any, index: number) => {
+                                        // console.log(match,"lookout")
                                         return (
 
                                             <button key={index}
-                                                className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
+                                                className={`flex flex-row h-2/6 items-center ${oppoId === match.user ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`}
                                                 onClick={() => handleChat(match.user)} >
                                                 <div
                                                     className="flex items-center justify-center h-8 w-10 bg-indigo-200 rounded-full mx-5"
                                                 >
-                                                    <img src={match.image[0]} alt='' className='rounded'></img>
+                                                    <img src={match.image[0]} alt='' className='rounded-full'></img>
                                                 </div>
-                                                <div className="ml-2 text-sm font-semibold" >{match.name}</div>
+                                                <div className="ml-2 text-lg font-medium" >{match.name}</div>
                                             </button>
                                         )
                                     })
+                                    :
+                                    ""
                                 }
 
                             </div>
@@ -203,32 +212,66 @@ const Chat: FC = () => {
 
                             <div className="flex flex-col h-full overflow-x-auto mb-4">
                                 {
-                                    messages?.map((message: any, index) => {
-                                        return (
+                                    messages.length > 0 ?
 
-                                            <div className="flex flex-col h-full" key={index}>
-                                                <div className="grid grid-cols-12 gap-y-2">
-                                                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                                                        <div className="flex items-center justify-start flex-row-reverse">
-                                                            <div
-                                                                className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0"
-                                                            >
-                                                                {/* <img src={}></img> */}
-                                                            </div>
-                                                            <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                                                                <div>
-                                                                    {message}
-                                                                </div>
-                                                                <div className="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500">
-                                                                    Seen
-                                                                </div>
+                                        messages?.map((message: any, index) => {
+                                            // console.log(message, "incoming message")
+                                            return (
+
+                                                <div className="flex flex-col h-full" key={index}>
+                                                    <div className="relative grid grid-cols-12 gap-y-2">
+                                                        <div className=" col-start-6 col-end-13 p-3 rounded-lg">
+                                                            <div className="flex items-center justify-start flex-row-reverse">
+                                                                {
+                                                                    message.sender?._id === userID ?
+                                                                        <>
+                                                                            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
+                                                                                <img src={message.userProfile?.image[0]} alt='' className='rounded-full'></img>
+                                                                            </div>
+                                                                            <div className="ml-2">
+                                                                                <div className="relative text-sm bg-red-200 py-2 px-4 shadow rounded-xl">
+                                                                                    <div>
+                                                                                        {message.content}
+                                                                                    </div>
+                                                                                    <div className="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500">
+                                                                                        Seen
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </>
+                                                                        :
+                                                                        <>
+                                                                            <div className='mb-10'>
+                                                                                <div className="absolute left-0 flex items-center justify-center h-10 w-10 flex-shrink-0">
+                                                                                    <img src={message.userProfile?.image[0]} alt='' className='rounded-full'></img>
+                                                                                </div>
+                                                                                <div className="ml-2 absolute left-8">
+                                                                                    <div className="relative text-sm bg-blue-200 py-2 px-4 shadow rounded-xl">
+                                                                                        <div className='mb-2'>
+                                                                                            {message.content}
+                                                                                        </div>
+                                                                                        <div className="text-xs -mb-6 mr-2 text-gray-500">
+                                                                                            Seen
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </>
+                                                                }
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    })
+                                            )
+                                        })
+
+                                        :
+
+
+                                        <div className='flex justify-center items-center h-full'>
+                                            <h1 className='text-3xl text-pink-800'>No Message to show</h1>
+                                        </div>
+
                                 }
                             </div>
 
@@ -261,6 +304,7 @@ const Chat: FC = () => {
                                         <input
                                             type="text"
                                             onChange={handleInput}
+                                            onKeyDown={handleKeyDown}
                                             value={input}
                                             className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                                         />

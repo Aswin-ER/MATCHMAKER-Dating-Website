@@ -154,127 +154,209 @@ const Profile: FC = () => {
                 {
                     user ?
                         <>
-                            <h3 className='text-white lg:text-sm font-medium absolute lg:absolute lg:top-36 lg:mt-5 md:absolute md:top-10 md:text-xs md:mt-16 mobile:absolute mobile:top-18 mobile:text-xs mobile:mt-16' >Filter to see profiles according to your preference ✨</h3>
-                            <div className='lg:w-3/6 mobile:w-4/6 md:w-5/6 lg:flex bg-pink-100 mobile:absolute mobile:top-40  md:absolute md:top-30 md:mt-2 lg:absolute lg:top-44 lg:mt-5 rounded mobile:flex-col mobile:align-middle'>
-                                <div className='mobile:mx-10 md:flex lg:flex lg:mb-3 mobile:mb-5'>
 
-                                    <div className='bg-pink-100 lg:mx-10 flex-col mt-2 lg:w-2/6 md:mx-5 mobile:w-full mobile:mx-3'>
-                                        <label className="text-pink-800 mobile:w-1/2 font-semibold text-lg  md:mx-6" htmlFor="gender">Gender</label>
-                                        <select id='gender' name='gender' className="block w-12/12 h-10 px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md">
-                                            <option value="">Select Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select>
-                                    </div>
-
-                                    <div className='bg-pink-100 lg:mx-10 flex-col mt-2 w-3/6 md:mx-5 mobile:w-full mobile:mx-3 mobile:mt-3'>
-                                        <label className="text-pink-800 mobile:w-1/2 md:w-full font-semibold text-lg" htmlFor="relationship-goals">Relationship Goals</label>
-                                        <select id='relationship-goals' name="relationship-goals" className="block lg:w-full w-10/12 h-10 px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md">
-                                            <option value="">Select Relationship Goals</option>
-                                            <option value="Long-term partne">Long-term partner</option>
-                                            <option value="Short-term fun">Short-term fun</option>
-                                            <option value="New friends">New friends</option>
-                                        </select>
-                                    </div>
-
-                                    <div className='bg-pink-100 lg:mx-10 flex-col mt-2  w-2/6 md:mx-5
-                    mobile:w-full mobile:mx-3 mobile:mb-3'>
-                                        <label className="text-pink-800 font-semibold text-lg md:mx-10" htmlFor="age">Age</label>
-                                        <select className="block w-10/12 h-10 px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md" id="age" name="age">
-                                            <option value="">Select Age</option>
-                                            <option value="18-24">18-24</option>
-                                            <option value="25-34">25-34</option>
-                                            <option value="35-44">35-44</option>
-                                            <option value="45+">45+</option>
-                                        </select>
-                                    </div>
-                                    <div className='lg:flex-col lg:my-3'>
-                                        <button className='bg-pink-700 lg:mb-3 lg:mt-2 lg:p-1 text-white rounded' type='submit' onClick={handleFilter}>Apply</button>
-                                        <button className='bg-pink-700 lg:p-1 text-white rounded' type='submit' onClick={handleClear}>Clear</button>
+                            <div className='absolute  lg:top-38 lg:left-144 md:top-24 md:left-22 md:mt-5'>
+                                <div className="lg:w-8/12 mx-10 lg:h-10 md:w-12/12 md:h-5 bg-pink-100 rounded-lg shadow-lg">
+                                    <div className="bg-pink-800 p-3 rounded-lg shadow-md">
+                                        <h2 className="text-2xl font-semibold mb-2 text-white text-center">Filters</h2>
+                                        <div className="flex flex-wrap mb-4">
+                                            <div className="w-full lg:w-1/3 md:w-1/2 px-4">
+                                                <label className="block font-medium mb-2 text-white text-center" htmlFor="gender">Gender</label>
+                                                <select id="gender" name="gender" className="w-full p-2 border rounded-md">
+                                                    <option value="">Select Gender</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
+                                            </div>
+                                            <div className="w-full lg:w-1/3 md:w-1/2 px-4">
+                                                <label className="block font-medium mb-2 text-white text-center" htmlFor="relationship-goals">Relationship</label>
+                                                <select id="relationship-goals" name="relationship-goals" className="w-full p-2 border rounded-md">
+                                                    <option value="">Select Relationship Goals</option>
+                                                    <option value="Long-term partner">Long-term partner</option>
+                                                    <option value="Short-term fun">Short-term fun</option>
+                                                    <option value="New friends">New friends</option>
+                                                </select>
+                                            </div>
+                                            <div className="w-full lg:w-1/3 md:w-1/2 px-4">
+                                                <label className="block font-medium mb-2 text-white text-center" htmlFor="age">Age</label>
+                                                <select id="age" name="age" className="w-full p-2 border rounded-md">
+                                                    <option value="">Select Age</option>
+                                                    <option value="18-24">18-24</option>
+                                                    <option value="25-34">25-34</option>
+                                                    <option value="35-44">35-44</option>
+                                                    <option value="45+">45+</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-end px-4">
+                                            <button className="bg-pink-600 text-white px-4 py-1 rounded-md mr-2" type="submit" onClick={handleFilter}>Apply</button>
+                                            <button className="bg-gray-600 text-white px-4 py-1 rounded-md" type="submit" onClick={handleClear}>Clear</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+
                         </>
                         :
                         ""
                 }
 
+                {
+                    user ?
 
-                <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-100 md:mt-90 mobile:mt-120 mobile:gap-16">
-                    {
-                        user ?
-                            userDet.filter((userProfile: UserProfile) => {
-                                return (userProfile.user !== user._id
-                                )
-                            }).filter((userProfile: UserProfile) => !user?.matches?.includes(userProfile.user)).map((userProfile: UserProfile, index: number) => (
+                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-100 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
+                            {
+                                user ?
+                                    userDet.filter((userProfile: UserProfile) => {
+                                        return (userProfile.user !== user._id
+                                        )
+                                    }).filter((userProfile: UserProfile) => !user?.matches?.includes(userProfile.user)).map((userProfile: UserProfile, index: number) => (
 
-                                <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
-                                    <div className="h-98 w-82">
-                                        <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
-                                    </div>
-                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-                                    <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                                        <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
-                                        <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
-                                        {
-                                            verify ?
-                                                <>
-                                                    <Button handleClick={() => openModal(userProfile)} text="View More" />
-                                                    <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
-                                                </>
-                                                :
-                                                <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
-                                        }
-                                    </div>
-                                </div>
-
-                            ))
-
-                            : user && filter ?
-                                filter.filter((userProfile: UserProfile) => {
-                                    return userProfile.user !== user._id;
-                                }).map((userProfile: UserProfile, index: number) => (
-
-                                    <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
-                                        <div className="h-98 w-82">
-                                            <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                        <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                            <div className="h-98 w-82">
+                                                <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                            <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
+                                                <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
+                                                {
+                                                    verify ?
+                                                        <>
+                                                            <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                            <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                                        </>
+                                                        :
+                                                        <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
+                                                }
+                                            </div>
                                         </div>
-                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-                                        <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                                            <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
-                                            <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
-                                            {
-                                                verify ?
-                                                    <>
-                                                        <Button handleClick={() => openModal(userProfile)} text="View More" />
-                                                        <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
-                                                    </>
-                                                    :
-                                                    <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
-                                            }
+
+                                    ))
+
+                                    : user && filter ?
+                                        filter.filter((userProfile: UserProfile) => {
+                                            return userProfile.user !== user._id;
+                                        }).map((userProfile: UserProfile, index: number) => (
+
+                                            <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                                <div className="h-98 w-82">
+                                                    <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                                </div>
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                                <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                    <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
+                                                    <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
+                                                    {
+                                                        verify ?
+                                                            <>
+                                                                <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                                <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                                            </>
+                                                            :
+                                                            <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
+                                                    }
+                                                </div>
+                                            </div>
+                                        ))
+
+                                        :
+
+                                        userDet.map((userProfile: UserProfile, index: number) => (
+
+                                            <div key={index} className="group relative blur-sm cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30" onClick={handleButton}>
+                                                <div className="h-98 w-82">
+                                                    <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                                </div>
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                                <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                    <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name}</h1>
+                                                    <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
+                                                    <Button className="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60" onClick={handleSeeMore} text="View More" />
+                                                </div>
+                                            </div>
+                                        ))
+                            }
+
+                        </div>
+                        :
+                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-60 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
+                            {
+                                user ?
+                                    userDet.filter((userProfile: UserProfile) => {
+                                        return (userProfile.user !== user._id
+                                        )
+                                    }).filter((userProfile: UserProfile) => !user?.matches?.includes(userProfile.user)).map((userProfile: UserProfile, index: number) => (
+
+                                        <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                            <div className="h-98 w-82">
+                                                <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                            <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
+                                                <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
+                                                {
+                                                    verify ?
+                                                        <>
+                                                            <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                            <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                                        </>
+                                                        :
+                                                        <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
 
-                                :
+                                    ))
 
-                                userDet.map((userProfile: UserProfile, index: number) => (
+                                    : user && filter ?
+                                        filter.filter((userProfile: UserProfile) => {
+                                            return userProfile.user !== user._id;
+                                        }).map((userProfile: UserProfile, index: number) => (
 
-                                    <div key={index} className="group relative blur-sm cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30" onClick={handleButton}>
-                                        <div className="h-98 w-82">
-                                            <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
-                                        </div>
-                                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
-                                        <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
-                                            <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name}</h1>
-                                            <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
-                                            <Button className="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60" onClick={handleSeeMore} text="View More" />
-                                        </div>
-                                    </div>
-                                ))
-                    }
+                                            <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                                <div className="h-98 w-82">
+                                                    <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                                </div>
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                                <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                    <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name} {userProfile.age}</h1>
+                                                    <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
+                                                    {
+                                                        verify ?
+                                                            <>
+                                                                <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                                <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                                            </>
+                                                            :
+                                                            <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
+                                                    }
+                                                </div>
+                                            </div>
+                                        ))
 
-                </div>
+                                        :
+
+                                        userDet.map((userProfile: UserProfile, index: number) => (
+
+                                            <div key={index} className="group relative blur-sm cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30" onClick={handleButton}>
+                                                <div className="h-98 w-82">
+                                                    <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
+                                                </div>
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div>
+                                                <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                                                    <h1 className="text-2xl font-semibold text-white lg:mb-16">{userProfile.name}</h1>
+                                                    <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{userProfile.about}</p>
+                                                    <Button className="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60" onClick={handleSeeMore} text="View More" />
+                                                </div>
+                                            </div>
+                                        ))
+                            }
+
+                        </div>
+                }
 
                 {selectedUserProfile && showModal && (
 

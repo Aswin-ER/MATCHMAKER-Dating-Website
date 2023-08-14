@@ -1,23 +1,26 @@
-import chatModel from '../Model/chat.js';
-import User from '../Model/user.js';
 import Message from '../Model/message.js';
 import chat from '../Model/chat.js';
+import UserProfile from '../Model/userProfile.js';
 
 const messageControllers = {
 
     sendMessage: async (req, res)=> {
 
-        const { content, chatId, oppoId} = req.body;
+        const { content, chatId} = req.body;
 
         if(!content || !chatId){
             console.log("Invalid data passed into request");
             return res.sendStatus(404);
         }
 
+        const userProfile = await UserProfile.findOne({ user: req.body.userId});
+        // console.log(userProfile,"herererererer")
+
         var newMessage = {
             sender:req.body.userId,
             content: content,
             chat: chatId,
+            userProfile: userProfile,
         }
 
         try{
@@ -26,10 +29,7 @@ const messageControllers = {
 
             message = await message.populate('sender', 'name picture')
                 message = await message.populate('chat')
-                message = await User.populate(message, {
-                    path:'chat.user',
-                    select:'name picture email',
-                })
+                message = await message.populate('userProfile','image')
 
                 await chat.findByIdAndUpdate(req.body.chatId, {
                     latestMessage: message,
@@ -46,7 +46,7 @@ const messageControllers = {
          try{
             console.log(req.params.id,"chatId");
              const message = await Message.find({ chat: req.params.id }).populate('sender', 'name picture email')
-                .populate('chat');
+                 .populate('chat').populate('userProfile','image');
 
                 // console.log(message,"message");
             res.json(message)

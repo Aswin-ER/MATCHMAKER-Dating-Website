@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import ProtectedPage from '../../Components/user/Navbar/protectedPage';
 import Body from '../../Components/user/Home/body';
+import Premium from 'Components/user/Home/premium';
 
 const Home: FC = () => {
 
@@ -9,6 +10,7 @@ const Home: FC = () => {
     <div>
      <ProtectedPage/>
      <Body/>
+     <Premium/>
     </div>
   );
 };

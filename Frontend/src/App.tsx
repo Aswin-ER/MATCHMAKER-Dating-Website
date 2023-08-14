@@ -35,6 +35,7 @@ function App() {
     <Route path='/matches' element={<Matches/>}></Route>
     <Route path='/userProfile' element={<UserProfiles/>}></Route>
     <Route path='/chat' element={<ChatPage/>}></Route>
+    <Route path='/plans' element={<ChatPage/>}></Route>
 
 
     {/* Admin side  */}

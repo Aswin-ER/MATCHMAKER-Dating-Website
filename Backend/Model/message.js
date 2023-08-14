@@ -7,6 +7,11 @@ const messageSchema = new mongoose.Schema({
         ref: 'user',
     },
 
+    userProfile: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserProfile',
+    },
+
     content: {
         type: String,
         trim: true,
@@ -17,9 +22,9 @@ const messageSchema = new mongoose.Schema({
         ref: 'chat',
     },
 },
-{
-    timestamps:true,
-}
+    {
+        timestamps: true,
+    }
 )
 
 const message = mongoose.model('message', messageSchema);
