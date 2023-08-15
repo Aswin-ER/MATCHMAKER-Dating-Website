@@ -16,6 +16,7 @@ import AdminUsers from './Pages/admin/adminUsers';
 import UserProfiles from './Pages/user/UserProfiles';
 import Matches from 'Pages/user/Match';
 import ChatPage from 'Pages/user/Chat';
+import Plans from 'Pages/user/Plans';
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
     <Route path='/matches' element={<Matches/>}></Route>
     <Route path='/userProfile' element={<UserProfiles/>}></Route>
     <Route path='/chat' element={<ChatPage/>}></Route>
-    <Route path='/plans' element={<ChatPage/>}></Route>
+    <Route path='/plans' element={<Plans/>}></Route>
 
 
     {/* Admin side  */}

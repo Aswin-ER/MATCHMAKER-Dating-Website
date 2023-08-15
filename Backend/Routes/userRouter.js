@@ -188,27 +188,33 @@ router.post("/password-reset", async (req, res) => {
 router.get('/userProfile', userAuth,  userControllers.getUserProfile);
 router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
-
 router.get('/verifyProfile',userAuth, userControllers.verifyProfile);
+
 
 //Liked profile
 router.post('/like', userAuth, userControllers.likedProfile);
 router.get('/getLikedProfiles', userAuth, userControllers.getLikedProfile);
 router.get('/getLikedUserProfiles', userAuth, userControllers.getLikedUserProfiles);
 
+
 // Filtered users
 router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
+
 
 // Matched Profiles 
 router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
 
+
 //Chat
 router.post('/getChatId', userAuth, chatControllers.accessChat);
-
 router.post('/message', userAuth, messageControllers.sendMessage);
-
 router.get('/message/:id', userAuth, messageControllers.allMessage);
 
+
+// Payment
+router.post('/payment/orders', userAuth, userControllers.paymentOrders);
+router.post('/payment/success', userAuth, userControllers.paymentSuccess);
+router.get('/getPremiumStat', userAuth, userControllers.premiumStat);
 
 
 export default router;

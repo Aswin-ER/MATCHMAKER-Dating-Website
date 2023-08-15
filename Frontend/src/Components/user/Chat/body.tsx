@@ -15,11 +15,11 @@ var socket: any;
 
 const Chat: FC = () => {
 
-
+    
     const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
     const userID = user?._id;
     console.log(userID, "userid in chat")
-
+    
     const [messages, setMessages] = useState<string[]>([]);
 
     const [input, setInput] = useState<string>();
@@ -84,11 +84,11 @@ const Chat: FC = () => {
             })
 
         } catch (err) {
-            console.log(err, "id herer")
+            console.log(err, "Error")
         }
     }
 
-    console.log(oppoId, "oppoId")
+    // console.log(oppoId, "oppoId")
 
     useEffect(() => {
         axiosInstance.get('/getMatchedUserProfiles').then((res) => {
@@ -96,7 +96,7 @@ const Chat: FC = () => {
         })
     }, []);
 
-    console.log(chatId, "chatId");
+    // console.log(chatId, "chatId");
 
 
     const fetchMessage = () => {
@@ -126,18 +126,17 @@ const Chat: FC = () => {
         }
     }, [chatId])
 
+
     useEffect(() => {
         socket.on('message received', (newMessageRecieved: any) => {
-
             if (!chatId || chatId !== newMessageRecieved.chat._id) {
-                console.log("bihahaha", newMessageRecieved);
+                // console.log("bihahaha", newMessageRecieved);
             } else {
                 console.log("perfect ok", newMessageRecieved);
                 setMessages([...messages, newMessageRecieved]);
             }
         })
     })
-
 
     console.log(messages, "full message")
 
@@ -207,10 +206,10 @@ const Chat: FC = () => {
 
 
                     {/* Messaging area here */}
-                    <div className="flex flex-col flex-auto h-full p-6">
-                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+                    <div className="flex flex-col flex-auto h-full p-6" >
+                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4" >
 
-                            <div className="flex flex-col h-full overflow-x-auto mb-4">
+                            <div className="flex flex-col h-full overflow-y-auto mb-4" >
                                 {
                                     messages.length > 0 ?
 

@@ -32,6 +32,8 @@ app.use('/admin', adminRouter);
 
 const server = app.listen(PORT, () => console.log('Server listening on port', PORT));
 
+
+// This code creates a new instance of a Server object from the socket.io library
 const io = new Server(server, {
   pingTimeout: 3000,
    cors: {
@@ -44,7 +46,6 @@ io.on('connection', (socket)=> {
 
   socket.on('setup', (userData)=> {
     socket.join(userData);
-    socket.emit('connected');
   });
 
   socket.on('join chat', (room)=> {

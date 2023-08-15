@@ -31,7 +31,6 @@ const ProtectedPage: FC = () => {
         // console.log(response.data.data.name);
         dispatch(userDet(response.data.data));
 
-
       } else {
         console.log('No user found');
 

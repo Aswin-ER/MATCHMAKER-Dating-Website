@@ -6,6 +6,10 @@ import User from '../Model/user.js';
 import cloudinary from '../Config/cloudinary.js';
 import likedProfile from '../Model/liked.js';
 import mongoose from 'mongoose';
+import Razorpay from 'razorpay'
+import crypto from 'crypto';
+import payment from '../Model/payment.js';
+import premium from '../Model/premium.js';
 
 
 const userController = {
@@ -262,12 +266,12 @@ const userController = {
               var likeProfileArray = likeProfile ? [likeProfile] : [];
             }
 
-            console.log("its a Match"); 
+            console.log("its a Match");
 
             const match = await User.findByIdAndUpdate(currentUser, { $push: { matches: matchUser } });
             const opomatch = await User.findByIdAndUpdate(matchUser, { $push: { matches: currentUser } });
 
-            console.log(match,opomatch, "user profile updated");
+            console.log(match, opomatch, "user profile updated");
 
             res.status(200).send({ match: "Congratulations, it's a match!🎉 Let the sparks fly✨", likeProfileArray });
 
@@ -343,9 +347,9 @@ const userController = {
     const userId = req.body.userId;
     try {
 
-      
+
       const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
-      console.log(likeProfile,"here is like profile")
+      console.log(likeProfile, "here is like profile")
 
       if (!likeProfile?.matched) {
         res.status(200).json(likeProfile?.userProfileId);
@@ -411,30 +415,124 @@ const userController = {
     }
   },
 
-  getMatchedUserProfiles: async (req, res)=> {
+  getMatchedUserProfiles: async (req, res) => {
 
-    try{
+    try {
 
       const userId = new mongoose.Types.ObjectId(req.body.userId);
 
-      const matchedUsers = await userModel.find({matches: userId});
+      const matchedUsers = await userModel.find({ matches: userId });
       console.log(matchedUsers, "matched user")
 
       const matchedUserIds = matchedUsers.map(matchedUser => matchedUser._id);
 
       const matchedUserProfiles = await UserProfile.find({ user: { $in: matchedUserIds } });
-          
-      
-      console.log(matchedUserProfiles,"matched user here");
+
+
+      console.log(matchedUserProfiles, "matched user here");
       res.status(200).send(matchedUserProfiles);
-      
-    }catch(err){
+
+    } catch (err) {
 
       console.log(err, "error here");
 
     }
-  }
+  },
 
+  paymentOrders: async (req, res) => {
+
+    try {
+      const instance = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_SECRET,
+      });
+
+      const options = {
+        amount: 500 * 100,
+        currency: 'INR',
+        receipt: 'receipt_order_74394',
+      };
+
+      const order = await instance.orders.create(options);
+
+      if (!order) return res.status(500).send('Some error occurred');
+      console.log(order, "This is orders")
+      res.json(order);
+
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
+
+  paymentSuccess: async (req, res) => {
+    try {
+      const {
+        orderCreationId,
+        razorpayPaymentId,
+        razorpayOrderId,
+        razorpaySignature,
+      } = req.body;
+
+      // console.log(req.body, "success payment");
+
+      const shasum = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET);
+      shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
+      const digest = shasum.digest('hex');
+
+      if (digest !== razorpaySignature) {
+        return res.status(400).json({ msg: 'Transaction not legit!' })
+      }
+
+      const newPayment = payment({
+        user: req.body.userId,
+        amount: Number(500),
+        razorpayDetails: {
+          orderId: razorpayOrderId,
+          paymentId: razorpayPaymentId,
+          signature: razorpaySignature,
+        },
+        status: 'success',
+        timestamp: Date.now(),
+      });
+
+      await newPayment.save();
+
+      const newPremium = premium({
+        user: req.body.userId,
+        start_date: Date.now(),
+        end_date: new Date(Date.now() + (365 * 24 * 60 * 60 * 1000)),
+        status: 'active',
+      })
+      await newPremium.save();
+
+
+      res.json({
+        success: 'success',
+        orderId: razorpayOrderId,
+        paymentId: razorpayPaymentId,
+      });
+
+
+    } catch (err) {
+      res.status(500).send(err)
+    }
+  },
+
+  premiumStat:async (req, res) => {
+
+    try {
+      const userId = req.body.userId;
+      const stat = await premium.findOne({ user: userId, status: 'active'});
+
+      if(stat){
+        res.status(200).send(stat);
+      }
+
+    } catch(err) {
+        res.status(500).send(err);
+    }
+
+  }
 
 };
 

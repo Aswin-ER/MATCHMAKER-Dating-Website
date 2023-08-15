@@ -27,7 +27,7 @@ const messageControllers = {
 
             var message = await Message.create(newMessage);
 
-            message = await message.populate('sender', 'name picture')
+            message = await message.populate('sender', 'name')
                 message = await message.populate('chat')
                 message = await message.populate('userProfile','image')
 
@@ -45,7 +45,7 @@ const messageControllers = {
     allMessage: async(req, res)=> {
          try{
             console.log(req.params.id,"chatId");
-             const message = await Message.find({ chat: req.params.id }).populate('sender', 'name picture email')
+             const message = await Message.find({ chat: req.params.id }).populate('sender', 'name email')
                  .populate('chat').populate('userProfile','image');
 
                 // console.log(message,"message");
