@@ -76,7 +76,6 @@ const Chat: FC = () => {
 
         try {
             axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
-                // console.log(res.data.users,"ddddddd")
                 setChatId((prev) => res.data._id)
 
             }).catch((err) => {
@@ -129,11 +128,11 @@ const Chat: FC = () => {
 
     useEffect(() => {
         socket.on('message received', (newMessageRecieved: any) => {
-            if (!chatId || chatId !== newMessageRecieved.chat._id) {
+            if (!chatId || chatId === newMessageRecieved.chat._id) {
                 // console.log("bihahaha", newMessageRecieved);
             } else {
-                console.log("perfect ok", newMessageRecieved);
                 setMessages([...messages, newMessageRecieved]);
+                console.log("perfect ok", newMessageRecieved);
             }
         })
     })

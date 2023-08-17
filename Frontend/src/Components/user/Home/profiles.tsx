@@ -10,6 +10,7 @@ import { axiosInstance } from '../../../api/axiosInstance';
 import Button from '../../common/button';
 import LoveIcon from '../../common/loveIcon';
 import Fancybox from '../../common/fancyBox';
+import Pagination from 'Components/common/pagination';
 
 interface UserProfile {
     _id: string;
@@ -40,9 +41,9 @@ const Profile: FC = () => {
     const [userDet, setUserDet] = useState([])
     const [likedProfile, setLikedProfile] = useState<string[]>([])
 
+
     //Logged in userDetails
     const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
-    // console.log(user)
 
     const handleButton = () => {
         toast.info('Login to see Profiles');
@@ -53,7 +54,6 @@ const Profile: FC = () => {
     }
 
     const isProfileLiked = (userProfileId: string, likedProfile: Array<any>): boolean => {
-        // console.log('Liked profiles:', likedProfile);
         return likedProfile.some((profile) => profile.userProfileId.includes(userProfileId));
     };
 
@@ -95,16 +95,36 @@ const Profile: FC = () => {
 
     const [filter, setFilter] = useState<any>([]);
 
-    useEffect(() => {
-        axiosInstance.get('/getAllUserProfile').then((res) => {
-            console.log(res, "all profile here mannnnnnn");
-            setUserDet(res.data)
-        })
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [cardsPerPage, setCardsPerPage] = useState<number>(2);
 
-    }, [updateUi])
+    useEffect(() => {
+        if(user){
+            axiosInstance.get('/profile').then((res) => {
+                const data = res.data;
+                const filtered = data.filter((users:any)=> users.user !== user._id);
+                console.log(filtered,"asas")
+                setUserDet(filtered || []);
+            })
+        }else{
+            axiosInstance.get('/getAllUserProfile').then((res) => {
+                console.log(res.data, "log out profile")
+                setUserDet(res.data || []);
+            })
+        }
+
+    }, [updateUi, user])
+
+    // pagination 
+    const lastPageIndex: number = currentPage * cardsPerPage;
+    const firstPostIndex: number = lastPageIndex - cardsPerPage;
+    const curretCards = userDet.slice(firstPostIndex, lastPageIndex);
+    console.log(curretCards, "current");
+
 
     useEffect(() => {
         axiosInstance.get('/getLikedProfiles').then((res) => {
+            console.log(res.data, "liked")
             setLikedProfile(res.data || []);
         }).catch((err) => {
             console.log(err)
@@ -208,10 +228,7 @@ const Profile: FC = () => {
                         <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-100 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
                             {
                                 user ?
-                                    userDet.filter((userProfile: UserProfile) => {
-                                        return (userProfile.user !== user._id
-                                        )
-                                    }).filter((userProfile: UserProfile) => !user?.matches?.includes(userProfile.user)).map((userProfile: UserProfile, index: number) => (
+                                    curretCards.map((userProfile: UserProfile, index: number) => (
 
                                         <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                             <div className="h-98 w-82">
@@ -263,7 +280,7 @@ const Profile: FC = () => {
 
                                         :
 
-                                        userDet.map((userProfile: UserProfile, index: number) => (
+                                        curretCards.map((userProfile: UserProfile, index: number) => (
 
                                             <div key={index} className="group relative blur-sm cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30" onClick={handleButton}>
                                                 <div className="h-98 w-82">
@@ -284,10 +301,7 @@ const Profile: FC = () => {
                         <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-60 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
                             {
                                 user ?
-                                    userDet.filter((userProfile: UserProfile) => {
-                                        return (userProfile.user !== user._id
-                                        )
-                                    }).filter((userProfile: UserProfile) => !user?.matches?.includes(userProfile.user)).map((userProfile: UserProfile, index: number) => (
+                                    curretCards.map((userProfile: UserProfile, index: number) => (
 
                                         <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                             <div className="h-98 w-82">
@@ -339,7 +353,7 @@ const Profile: FC = () => {
 
                                         :
 
-                                        userDet.map((userProfile: UserProfile, index: number) => (
+                                        curretCards.map((userProfile: UserProfile, index: number) => (
 
                                             <div key={index} className="group relative blur-sm cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30" onClick={handleButton}>
                                                 <div className="h-98 w-82">
@@ -415,6 +429,10 @@ const Profile: FC = () => {
                     </div>
 
                 )}
+
+                <div className='flex absolute bottom-5'>
+                    <Pagination totalPosts={userDet.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage} />
+                </div>
 
             </div>
         </>

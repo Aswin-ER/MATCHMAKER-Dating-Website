@@ -4,6 +4,7 @@ import Button from '../../common/button';
 import { axiosInstance } from '../../../api/axiosInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import Fancybox from 'Components/common/fancyBox';
+import Pagination from 'Components/common/pagination';
 
 
 interface UserProfile {
@@ -33,6 +34,9 @@ const Match: FC = () => {
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
     const [showModal, setShowModal] = useState<Boolean>(false);
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [cardsPerPage, setCardsPerPage] = useState<number>(2);
+
     useEffect(() => {
         axiosInstance.get('/getMatchedUserProfiles').then((res) => {
             setMatchedProfile(res.data || []);
@@ -40,6 +44,12 @@ const Match: FC = () => {
             console.log(err)
         })
     }, []);
+
+    // pagination 
+    const lastPageIndex: number = currentPage * cardsPerPage;
+    const firstPostIndex: number = lastPageIndex - cardsPerPage;
+    const curretCards = matchedProfiles.slice(firstPostIndex, lastPageIndex);
+    console.log(curretCards, "current");
 
     function openModal(userProfile: UserProfile) {
         setSelectedUserProfile(userProfile);
@@ -67,13 +77,13 @@ const Match: FC = () => {
         <>
             <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
                 {
-                    matchedProfiles.length > 0 ?
+                    curretCards.length > 0 ?
 
                         <>
                             <h3 className='text-white lg:text-6xl font-semibold lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Matched <span className='text-pink-700 '>Profiles</span></h3>
                             <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
                                 {
-                                    matchedProfiles.map((match: any, index: number) => (
+                                    curretCards.map((match: any, index: number) => (
 
                                         <div>
                                         <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
@@ -161,6 +171,10 @@ const Match: FC = () => {
                     </div>
 
                 )}
+
+                <div className='flex absolute bottom-5'>
+                    <Pagination totalPosts={matchedProfiles.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage} />
+                </div>
 
             </div>
         </>

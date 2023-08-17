@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { FC, useEffect, useState } from 'react'
 import Button from '../../common/button';
@@ -5,8 +6,9 @@ import { axiosInstance } from '../../../api/axiosInstance';
 import { Link } from 'react-router-dom';
 import Fancybox from 'Components/common/fancyBox';
 import { useSelector } from 'react-redux';
-import { UserCred } from 'Redux/slice';
+import { UserCred, userDet } from 'Redux/slice';
 import RootState from 'Redux/rootState';
+import Pagination from 'Components/common/pagination';
 
 interface UserProfile {
     _id: string;
@@ -35,6 +37,9 @@ const LikedProfiles: FC = () => {
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
     const [showModal, setShowModal] = useState<Boolean>(false);
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [cardsPerPage, setCardsPerPage] = useState<number>(2);
+
     useEffect(() => {
         if (user) {
             axiosInstance.get('/getLikedUserProfiles').then((res) => {
@@ -45,6 +50,13 @@ const LikedProfiles: FC = () => {
             })
         }
     }, []);
+
+
+    // pagination 
+    const lastPageIndex: number = currentPage * cardsPerPage;
+    const firstPostIndex: number = lastPageIndex - cardsPerPage;
+    const curretCards = likedProfile.slice(firstPostIndex, lastPageIndex);
+    console.log(curretCards, "current");
 
     function openModal(userProfile: UserProfile) {
         setSelectedUserProfile(userProfile);
@@ -83,9 +95,9 @@ const LikedProfiles: FC = () => {
                         <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-20 mobile:gap-10">
 
                             {
-                                likedProfile?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ? (
+                                curretCards?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ? (
 
-                                    likedProfile.filter((profile: any) => !user?.matches?.includes(profile.user)).map((profile: any, index: number) => {
+                                    curretCards.filter((profile: any) => !user?.matches?.includes(profile.user)).map((profile: any, index: number) => {
                                         return (
                                             <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                                 <div className="h-98 w-82">
@@ -185,6 +197,9 @@ const LikedProfiles: FC = () => {
 
                 )}
 
+                <div className='flex absolute bottom-5'>
+                    <Pagination totalPosts={likedProfile.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage}/>
+                </div>
             </div>
         </>
     );

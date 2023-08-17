@@ -202,6 +202,7 @@ const userController = {
   getAllUserProfile: async (req, res) => {
     try {
       const userDet = await UserProfile.find({});
+      console.log(userDet,"userDet")
       res.status(200).json(userDet);
     } catch (error) {
       // If there's an error while fetching user profiles, handle it here.
@@ -349,13 +350,17 @@ const userController = {
 
 
       const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
-      console.log(likeProfile, "here is like profile")
+      console.log(likeProfile.user,"sdfadsfasdf")
+      const loggedInUser = await User.findById(userId);
+      const loggedInUserMatches = loggedInUser.matches;
 
-      if (!likeProfile?.matched) {
-        res.status(200).json(likeProfile?.userProfileId);
-      } else {
-        res.status(200).send();
-      }
+      const filteredProfiles = likeProfile.userProfileId.filter(profile => {
+        return !loggedInUserMatches.includes(profile.user.toString());
+      });
+
+      // console.log(filteredProfiles,"filtered here")
+
+      res.status(200).json(filteredProfiles);
 
 
     } catch (err) {
@@ -532,7 +537,37 @@ const userController = {
         res.status(500).send(err);
     }
 
+  },
+
+  profile:async (req, res)=> {
+
+    const userId = req.body.userId;
+
+    if(userId){
+      const user = await UserProfile.findOne({ user: userId});
+      const usersProfile = await UserProfile.find({});
+      const liked = await likedProfile.findOne({ user: userId})
+      const matchedUsers = await userModel.find({ _id: userId });
+  
+      const filteredProfiles = usersProfile.filter(profile => {
+  
+          if (!matchedUsers.some(matchedUser => matchedUser.matches.includes(profile.user))) {
+            if (!liked || !liked.userProfileId.includes(profile._id)) {
+              return true; 
+            }
+          }
+        return false; // Exclude this profile
+      });
+  
+      res.send(filteredProfiles)
+
+    }else{
+      const usersProfile = await UserProfile.find({});
+      res.send([usersProfile]);
+    }
+    
   }
+
 
 };
 

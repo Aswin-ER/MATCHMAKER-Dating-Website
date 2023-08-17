@@ -205,6 +205,9 @@ router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
 router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
 
 
+router.get('/profile', userAuth, userControllers.profile);
+
+
 //Chat
 router.post('/getChatId', userAuth, chatControllers.accessChat);
 router.post('/message', userAuth, messageControllers.sendMessage);
