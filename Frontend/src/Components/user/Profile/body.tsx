@@ -23,7 +23,22 @@ const Body: FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file: any = e.target.files[0];
-            console.log(file)
+
+            // Check for valid image file types
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+               toast.error("Invalid image file type!");
+                return; // Stop execution if the file type is not valid
+            }
+
+            // Check for valid image file size (in bytes)
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                toast.error("Image file size is too large!");
+                return; // Stop execution if the file size is too large
+            }
+
+            // console.log(file)
             setImages(file);
             setSelectedImage(URL.createObjectURL(file));
             setVerify((prev) => !prev);
@@ -35,7 +50,19 @@ const Body: FC = () => {
     const handleChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file: any = e.target.files[0];
-            console.log(file)
+            // Check for valid image file types
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file.type)) {
+                toast.error("Invalid image file type!");
+                return; // Stop execution if the file type is not valid
+            }
+
+            // Check for valid image file size (in bytes)
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                toast.error("Image file size is too large!");
+                return; // Stop execution if the file size is too large
+            }
             setImages1(file);
             setSelectedImage1(URL.createObjectURL(file));
             setVerify1((prev) => !prev);
@@ -45,7 +72,19 @@ const Body: FC = () => {
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file2: any = e.target.files[0];
-            console.log(file2)
+            // Check for valid image file types
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!allowedTypes.includes(file2.type)) {
+                toast.error("Invalid image file type!");
+                return; // Stop execution if the file type is not valid
+            }
+
+            // Check for valid image file size (in bytes)
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file2.size > maxSize) {
+                toast.error("Image file size is too large!");
+                return; // Stop execution if the file size is too large
+            }
             setImages2(file2);
             setSelectedImage2(URL.createObjectURL(file2));
             setVerify2((prev) => !prev);

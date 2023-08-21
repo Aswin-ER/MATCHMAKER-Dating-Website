@@ -10,6 +10,11 @@ const chatSchema = new mongoose.Schema({
         }
     ],
 
+    userProfiles: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserProfile',
+    },
+
     latestMessage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'message',

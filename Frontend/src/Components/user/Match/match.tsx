@@ -72,6 +72,10 @@ const Match: FC = () => {
         }
     }
 
+    // const handleChat = (id: any)=> {
+    //     navigate(`/chat/${id}`)
+    // }
+
 
     return (
         <>

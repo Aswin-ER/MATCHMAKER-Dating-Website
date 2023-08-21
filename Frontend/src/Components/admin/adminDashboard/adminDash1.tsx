@@ -1,68 +1,99 @@
 
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Pie } from 'react-chartjs-2';
+import { adminAxiosInstance } from 'api/axiosInstance';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const data1 = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-        {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-        },
-    ],
-};
-
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-export const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-        {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-        },
-    ],
-};
+
 
 const AdminDash1: FC = () => {
+
+    const [users, setUsers] = useState<number>(0);
+    const [premium, setPremium] = useState<number>(0);
+    const [profiles, setProfiles] = useState<number>(0);
+    const [genderMale, setGenderMale] = useState<number>(0);
+    const [genderFemale, setGenderFemale] = useState<number>(0);
+    const [age, setAge] = useState<number>(0); 
+    const [age1, setAge1] = useState<number>(0);
+    const [age2, setAge2] = useState<number>(0); 
+    const [age3, setAge3] = useState<number>(0); 
+
+    const data1 = {
+        labels: ['Males', 'Females'],
+        datasets: [
+            {
+                label: 'Total',
+                data: [genderMale, genderFemale],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+
+
+    const data = {
+        labels: ['18-24', '25-34', '34-44', '45+'],
+        datasets: [
+            {
+                label: 'Total Users',
+                data: [age, age1, age2, age3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+
+
+
+    useEffect(()=> {
+        adminAxiosInstance.get('/admin/totalUsers').then((res)=> {
+            setUsers(res.data);
+        })
+
+        adminAxiosInstance.get('/admin/totalPremium').then((res) => {
+            setPremium(res.data);
+        })
+
+        adminAxiosInstance.get('/admin/totalUserProfiles').then((res) => {
+            setProfiles(res.data);
+        })
+
+        adminAxiosInstance.get('/admin/totalGender').then((res) => {
+            setGenderMale(res.data.males);
+            setGenderFemale(res.data.females);
+        })
+
+        adminAxiosInstance.get('/admin/ageOfUsers').then((res) => {
+           setAge(res.data.age);
+           setAge1(res.data.age1);
+           setAge2(res.data.age2);
+           setAge3(res.data.age3);
+        })
+
+    }, [])
 
     return (
         <>
@@ -111,8 +142,8 @@ const AdminDash1: FC = () => {
                             </div>
 
                             <div className="mx-5">
-                                <h4 className="text-2xl font-semibold text-gray-700">8,282</h4>
-                                <div className="text-gray-500">New Users</div>
+                                <h4 className="text-2xl font-semibold text-gray-700">{users}</h4>
+                                <div className="text-gray-500">Total Users</div>
                             </div>
                         </div>
                     </div>
@@ -144,8 +175,8 @@ const AdminDash1: FC = () => {
                             </div>
 
                             <div className="mx-5">
-                                <h4 className="text-2xl font-semibold text-gray-700">200,521</h4>
-                                <div className="text-gray-500">Total Orders</div>
+                                    <h4 className="text-2xl font-semibold text-gray-700">{premium}</h4>
+                                <div className="text-gray-500">Total Premium Membership</div>
                             </div>
                         </div>
                     </div>
@@ -177,8 +208,8 @@ const AdminDash1: FC = () => {
                             </div>
 
                             <div className="mx-5">
-                                <h4 className="text-2xl font-semibold text-gray-700">215,542</h4>
-                                <div className="text-gray-500">Available Products</div>
+                                    <h4 className="text-2xl font-semibold text-gray-700">{profiles}</h4>
+                                <div className="text-gray-500">Available User Profiles</div>
                             </div>
                         </div>
                     </div>
@@ -187,10 +218,12 @@ const AdminDash1: FC = () => {
 
             <div className='flex'>
                 <div className='w-2/4 h-140 mt-16 mb-16  mx-30'>
-                    <Doughnut data={data} />
+                        <div className='text-xl font-semibold mb-6 text-center text-pink-700 mr-40'>Total Number of Males and Females</div>
+                    <Doughnut data={data1} />
                 </div>
 
                 <div className='w-2/4 h-140 mt-16 mb-16'>
+                        <div className='text-xl font-semibold mb-6 text-center text-pink-700 mr-40'>Age of users</div>
                     <Pie data={data} />
                 </div>
             </div>

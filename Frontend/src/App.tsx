@@ -17,6 +17,7 @@ import UserProfiles from './Pages/user/UserProfiles';
 import Matches from 'Pages/user/Match';
 import ChatPage from 'Pages/user/Chat';
 import Plans from 'Pages/user/Plans';
+import ProfileDet from 'Pages/user/profileDet';
 
 function App() {
   return (
@@ -32,12 +33,12 @@ function App() {
     <Route path="/password-reset/:userId/:token" Component={NewPass} />
 
     <Route path='/profile' element={<Profile/>}></Route>
+    <Route path='/profileDet/:id' element={<ProfileDet/>}></Route>
     <Route path='/liked' element={<Like/>}></Route>
     <Route path='/matches' element={<Matches/>}></Route>
     <Route path='/userProfile' element={<UserProfiles/>}></Route>
     <Route path='/chat' element={<ChatPage/>}></Route>
     <Route path='/plans' element={<Plans/>}></Route>
-
 
     {/* Admin side  */}
     <Route path="/admin" element={<Admin/>} />

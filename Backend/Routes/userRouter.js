@@ -190,6 +190,8 @@ router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
 router.get('/verifyProfile',userAuth, userControllers.verifyProfile);
 
+router.post('/profileDet',userAuth, userControllers.profileDet);
+
 
 //Liked profile
 router.post('/like', userAuth, userControllers.likedProfile);
@@ -203,6 +205,7 @@ router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
 
 // Matched Profiles 
 router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
+router.get('/getMatchedUserProfilesChat', userAuth, chatControllers.getMatchedUserProfiles);
 
 
 router.get('/profile', userAuth, userControllers.profile);
@@ -212,6 +215,8 @@ router.get('/profile', userAuth, userControllers.profile);
 router.post('/getChatId', userAuth, chatControllers.accessChat);
 router.post('/message', userAuth, messageControllers.sendMessage);
 router.get('/message/:id', userAuth, messageControllers.allMessage);
+
+// router.post('/lastMessage', userAuth, messageControllers.lastMessage);
 
 
 // Payment

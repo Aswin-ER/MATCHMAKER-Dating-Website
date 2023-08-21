@@ -11,6 +11,7 @@ import Button from '../../common/button';
 import LoveIcon from '../../common/loveIcon';
 import Fancybox from '../../common/fancyBox';
 import Pagination from 'Components/common/pagination';
+import { useNavigate } from 'react-router-dom';
 
 interface UserProfile {
     _id: string;
@@ -33,8 +34,9 @@ interface UserProfile {
 
 const Profile: FC = () => {
 
+    const navigate = useNavigate();
+
     const verify: boolean | any = useSelector((state: RootState) => state.userCred.userCred?.profile);
-    // console.log(verify,"userprofileCreated here")
 
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
     const [showModal, setShowModal] = useState<Boolean>(false);
@@ -133,6 +135,7 @@ const Profile: FC = () => {
 
 
     const handleFilter = () => {
+
         const genderElement = document.getElementById('gender') as HTMLSelectElement;
         const gender = genderElement.value;
 
@@ -163,6 +166,11 @@ const Profile: FC = () => {
     useEffect(() => {
         setUserDet(filter)
     }, [filter])
+
+    const handleProfile = (id: any)=> {
+        console.log("reached profile", id)
+        navigate(`/profileDet/${id}`);
+    }
 
 
     return (
@@ -241,8 +249,8 @@ const Profile: FC = () => {
                                                 {
                                                     verify ?
                                                         <>
-                                                            <Button handleClick={() => openModal(userProfile)} text="View More" />
-                                                            <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
+                                                            <Button handleClick={()=> handleProfile(userProfile._id)} text="View More" />
+                                                            <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)}  />
                                                         </>
                                                         :
                                                         <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
@@ -268,7 +276,7 @@ const Profile: FC = () => {
                                                     {
                                                         verify ?
                                                             <>
-                                                                <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                                <Button handleClick={() => handleProfile(userProfile._id)} text="View More" />
                                                                 <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
                                                             </>
                                                             :
@@ -314,7 +322,7 @@ const Profile: FC = () => {
                                                 {
                                                     verify ?
                                                         <>
-                                                            <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                            <Button handleClick={() => handleProfile(userProfile._id)} text="View More" />
                                                             <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
                                                         </>
                                                         :
@@ -341,7 +349,7 @@ const Profile: FC = () => {
                                                     {
                                                         verify ?
                                                             <>
-                                                                <Button handleClick={() => openModal(userProfile)} text="View More" />
+                                                                <Button handleClick={() => handleProfile(userProfile._id)} text="View More" />
                                                                 <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
                                                             </>
                                                             :

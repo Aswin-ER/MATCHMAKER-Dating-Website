@@ -8,6 +8,10 @@ import React, { FC, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import io from 'socket.io-client';
+import EmojiPicker from 'emoji-picker-react';
+import data from '@emoji-mart/data';
+
+var det: any = data;
 
 const ENDPOINT = 'http://localhost:3001';
 
@@ -15,22 +19,40 @@ var socket: any;
 
 const Chat: FC = () => {
 
-    
     const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
     const userID = user?._id;
     console.log(userID, "userid in chat")
-    
+
+    //emoji
+    const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+    const [emojis, setEmojis] = useState([]);
+    useEffect(() => {
+        // Get the list of emojis from the emoji-picker library
+        setEmojis(det);
+    }, []);
+
+    const handleEmojiClick = (emojiObject: any) => {
+        // Extract the emoji character from the emoji object
+        const emoji = emojiObject.emoji;
+
+        // Insert the emoji into the input message
+        setInput(input + emoji);
+    };
+
     const [messages, setMessages] = useState<string[]>([]);
 
     const [input, setInput] = useState<string>();
 
     const [oppoId, setOppoId] = useState<string>();
 
-    const [matched, setMatched] = useState<any>();
+    const [matched, setMatched] = useState<any>([]);
 
-    const [chatId, setChatId] = useState<string>('');
+    const [chatId, setChatId] = useState<any>([]);
+
+    const [lastMessage, setLastMessage] = useState<any[]>([]);
 
     const [isSocket, isSocketConnected] = useState<boolean>();
+
 
     useEffect(() => {
         socket = io(ENDPOINT);
@@ -41,9 +63,38 @@ const Chat: FC = () => {
     }, [userID]);
 
 
+    useEffect(() => {
+        axiosInstance.get('/getMatchedUserProfilesChat').then((res) => {
+            console.log(res.data, "vanuuuuuuuuuu");
+            setMatched(res.data.userPro);
+            setLastMessage(res.data.message);
+        })
+    }, [messages])
+
+
     const handleInput = (e: any) => {
         setInput((prev) => e.target.value);
     }
+
+    const handleClick = (id: any) => {
+        const oppoId = id;
+        console.log(oppoId, "id here")
+        setOppoId(oppoId)
+
+        try {
+            axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
+                console.log(res.data, "onclik vagaaaaaaaaaaa")
+                setChatId(res.data._id)
+
+            }).catch((err) => {
+                console.log(err, "error")
+            })
+
+        } catch (err) {
+            console.log(err, "Error")
+        }
+    }
+
 
     const sendMessage = async () => {
 
@@ -64,45 +115,19 @@ const Chat: FC = () => {
         }
     }
 
+
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter') {
             sendMessage();
         }
     };
 
-    const handleChat = (id: any) => {
-        const oppoId = id;
-        setOppoId(oppoId)
-
-        try {
-            axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
-                setChatId((prev) => res.data._id)
-
-            }).catch((err) => {
-                console.log(err, "error")
-            })
-
-        } catch (err) {
-            console.log(err, "Error")
-        }
-    }
-
-    // console.log(oppoId, "oppoId")
-
-    useEffect(() => {
-        axiosInstance.get('/getMatchedUserProfiles').then((res) => {
-            setMatched(res.data);
-        })
-    }, []);
-
-    // console.log(chatId, "chatId");
-
 
     const fetchMessage = () => {
         try {
             const id = chatId;
             axiosInstance.get(`/message/${id}`).then((res) => {
-                // console.log(res.data, "all messages")
+                console.log(res.data, "all messages")
 
                 setMessages([...res.data]);
 
@@ -119,25 +144,20 @@ const Chat: FC = () => {
 
 
     useEffect(() => {
-        if (chatId) {
-            setMessages([]);
-            fetchMessage();
-        }
+        setMessages([]);
+        fetchMessage();
     }, [chatId])
 
 
     useEffect(() => {
         socket.on('message received', (newMessageRecieved: any) => {
-            if (!chatId || chatId === newMessageRecieved.chat._id) {
-                // console.log("bihahaha", newMessageRecieved);
+            if (!chatId || chatId !== newMessageRecieved.chat._id) {
             } else {
                 setMessages([...messages, newMessageRecieved]);
                 console.log("perfect ok", newMessageRecieved);
             }
         })
     })
-
-    console.log(messages, "full message")
 
     return (
         <>
@@ -171,26 +191,39 @@ const Chat: FC = () => {
                             <div className="flex flex-col space-y-1 mt-4 -mx-2 h-100 overflow-y-auto">
 
                                 {
-                                    user?
+                                    user ?
 
-                                    matched?.map((match: any, index: number) => {
-                                        // console.log(match,"lookout")
-                                        return (
+                                        matched?.map((match: any, index: number) => {
+                                            console.log(match, "ojoo")
+                                            return (
 
-                                            <button key={index}
-                                                className={`flex flex-row h-2/6 items-center ${oppoId === match.user ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`}
-                                                onClick={() => handleChat(match.user)} >
-                                                <div
-                                                    className="flex items-center justify-center h-8 w-10 bg-indigo-200 rounded-full mx-5"
-                                                >
-                                                    <img src={match.image[0]} alt='' className='rounded-full'></img>
-                                                </div>
-                                                <div className="ml-2 text-lg font-medium" >{match.name}</div>
-                                            </button>
-                                        )
-                                    })
-                                    :
-                                    ""
+                                                <button key={index}
+                                                    className={`flex flex-row h-2/6 items-center ${oppoId === match.user ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`} onClick={() => handleClick(match.user)} >
+                                                    <div
+                                                        className="flex items-center justify-center h-8 w-10 bg-indigo-200 rounded-full mx-5"
+                                                    >
+                                                        <img src={match.image[0]} alt='' className='rounded-full'></img>
+                                                    </div>
+                                                    <div className='flex-col'>
+                                                        <div className="ml-2 text-lg font-medium" >{match.name}</div>
+                                                        {
+                                                            lastMessage.map((msg) => {
+                                                                console.log(msg, "lastMessage")
+                                                                return (
+                                                                    match._id === msg?.userProfile ?
+                                                                        <p className='text-xs text-gray-500'>{match.name}: {msg?.content}</p>
+                                                                        :
+                                                                        ""
+                                                                )
+                                                            })
+                                                        }
+                                                    </div>
+                                                </button>
+                                            )
+                                        })
+
+                                        :
+                                        ""
                                 }
 
                             </div>
@@ -213,7 +246,7 @@ const Chat: FC = () => {
                                     messages.length > 0 ?
 
                                         messages?.map((message: any, index) => {
-                                            // console.log(message, "incoming message")
+                                            console.log(message, "incoming message")
                                             return (
 
                                                 <div className="flex flex-col h-full" key={index}>
@@ -307,6 +340,7 @@ const Chat: FC = () => {
                                             className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                                         />
                                         <button
+                                            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                                             className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
                                         >
                                             <svg
@@ -324,6 +358,13 @@ const Chat: FC = () => {
                                                 ></path>
                                             </svg>
                                         </button>
+                                        {showEmojiPicker && (
+                                            <div className="absolute z-50 right-0 bottom-10 w-44 sm:w-auto">Modal
+                                                <EmojiPicker
+                                                    onEmojiClick={handleEmojiClick}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="ml-4">

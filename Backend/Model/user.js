@@ -25,7 +25,10 @@ const userSchema = new mongoose.Schema({
     profile: {
         type: Boolean,
     },
-    matches: [{ type: String }],
+    matches: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserProfile', }],
+        
     userProfile: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserProfile',

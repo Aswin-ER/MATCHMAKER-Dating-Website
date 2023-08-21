@@ -423,18 +423,10 @@ const userController = {
   getMatchedUserProfiles: async (req, res) => {
 
     try {
-
       const userId = new mongoose.Types.ObjectId(req.body.userId);
-
-      const matchedUsers = await userModel.find({ matches: userId });
-      console.log(matchedUsers, "matched user")
-
+      const matchedUsers = await User.find({ matches: userId });
       const matchedUserIds = matchedUsers.map(matchedUser => matchedUser._id);
-
-      const matchedUserProfiles = await UserProfile.find({ user: { $in: matchedUserIds } });
-
-
-      console.log(matchedUserProfiles, "matched user here");
+      const matchedUserProfiles = await UserProfile.find({ user: { $in: matchedUserIds }});
       res.status(200).send(matchedUserProfiles);
 
     } catch (err) {
@@ -443,6 +435,7 @@ const userController = {
 
     }
   },
+
 
   paymentOrders: async (req, res) => {
 
@@ -566,6 +559,11 @@ const userController = {
       res.send([usersProfile]);
     }
     
+  },
+
+  profileDet:async(req, res)=> {
+    const userProfile = await UserProfile.findById(req.body.id);
+    res.send(userProfile);
   }
 
 
