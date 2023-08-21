@@ -7,6 +7,8 @@ import { AiFillEdit } from 'react-icons/ai'
 
 const Body: FC = () => {
 
+    const userPro: boolean | any = useSelector((state: RootState) => state.userCred.userCred?.profile);
+
     // Images of user
     const [image, setImages] = useState<string>('');
     const [img, setImg] = useState<string>('');
@@ -20,6 +22,8 @@ const Body: FC = () => {
     const [img2, setImg2] = useState<string>('');
     const [selectedImage2, setSelectedImage2] = useState<any>()
 
+    const [premium, setPremium] = useState<boolean>(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file: any = e.target.files[0];
@@ -27,7 +31,7 @@ const Body: FC = () => {
             // Check for valid image file types
             const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
             if (!allowedTypes.includes(file.type)) {
-               toast.error("Invalid image file type!");
+                toast.error("Invalid image file type!");
                 return; // Stop execution if the file type is not valid
             }
 
@@ -282,14 +286,37 @@ const Body: FC = () => {
         setVerify2((prev) => !prev);
     }
 
+    useEffect(() => {
+
+        axiosInstance.get('/premiumUser').then((res) => {
+            console.log(res.data);
+            setPremium(res.data);
+
+        })
+    }, []);
+
     return (
         <>
             <section className="max-w-4xl p-6 lg:mx-auto mobile:mx-6 md:mx-20 bg-gradient-to-r from-gray-900 to-pink-700 rounded-md shadow-md dark:bg-gray-800 mt-20 mb-20">
                 <h1 className="text-2xl font-semibold text-white capitalize dark:text-white mb-10 flex justify-center">USER PROFILE</h1>
                 <div className="mb-6">
-                    <h1 className="block text-lg font-medium text-white">
-                        Fill all the details and verify your profile
-                    </h1>
+                    {
+                        premium ?
+                            <h1 className="block text-xl font-semibold text-yellow-500 mx-2">
+                                PREMIUM MEMBER
+                            </h1>
+                            :
+                            ""
+                    }
+
+                    {
+                        userPro ?
+                            ""
+                            :
+                            <h1 className="block text-sm font-medium text-white text-right mx-2">
+                                Fill all the details and verify your profile
+                            </h1>
+                    }
                     <div className="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-2 border-solid border-white rounded-md">
                         <div className="space-y-1 text-center">
                             {

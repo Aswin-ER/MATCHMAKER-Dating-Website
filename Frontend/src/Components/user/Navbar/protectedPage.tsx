@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance } from '../../../api/axiosInstance';
 import { UserCred, userDet } from '../../../Redux/slice';
 import RootState from '../../../Redux/rootState';
-import head from '../../../assests/5856.jpg'
+import head from '../../../assests/5856.jpg';
+import { AiFillStar } from 'react-icons/ai'
 
 
 const ProtectedPage: FC = () => {
@@ -16,6 +17,7 @@ const ProtectedPage: FC = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [image, setImages] = useState<string>('');
+  const [premium, setPremium] = useState<boolean>(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -61,6 +63,16 @@ const ProtectedPage: FC = () => {
       }
     })
   }, [])
+
+
+  useEffect(() => {
+
+    axiosInstance.get('/premiumUser').then((res) => {
+      console.log(res.data);
+      setPremium(res.data);
+
+    })
+  }, []);
 
 
   return (
@@ -138,18 +150,18 @@ const ProtectedPage: FC = () => {
                 </NavLink>
               </li>
               <li className='mt-1'>
-              <NavLink to={'/matches'}
+                <NavLink to={'/matches'}
                   style={({ isActive }) => {
                     return {
                       color: isActive ? "darkred" : "black",
                     };
                   }}>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
-                >
-                  Matches
-                </a>
+                  <a
+                    href="#"
+                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
+                  >
+                    Matches
+                  </a>
                 </NavLink>
               </li>
               <li className='mt-1'>
@@ -186,14 +198,26 @@ const ProtectedPage: FC = () => {
                   {
                     userName && (
                       <div className='flex items-center'>
-                        <div className="w-10 h-10 mr-4 rounded-full bg-gray-300">
-                          {image ? (
-                            <img src={image} alt="User Profile" className="w-full h-full rounded-full" />
-                          ) : (
-                            <img src={head} alt="User Profile" className="w-full h-full rounded-full" />
-                          )}
-                        </div>
-                        <span className="text-lg text-gray-900 mr-2 cursor-pointer">{userName}</span>
+                        {
+                          premium ?
+
+                            <div className="w-10 h-10 mr-4 rounded-full bg-yellow-500 outline outline-yellow-500">
+                              {image ? (
+                                <img src={image} alt="User Profile" className="w-full h-full rounded-full" />
+                              ) : (
+                                <img src={head} alt="User Profile" className="w-full h-full rounded-full" />
+                              )}
+                            </div>
+                            :
+                            <div className="w-10 h-10 mr-4 rounded-full bg-gray-300">
+                              {image ? (
+                                <img src={image} alt="User Profile" className="w-full h-full rounded-full" />
+                              ) : (
+                                <img src={head} alt="User Profile" className="w-full h-full rounded-full" />
+                              )}
+                            </div>
+                        }
+                        <span className="text-lg text-gray-900 mr-2 cursor-pointer">{userName}</span><AiFillStar className='text-yellow-500'/>
                       </div>
                     )
                   }

@@ -24,7 +24,7 @@ const AdminUsers: FC = () => {
 
     const handleClick = (user:any)=> {
 
-        adminAxiosInstance.post('/admin/userBlock', user).then((res)=> {
+        adminAxiosInstance.put('/admin/userBlock', user).then((res)=> {
             toast.success(res.data.message);
             setTimeout(()=> {
                 window.location.href = '/users'

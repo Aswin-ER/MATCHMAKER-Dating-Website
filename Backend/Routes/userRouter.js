@@ -190,7 +190,9 @@ router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
 router.get('/verifyProfile',userAuth, userControllers.verifyProfile);
 
-router.post('/profileDet',userAuth, userControllers.profileDet);
+router.get('/premiumUser', userAuth, userControllers.premiumUser);
+
+router.get('/profileDet/:id',userAuth, userControllers.profileDet);
 
 
 //Liked profile
@@ -200,7 +202,7 @@ router.get('/getLikedUserProfiles', userAuth, userControllers.getLikedUserProfil
 
 
 // Filtered users
-router.post('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
+router.put('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
 
 
 // Matched Profiles 

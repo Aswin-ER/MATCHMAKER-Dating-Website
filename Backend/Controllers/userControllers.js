@@ -34,7 +34,7 @@ const userController = {
         status: true,
       });
 
-      console.log(newUser.name);
+      // console.log(newUser.name);
       res.status(200).send({ message: 'User registered successfully' });
     } catch (error) {
       console.log(error);
@@ -100,7 +100,7 @@ const userController = {
     // console.log(req.files, "file")
 
     req.files.forEach((file, index) => {
-      console.log(`File ${index + 1}:`, file);
+      // console.log(`File ${index + 1}:`, file);
       // Handle the uploaded file as needed
     });
 
@@ -202,7 +202,7 @@ const userController = {
   getAllUserProfile: async (req, res) => {
     try {
       const userDet = await UserProfile.find({});
-      console.log(userDet,"userDet")
+      // console.log(userDet,"userDet")
       res.status(200).json(userDet);
     } catch (error) {
       // If there's an error while fetching user profiles, handle it here.
@@ -225,10 +225,10 @@ const userController = {
       // console.log(matchUser,"matchUser");
 
       const matchLikedProfile = await likedProfile.findOne({ user: matchUser });
-      console.log(matchLikedProfile, "matchLikedProfile");
+      // console.log(matchLikedProfile, "matchLikedProfile");
 
       if (!matchLikedProfile) {
-        console.log("no matching profile found")
+        // console.log("no matching profile found")
       } else {
 
         const currentUserProfile = await UserProfile.findOne({ user: currentUser });
@@ -263,16 +263,16 @@ const userController = {
               })
 
               await likeProfile.save();
-              console.log(likeProfile, "user profile created");
+              // console.log(likeProfile, "user profile created");
               var likeProfileArray = likeProfile ? [likeProfile] : [];
             }
 
-            console.log("its a Match");
+            // console.log("its a Match");
 
             const match = await User.findByIdAndUpdate(currentUser, { $push: { matches: matchUser } });
             const opomatch = await User.findByIdAndUpdate(matchUser, { $push: { matches: currentUser } });
 
-            console.log(match, opomatch, "user profile updated");
+            // console.log(match, opomatch, "user profile updated");
 
             res.status(200).send({ match: "Congratulations, it's a match!🎉 Let the sparks fly✨", likeProfileArray });
 
@@ -288,7 +288,7 @@ const userController = {
 
         const userId = req.body.userId;
         const profile = await likedProfile.findOne({ user: userId });
-        console.log(profile, "profile found")
+        // console.log(profile, "profile found")
 
         if (profile) {
 
@@ -313,7 +313,7 @@ const userController = {
           })
 
           await likeProfile.save();
-          console.log(likeProfile, "user profile created");
+          // console.log(likeProfile, "user profile created");
 
           const likeProfileArray = likeProfile ? [likeProfile] : [];
 
@@ -350,7 +350,7 @@ const userController = {
 
 
       const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
-      console.log(likeProfile.user,"sdfadsfasdf")
+      // console.log(likeProfile.user,"sdfadsfasdf")
       const loggedInUser = await User.findById(userId);
       const loggedInUserMatches = loggedInUser.matches;
 
@@ -377,7 +377,7 @@ const userController = {
       if (profile.length === 0) {
         res.status(200).send({ message: "Verify your profile to see" });
       } else {
-        console.log("ok")
+        // console.log("ok")
       }
 
     } catch (err) {
@@ -412,7 +412,7 @@ const userController = {
 
       const matchingUsers = await UserProfile.find(query)
 
-      console.log(matchingUsers, "filtered user getting here")
+      // console.log(matchingUsers, "filtered user getting here")
       res.status(200).send(matchingUsers);
 
     } catch (err) {
@@ -503,6 +503,8 @@ const userController = {
       })
       await newPremium.save();
 
+      await User.findByIdAndUpdate(req.body.userId, { premium: true});
+
 
       res.json({
         success: 'success',
@@ -562,8 +564,23 @@ const userController = {
   },
 
   profileDet:async(req, res)=> {
-    const userProfile = await UserProfile.findById(req.body.id);
-    res.send(userProfile);
+    try{
+      const userProfile = await UserProfile.findById(req.params.id);
+      res.send(userProfile);
+    }catch(err){
+      console.log(err)
+    }
+  },
+
+  premiumUser:async (req, res)=> {
+
+    try{
+      const premium = await userModel.findById(req.body.userId, { premium: true });
+      res.json(premium.premium);
+
+    }catch(err){
+      console.log(err)
+    }
   }
 
 

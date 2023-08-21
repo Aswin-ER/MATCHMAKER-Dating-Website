@@ -11,7 +11,7 @@ const Plans: FC = () => {
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>([])
 
     useEffect(() => {
-        axiosInstance.post('/profileDet', { id: id }).then((res) => {
+        axiosInstance.get(`/profileDet/${id}`).then((res) => {
             setSelectedUserProfile((prev: any) => res.data)
         })
     }, [id])

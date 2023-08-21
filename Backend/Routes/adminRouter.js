@@ -20,7 +20,7 @@ router.get('/totalGender', adminAuth, adminControllers.totalGender);
 
 router.get('/ageOfUsers', adminAuth, adminControllers.ageOfUsers);
 
-router.post('/userBlock', adminAuth, adminControllers.userBlock);
+router.put('/userBlock', adminAuth, adminControllers.userBlock);
 
 
 

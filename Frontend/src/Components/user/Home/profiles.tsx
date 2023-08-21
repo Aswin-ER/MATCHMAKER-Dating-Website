@@ -151,7 +151,7 @@ const Profile: FC = () => {
             age: age
         }
 
-        axiosInstance.post('/getFilteredUsers', data).then((res) => {
+        axiosInstance.put('/getFilteredUsers', data).then((res) => {
             console.log(res.data, "filtered users here");
             toast.success("Filter applied successfully")
             setFilter(res.data);

@@ -54,7 +54,7 @@ io.on('connection', (socket)=> {
   });
 
   socket.on('new message', (newMessageRecieved)=> {
-    console.log(newMessageRecieved.content,"new Message")
+    // console.log(newMessageRecieved.content,"new Message")
     const chat = newMessageRecieved.chat;
 
     // console.log("Chat ID:", chat);
