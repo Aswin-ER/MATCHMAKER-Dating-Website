@@ -34,38 +34,85 @@ const server = app.listen(PORT, () => console.log('Server listening on port', PO
 
 
 // This code creates a new instance of a Server object from the socket.io library
+// const io = new Server(server, {
+//   pingTimeout: 3000,
+//    cors: {
+//     origin: "http://localhost:3000",
+//    },
+// });
+
+// io.on('connection', (socket)=> {
+//   console.log("connected to socket.io");
+
+//   socket.on('setup', (userData)=> {
+//     socket.join(userData);
+//   });
+
+//   socket.on('join chat', (room)=> {
+//     socket.join(room);
+//     console.log("user joined room "+ room);
+//   });
+
+//   socket.on('new message', (newMessageRecieved)=> {
+//     // console.log(newMessageRecieved.content,"new Message")
+//     const chat = newMessageRecieved.chat;
+
+//     // console.log("Chat ID:", chat);
+
+//     if(!chat.users) return console.log("chat.user is not defined");
+
+//     chat.users.forEach(user => {
+//       // console.log(newMessageRecieved.sender._id,"id hereeeee", user)
+//       if(user === newMessageRecieved.sender._id) return
+//       socket.in(user).emit("message received", newMessageRecieved);
+//     })
+//   })
+
+// })
+
 const io = new Server(server, {
   pingTimeout: 3000,
-   cors: {
+  cors: {
     origin: "http://localhost:3000",
-   },
+  },
 });
 
-io.on('connection', (socket)=> {
-  console.log("connected to socket.io");
+io.on('connection', (socket) => {
+  console.log("User connected to socket.io");
 
-  socket.on('setup', (userData)=> {
-    socket.join(userData);
+  socket.on('setup', (userData) => {
+    // Validate and sanitize userData before using it
+    // console.log(userData,"userdata");
+
+    const roomName = userData; // For example, assume userData is the room name
+    socket.join(roomName);
   });
 
-  socket.on('join chat', (room)=> {
+
+  socket.on('join chat', (room) => {
+    // Validate and sanitize room name before joining
+    if (socket.room) {
+      socket.disconnect(socket.room);
+      console.log("disconnect room", socket.room);
+    }
     socket.join(room);
-    console.log("user joined room "+ room);
+    socket.room = room;
+    console.log("User joined room " + room);
   });
 
-  socket.on('new message', (newMessageRecieved)=> {
-    // console.log(newMessageRecieved.content,"new Message")
-    const chat = newMessageRecieved.chat;
+  socket.on('new message', (newMessageReceived) => {
+    const chat = newMessageReceived.chat;
 
-    // console.log("Chat ID:", chat);
-
-    if(!chat.users) return console.log("chat.user is not defined");
+    if (!chat.users) {
+      console.log("chat.users is not defined");
+      return;
+    }
 
     chat.users.forEach(user => {
-      // console.log(newMessageRecieved.sender._id,"id hereeeee", user)
-      if(user == newMessageRecieved.sender._id) return
-      socket.in(user).emit("message received", newMessageRecieved)
-    })
-  })
+      // console.log(user,"user")
+      if (user === newMessageReceived.sender._id) return
+        socket.to(user).emit("message received", newMessageReceived);
+    });
+  });
 
-})
+});

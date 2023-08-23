@@ -9,7 +9,7 @@ const Premium: FC = () => {
 
     return (
         <>
-            <div className=' grid grid-col-12 grid-row-12 mt-20 mb-20'>
+            <div className=' grid grid-col-12 grid-row-12 mt-20 mb-18'>
                 <div className='grid col-start-1 col-end-12 row-start-1 row-end-3'>
                     <h1 className='text-6xl font-semibold text-black text-center mb-16'>Premium <span className='text-pink-700'>Membership</span></h1>
                 </div>

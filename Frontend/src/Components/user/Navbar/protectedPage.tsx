@@ -164,14 +164,14 @@ const ProtectedPage: FC = () => {
                   </a>
                 </NavLink>
               </li>
-              <li className='mt-1'>
+              {/* <li className='mt-1'>
                 <a
                   href="#"
                   className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
                 >
                   Settings
                 </a>
-              </li>
+              </li> */}
               <li className='mt-1'>
                 {userName ?
 
@@ -217,7 +217,17 @@ const ProtectedPage: FC = () => {
                               )}
                             </div>
                         }
-                        <span className="text-lg text-gray-900 mr-2 cursor-pointer">{userName}</span><AiFillStar className='text-yellow-500'/>
+                        {
+                          premium ?
+                            <>
+                              <span className="text-lg text-gray-900 mr-2 cursor-pointer">{userName}</span><AiFillStar className='text-yellow-500' />
+                            </>
+                            :
+                            <>
+                              <span className="text-lg text-gray-900 mr-2 cursor-pointer">{userName}</span>
+                            </>
+
+                        }
                       </div>
                     )
                   }

@@ -79,8 +79,8 @@ const adminControllers = {
             const males = await  UserProfile.find({gender: 'Male'})
             const MaleCount = males.length;
 
-            const females = await UserProfile.find({ gender: 'Females' })
-            const FemalesCount = males.length;
+            const females = await UserProfile.find({ gender: 'Female' })
+            const FemalesCount = females.length;
             res.status(200).json({ males: MaleCount, females:FemalesCount});
         }catch(err) {
 

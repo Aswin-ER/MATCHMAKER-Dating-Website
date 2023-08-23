@@ -41,7 +41,8 @@ const Profile: FC = () => {
     const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
     const [showModal, setShowModal] = useState<Boolean>(false);
     const [userDet, setUserDet] = useState([])
-    const [likedProfile, setLikedProfile] = useState<string[]>([])
+    const [likedProfile, setLikedProfile] = useState<string[]>([]);
+    const [premium, setPremium] = useState<boolean>(false);
 
 
     //Logged in userDetails
@@ -59,26 +60,7 @@ const Profile: FC = () => {
         return likedProfile.some((profile) => profile.userProfileId.includes(userProfileId));
     };
 
-    function openModal(userProfile: UserProfile) {
-        setSelectedUserProfile(userProfile);
-        setShowModal(true);
-    }
 
-    function closeModal() {
-        setShowModal(false);
-    }
-
-    function handleClick() {
-        closeModal();
-    }
-
-    function closeModalBgClick(e: any) {
-        if (e.target.id === 'modal-bg') {
-            console.log('clicked modal bg')
-            console.log(e.target);
-            closeModal();
-        }
-    }
     const [updateUi, setUpdateUi] = useState<boolean>(false);
 
     const addToLikedCollection = (userProfile: UserProfile) => {
@@ -88,6 +70,8 @@ const Profile: FC = () => {
                 setUpdateUi((prev) => !prev)
                 setLikedProfile(res.data.likeProfileArray || []);
                 toast.success(res.data.match)
+            } else if (res.data.LikeLimit){
+                toast.info(res.data.LikeLimit);
             }
             toast.success(res.data.message)
         }).catch((err) => {
@@ -101,14 +85,14 @@ const Profile: FC = () => {
     const [cardsPerPage, setCardsPerPage] = useState<number>(2);
 
     useEffect(() => {
-        if(user){
+        if (user) {
             axiosInstance.get('/profile').then((res) => {
                 const data = res.data;
-                const filtered = data.filter((users:any)=> users.user !== user._id);
-                console.log(filtered,"asas")
+                const filtered = data.filter((users: any) => users.user !== user._id);
+                console.log(filtered, "asas")
                 setUserDet(filtered || []);
             })
-        }else{
+        } else {
             axiosInstance.get('/getAllUserProfile').then((res) => {
                 console.log(res.data, "log out profile")
                 setUserDet(res.data || []);
@@ -153,8 +137,9 @@ const Profile: FC = () => {
 
         axiosInstance.put('/getFilteredUsers', data).then((res) => {
             console.log(res.data, "filtered users here");
+            const filtered = res.data.filter((users: any) => users.user !== user._id);
             toast.success("Filter applied successfully")
-            setFilter(res.data);
+            setFilter(filtered);
         })
     }
 
@@ -167,24 +152,33 @@ const Profile: FC = () => {
         setUserDet(filter)
     }, [filter])
 
-    const handleProfile = (id: any)=> {
+    const handleProfile = (id: any) => {
         console.log("reached profile", id)
         navigate(`/profileDet/${id}`);
     }
+
+    useEffect(() => {
+
+        axiosInstance.get('/premiumUser').then((res) => {
+            console.log(res.data);
+            setPremium(res.data);
+
+        })
+    }, []);
 
 
     return (
         <>
 
-            <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
+            <div className="flex max-h-none items-center justify-center bg-neutral-800 relative">
                 <h3 className='text-white lg:text-6xl font-semibold absolute lg:absolute lg:top-10 lg:mt-5 md:mt-12 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Find Your <span className='text-pink-700'>Match Here</span></h3>
 
                 {
                     user ?
                         <>
 
-                            <div className='absolute  lg:top-38 lg:left-144 md:top-24 md:left-22 md:mt-5'>
-                                <div className="lg:w-8/12 mx-10 lg:h-10 md:w-12/12 md:h-5 bg-pink-100 rounded-lg shadow-lg">
+                            <div className='absolute  lg:top-38 lg:left-144 md:top-24 md:left-22 md:mt-5 mobile:top-30 mobile:left-20'>
+                                <div className="lg:w-8/12 mx-10 lg:h-10 md:w-12/12 md:h-5 mobile:w-7/12 bg-pink-100 rounded-lg shadow-lg">
                                     <div className="bg-pink-800 p-3 rounded-lg shadow-md">
                                         <h2 className="text-2xl font-semibold mb-2 text-white text-center">Filters</h2>
                                         <div className="flex flex-wrap mb-4">
@@ -226,7 +220,9 @@ const Profile: FC = () => {
 
 
                         </>
+
                         :
+
                         ""
                 }
 
@@ -234,6 +230,7 @@ const Profile: FC = () => {
                     user ?
 
                         <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-100 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
+
                             {
                                 user ?
                                     curretCards.map((userProfile: UserProfile, index: number) => (
@@ -249,8 +246,8 @@ const Profile: FC = () => {
                                                 {
                                                     verify ?
                                                         <>
-                                                            <Button handleClick={()=> handleProfile(userProfile._id)} text="View More" />
-                                                            <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)}  />
+                                                            <Button handleClick={() => handleProfile(userProfile._id)} text="View More" />
+                                                            <LoveIcon isLiked={isProfileLiked(userProfile._id, likedProfile)} onClick={() => addToLikedCollection(userProfile)} />
                                                         </>
                                                         :
                                                         <Button handleClick={() => toast.info("Verify your Profile to see")} text="View More" />
@@ -306,7 +303,7 @@ const Profile: FC = () => {
 
                         </div>
                         :
-                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-60 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
+                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-60 md:mt-110 mobile:mt-40 mobile:gap-16 mb-20">
                             {
                                 user ?
                                     curretCards.map((userProfile: UserProfile, index: number) => (
@@ -380,67 +377,20 @@ const Profile: FC = () => {
                         </div>
                 }
 
-                {selectedUserProfile && showModal && (
+                {
+                    premium ?
 
-                    <div
-                        id="modal-bg"
-                        className="fixed top-0 left-0 w-full h-full bg-zinc-700/50 flex flex-col justify-center items-center"
-                        onClick={closeModalBgClick}>
-                        <div className="bg-white md:w-6/12 w-10/12 max-w-screen-md rounded-lg p-4 m-4 flex flex-col relative shadow-2xl">
-                            <a onClick={closeModal} className="absolute text-2xl right-5 hover:cursor-pointer">
-                                x
-                            </a>
-                            <h1 className="text-3xl pb-8 text-center">{selectedUserProfile.name} {selectedUserProfile.age}</h1>
-
-                            <div className='flex justify-center items-center gap-5 mb-5 '>
-                                {
-                                    selectedUserProfile?.image?.[0] ?
-                                        <Fancybox>
-                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[0]} ><img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50 border-4 border-black border-double'></img></a>
-                                        </Fancybox>
-                                        :
-                                        ""
-                                }
-
-                                {
-                                    selectedUserProfile?.image?.[1] ?
-                                        <Fancybox>
-                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[1]} ><img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50 border-4 border-black border-double'></img></a>
-                                        </Fancybox>
-                                        :
-                                        ""
-                                }
-
-                                {
-                                    selectedUserProfile?.image?.[2] ?
-                                        <Fancybox>
-                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[2]} ><img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50 border-4 border-black border-double'></img></a>
-                                        </Fancybox>
-                                        :
-                                        ""
-                                }
-
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 mx-20">
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Gender: </span>{selectedUserProfile.gender}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Relationship Goals: </span> {selectedUserProfile.relationshipGoals}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Life Style: </span> {selectedUserProfile.lifeStyle}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Passion: </span> {selectedUserProfile.passion}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Language: </span> {selectedUserProfile.language}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Job: </span> {selectedUserProfile.job}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Company: </span> {selectedUserProfile.company}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Education: </span> {selectedUserProfile.school}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Place: </span> {selectedUserProfile.place}</h4>
-                            </div>
-                            <Button handleClick={handleClick} text="Close" />
+                        ""
+                        :
+                        <div className='flex absolute bottom-5 text-white text-lg left-60'>
+                            <a href="/plans">To see More Profiles and Unlimited Likes Click Here...</a>
                         </div>
-                    </div>
-
-                )}
+                }
 
                 <div className='flex absolute bottom-5'>
                     <Pagination totalPosts={userDet.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage} />
                 </div>
+
 
             </div>
         </>

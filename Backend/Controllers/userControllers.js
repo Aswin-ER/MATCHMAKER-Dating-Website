@@ -274,7 +274,7 @@ const userController = {
 
             // console.log(match, opomatch, "user profile updated");
 
-            res.status(200).send({ match: "Congratulations, it's a match!🎉 Let the sparks fly✨", likeProfileArray });
+            res.status(200).send({ match: "Congratulations, it's a match!🎉", likeProfileArray });
 
           } else {
             console.log("no match")
@@ -294,15 +294,25 @@ const userController = {
 
           const existingProfileIndex = profile.userProfileId.indexOf(userProfileId);
 
-          if (existingProfileIndex === -1) {
-            profile.userProfileId.push(userProfileId);
-            await profile.save();
-            const likeProfileArray = profile ? [profile] : [];
-            res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
-          } else {
-            const likeProfileArray = profile ? [profile] : [];
-            res.status(200).json({ message: 'Profile Already Liked', likeProfileArray });
+          const premium = await User.findById(req.body.userId, { premium: true });
+
+          if(premium.premium === false){
+            profile.userProfileId.length >= 3
+            res.send({LikeLimit: "Limit For Likes Finished Take Premium for Unlimited Likes"})
+          }else{
+
+            if (existingProfileIndex === -1) {
+              profile.userProfileId.push(userProfileId);
+              await profile.save();
+              const likeProfileArray = profile ? [profile] : [];
+              res.status(200).json({ message: 'Profile Liked successfully', likeProfileArray });
+            } else {
+              const likeProfileArray = profile ? [profile] : [];
+              res.status(200).json({ message: 'Profile Already Liked', likeProfileArray });
+            }
+
           }
+
 
         } else {
 
@@ -409,11 +419,18 @@ const userController = {
         query.relationshipGoals = relationshipGoals;
       }
 
+      const matchingUsers = await UserProfile.find(query);
 
-      const matchingUsers = await UserProfile.find(query)
+      const premiumUser = await userModel.findById(req.body.userId, { premium: true });
 
-      // console.log(matchingUsers, "filtered user getting here")
-      res.status(200).send(matchingUsers);
+      if (premiumUser.premium === false) {
+        const maxProfilesToShow = 3; // Actually 2 One is current Loged in user profile
+        const limitedProfiles = matchingUsers.slice(0, maxProfilesToShow);
+        res.send(limitedProfiles);
+      }else{
+        // console.log(matchingUsers, "filtered user getting here")
+        res.status(200).send(matchingUsers);
+      }
 
     } catch (err) {
       console.log(err, "error Here")
@@ -553,8 +570,20 @@ const userController = {
           }
         return false; // Exclude this profile
       });
+
+      console.log(filteredProfiles,"profile");
+
+      const premiumUser = await userModel.findById(req.body.userId, { premium: true});
+
+      if (premiumUser.premium === false) {
+        const maxProfilesToShow = 3; // Actually 2 One is current Loged in user profile
+        const limitedProfiles = filteredProfiles.slice(0, maxProfilesToShow);
+        // console.log(limitedProfiles,"limited")
+        res.send(limitedProfiles);
+      } else {
+        res.send(filteredProfiles);
+      }
   
-      res.send(filteredProfiles)
 
     }else{
       const usersProfile = await UserProfile.find({});

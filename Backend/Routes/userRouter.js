@@ -189,9 +189,7 @@ router.get('/userProfile', userAuth,  userControllers.getUserProfile);
 router.post('/userProfile', upload, userAuth, userControllers.userProfile);
 router.get('/getAllUserProfile', userControllers.getAllUserProfile);
 router.get('/verifyProfile',userAuth, userControllers.verifyProfile);
-
 router.get('/premiumUser', userAuth, userControllers.premiumUser);
-
 router.get('/profileDet/:id',userAuth, userControllers.profileDet);
 
 

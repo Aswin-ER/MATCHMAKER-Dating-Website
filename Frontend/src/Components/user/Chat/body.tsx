@@ -66,7 +66,7 @@ const Chat: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/getMatchedUserProfilesChat').then((res) => {
-            console.log(res.data, "vanuuuuuuuuuu");
+            // console.log(res.data, "vanuuuuuuuuuu");
             setMatched(res.data.userPro);
             setLastMessage(res.data.message);
         })
@@ -78,6 +78,7 @@ const Chat: FC = () => {
     }
 
     const handleClick = (id: any) => {
+
         const oppoId = id;
         console.log(oppoId, "id here")
         setOppoId(oppoId)
@@ -85,7 +86,10 @@ const Chat: FC = () => {
         try {
             axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
                 console.log(res.data, "onclik vagaaaaaaaaaaa")
+
                 setChatId(res.data._id)
+
+                socket.emit('join chat', res.data._id)
 
             }).catch((err) => {
                 console.log(err, "error")
@@ -128,11 +132,9 @@ const Chat: FC = () => {
         try {
             const id = chatId;
             axiosInstance.get(`/message/${id}`).then((res) => {
-                console.log(res.data, "all messages")
+                // console.log(res.data, "all messages")
 
                 setMessages([...res.data]);
-
-                socket.emit('join chat', chatId)
 
             }).catch((err) => {
                 console.log(err, "Unexpected error")
@@ -153,9 +155,10 @@ const Chat: FC = () => {
     useEffect(() => {
         socket.on('message received', (newMessageRecieved: any) => {
             if (!chatId || chatId !== newMessageRecieved.chat._id) {
+                // console.log(newMessageRecieved.chat._id, "message received", chatId)
             } else {
                 setMessages([...messages, newMessageRecieved]);
-                console.log("perfect ok", newMessageRecieved);
+                // console.log("perfect ok", newMessageRecieved);
             }
         })
     })
@@ -195,7 +198,7 @@ const Chat: FC = () => {
                                     user ?
 
                                         matched?.map((match: any, index: number) => {
-                                            console.log(match, "ojoo")
+                                            // console.log(match, "ojoo")
                                             return (
 
                                                 <button key={index}
@@ -207,7 +210,7 @@ const Chat: FC = () => {
                                                     </div>
                                                     <div className='flex-col'>
                                                         <div className="ml-2 text-lg font-medium" >{match.name}</div>
-                                                        {
+                                                        {/* {
                                                             lastMessage.map((msg) => {
                                                                 console.log(msg, "lastMessage")
                                                                 return (
@@ -217,7 +220,7 @@ const Chat: FC = () => {
                                                                         ""
                                                                 )
                                                             })
-                                                        }
+                                                        } */}
                                                     </div>
                                                 </button>
                                             )
@@ -247,7 +250,7 @@ const Chat: FC = () => {
                                     messages.length > 0 ?
 
                                         messages?.map((message: any, index) => {
-                                            console.log(message, "incoming message")
+                                            // console.log(message, "incoming message")
                                             return (
 
                                                 <div className="flex flex-col h-full" key={index}>
