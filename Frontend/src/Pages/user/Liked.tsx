@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import ProtectedPage from '../../Components/user/Navbar/protectedPage';
 import LikedProfiles from '../../Components/user/Liked/likedProfiles';
+import Footer from 'Components/user/Footer/footer';
 
 const Home: FC = () => {
 
@@ -9,6 +10,7 @@ const Home: FC = () => {
     <div>
      <ProtectedPage/>
      <LikedProfiles/>
+     <Footer/>
     </div>
   );
 };

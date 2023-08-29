@@ -76,7 +76,7 @@ router.post('/google/login', async (req, res) => {
 });
 
 
-//Forgot password reset using email
+//Forgot password reset using Nodemailer 
 router.post("/password", async (req, res) => {
     try {
 
@@ -212,6 +212,7 @@ router.get('/profile', userAuth, userControllers.profile);
 
 
 //Chat
+router.get('/chat', userAuth, chatControllers.fetchChat);
 router.post('/getChatId', userAuth, chatControllers.accessChat);
 router.post('/message', userAuth, messageControllers.sendMessage);
 router.get('/message/:id', userAuth, messageControllers.allMessage);
@@ -223,6 +224,9 @@ router.get('/message/:id', userAuth, messageControllers.allMessage);
 router.post('/payment/orders', userAuth, userControllers.paymentOrders);
 router.post('/payment/success', userAuth, userControllers.paymentSuccess);
 router.get('/getPremiumStat', userAuth, userControllers.premiumStat);
+
+//Pagination
+router.get('/getPageNumber', userAuth, userControllers.getPageNumber);
 
 
 export default router;

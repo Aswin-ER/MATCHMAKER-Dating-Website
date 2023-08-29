@@ -65,7 +65,7 @@ const AdminUsers: FC = () => {
                         className="bg-pink-600 text-white p-2 rounded-md"
                         onClick={handleSearchClick}
                     >
-                        <FaSearch />
+                        <FaSearch/>
                     </button>
                 </div>
                 {

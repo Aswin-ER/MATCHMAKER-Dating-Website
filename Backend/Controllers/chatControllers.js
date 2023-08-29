@@ -53,26 +53,25 @@ const chatControllers = {
         }
     },
 
-    // fetchChat: async (req, res) => {
-    //     try {
-    //         const { userId } = req.body
-    //         Chat.find({ users: { $elemMatch: { $eq: userId } } })
-    //             .populate("users", "-Password")
-    //             .populate("groupAdmin", "-Password")
-    //             .populate("latestMessage")
-    //             .sort({ updatedAt: -1 })
-    //             .then(async (result) => {
-    //                 result = await User.populate(result, {
-    //                     path: "latestMessage.sender",
-    //                     select: "name email"
-    //                 })
-    //                 res.status(200).send(result)
-    //             })
-    //     } catch (error) {
-    //         console.log(error, "fetchChat error catch")
-    //         res.status(400).json({ error })
-    //     }
-    // },
+    fetchChat: async (req, res) => {
+        try {
+            const { userId } = req.body
+            Chat.find({ users: { $elemMatch: { $eq: userId } } })
+                .populate("users", "-Password")
+                .populate("latestMessage")
+                .sort({ updatedAt: -1 })
+                .then(async (result) => {
+                    result = await User.populate(result, {
+                        path: "latestMessage.sender",
+                        select: "name email"
+                    })
+                    res.status(200).send(result)
+                })
+        } catch (error) {
+            console.log(error, "fetchChat error catch")
+            res.status(400).json({ error })
+        }
+    },
 
     getMatchedUserProfiles: async (req, res) => {
         try {

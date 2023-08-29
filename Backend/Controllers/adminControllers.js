@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../Model/user.js';
 import Premium from '../Model/premium.js';
 import UserProfile from '../Model/userProfile.js';
+import premium from '../Model/premium.js';
 
 const adminControllers = {
 
@@ -117,6 +118,21 @@ const adminControllers = {
 
             console.error("Error in toggling user status:", error);
             res.status(500).send({ message: "Error in toggling user status" });
+        }
+    },
+
+    adminPremium:async (req, res)=> {
+        try{
+
+            const Adminpremium = await premium.find({}).populate('user').populate('payment_transaction');
+
+            console.log(Adminpremium,"wohooooooo");
+
+            res.status(200).send(Adminpremium);
+
+
+        }catch(err){
+            console.log(err)
         }
     }
 

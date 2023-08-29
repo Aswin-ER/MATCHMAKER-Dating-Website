@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import ProtectedPage from '../../Components/user/Navbar/protectedPage';
 import Body from '../../Components/user/Home/body';
 import Premium from 'Components/user/Home/premium';
+import Footer from 'Components/user/Footer/footer';
 
 const Home: FC = () => {
 
@@ -11,6 +12,7 @@ const Home: FC = () => {
      <ProtectedPage/>
      <Body/>
      <Premium/>
+     <Footer/>
     </div>
   );
 };

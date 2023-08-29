@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import ProtectedPage from '../../Components/user/Navbar/protectedPage';
 import Plan from 'Components/user/Plans/plans';
+import Footer from 'Components/user/Footer/footer';
 
 const Plans: FC = () => {
 
@@ -10,6 +11,7 @@ const Plans: FC = () => {
         <>
             <ProtectedPage />
             <Plan/>
+            <Footer/>
         </>
     );
 }

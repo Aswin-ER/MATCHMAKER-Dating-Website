@@ -10,6 +10,7 @@ import Razorpay from 'razorpay'
 import crypto from 'crypto';
 import payment from '../Model/payment.js';
 import premium from '../Model/premium.js';
+import chat from '../Model/chat.js';
 
 
 const userController = {
@@ -141,6 +142,15 @@ const userController = {
 
         await existingProfile.save();
         // console.log(existingProfile, "Updated user profile");
+
+        const updatedUser = await User.findByIdAndUpdate(
+          req.body.userId,
+          { $set: { picture: cloudImageUrls[0] } },
+          { new: true }
+        );
+
+        console.log(updatedUser,"successfully updated user profile");
+
         res.status(200).send({ message: "Profile updated successfully" });
 
       } else {
@@ -171,7 +181,7 @@ const userController = {
 
         const updatedUser = await User.findByIdAndUpdate(
           req.body.userId,
-          { $set: { profile: true } },
+          { $set: { profile: true, picture: cloudImageUrls[0] } },
           { new: true }
         );
         // console.log(updatedUser,"Updated user here")
@@ -272,7 +282,14 @@ const userController = {
             const match = await User.findByIdAndUpdate(currentUser, { $push: { matches: matchUser } });
             const opomatch = await User.findByIdAndUpdate(matchUser, { $push: { matches: currentUser } });
 
-            // console.log(match, opomatch, "user profile updated");
+            var chatData = {
+              chatName: "sender",
+              users: [matchUser, currentUser],
+            }
+
+            const createdChat = await chat.create(chatData);
+
+            // console.log(createdChat, "chat created");
 
             res.status(200).send({ match: "Congratulations, it's a match!🎉", likeProfileArray });
 
@@ -296,9 +313,9 @@ const userController = {
 
           const premium = await User.findById(req.body.userId, { premium: true });
 
-          if(premium.premium === false){
-            profile.userProfileId.length >= 3
-            res.send({LikeLimit: "Limit For Likes Finished Take Premium for Unlimited Likes"})
+          if (premium.premium === false && profile.userProfileId.length >= 3){
+            // console.log(profile.userProfileId.length, "user profile found")
+              res.send({LikeLimit: "Limit For Likes Finished Take Premium for Unlimited Likes"})
           }else{
 
             if (existingProfileIndex === -1) {
@@ -357,7 +374,6 @@ const userController = {
   getLikedUserProfiles: async (req, res) => {
     const userId = req.body.userId;
     try {
-
 
       const likeProfile = await likedProfile.findOne({ user: userId }).populate('userProfileId');
       // console.log(likeProfile.user,"sdfadsfasdf")
@@ -540,7 +556,8 @@ const userController = {
     try {
       const userId = req.body.userId;
       const stat = await premium.findOne({ user: userId, status: 'active'});
-
+      console.log(stat,"asasas")
+      
       if(stat){
         res.status(200).send(stat);
       }
@@ -571,7 +588,7 @@ const userController = {
         return false; // Exclude this profile
       });
 
-      console.log(filteredProfiles,"profile");
+      // console.log(filteredProfiles,"profile");
 
       const premiumUser = await userModel.findById(req.body.userId, { premium: true});
 
@@ -607,6 +624,14 @@ const userController = {
       const premium = await userModel.findById(req.body.userId, { premium: true });
       res.json(premium.premium);
 
+    }catch(err){
+      console.log(err)
+    }
+  },
+
+  getPageNumber:(req, res)=> {
+
+    try{
     }catch(err){
       console.log(err)
     }

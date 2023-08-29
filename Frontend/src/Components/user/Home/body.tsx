@@ -36,9 +36,9 @@ const Body: FC = () => {
             </div>
 
 
-            <div className='lg:flex lg:items-center bg-pink-100'>
+            <div className='lg:flex lg:items-center bg-pink-100 relative'>
                 <div className='lg:w-1/2 lg:pr-16'>
-                    <h3 className='text-black lg:text-6xl lg:mt-24 lg:ml-16 md:text-4xl mobile:text-2xl mobile:ml-5 mobile:mt-10 italic font-semibold tracking-wide'>
+                    <h3 className='text-black lg:text-6xl lg:mt-24 lg:ml-16 md:text-4xl md:mt-0 mobile:text-2xl mobile:ml-5 mobile:mt-10 italic font-semibold tracking-wide'>
                         What our <span className='text-pink-700 italic'>Users Say</span>
                     </h3>
                     <h1 className='text-pink-700 lg:text-8xl md:text-4xl lg:ml-16 mobile:text-4xl mobile:ml-5 italic font-semibold tracking-wide '>
@@ -47,13 +47,15 @@ const Body: FC = () => {
                     <h3 className='text-black lg:text-2xl lg:w-11/12 lg:ml-16 md:text-sm md:w-7/12 mobile:text-xs mobile:w-11/12 mobile:ml-5'>
                         MatchMaker prompts really made the difference. I felt like I got a good sense of a guy’s vibes from his answers, and it was easy to jump right into a real conversation. The MatchMaker prompts revolutionized the way online dating worked. Unlike traditional dating apps that relied heavily on shallow profiles and generic bios, MatchMaker introduced a unique approach. Instead of writing lengthy self-descriptions, users were provided with a series of thought-provoking prompts to respond to. These prompts covered a wide range of topics, from favorite travel experiences to deeply held beliefs and aspirations.
                     </h3>
-                    <h3 className='text-pink-700 lg:text-2xl lg:ml-16 lg:mt-10 lg:mb-10 font-semibold mobile:ml-5 mobile:mt-5 mobile:mb-10'>Helen Ann</h3>
+                    <h3 className='text-pink-700 lg:text-2xl lg:ml-16 lg:mt-10 lg:mb-10 md:mb-0 font-semibold mobile:ml-5 mobile:mt-5 mobile:mb-10'>Helen Ann</h3>
                 </div>
+                <div className='absolute right-0 md:bottom-0 '>
                 <img
-                    className='lg:h-100 lg:w-100 lg:absolute lg:right-0 md:h-500 md:w-50 md:absolute md:right-0'
+                    className='lg:h-100 lg:w-100 md:h-500 md:w-50 mix-blend-multiply lg:visible md:visible mobile:invisible'
                     alt=''
                     src={bodyImage2}
                 />
+                </div>
             </div>
 
             <Profile />

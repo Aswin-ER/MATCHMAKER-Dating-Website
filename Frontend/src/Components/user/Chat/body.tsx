@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import io from 'socket.io-client';
 import EmojiPicker from 'emoji-picker-react';
 import data from '@emoji-mart/data';
+import Footer from '../Footer/footer';
 
 var det: any = data;
 
@@ -26,6 +27,7 @@ const Chat: FC = () => {
 
     //emoji
     const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+    const [updateUI, setUpdateUI] = useState(false);
     const [emojis, setEmojis] = useState([]);
     useEffect(() => {
         // Get the list of emojis from the emoji-picker library
@@ -54,6 +56,8 @@ const Chat: FC = () => {
 
     const [isSocket, isSocketConnected] = useState<boolean>();
 
+    const [chatUsers, setChatUsers] = useState<any>([]);
+
 
     useEffect(() => {
         socket = io(ENDPOINT);
@@ -62,6 +66,23 @@ const Chat: FC = () => {
         socket.on('connection', () => isSocketConnected(true));
 
     }, [userID]);
+
+    useEffect(() => {
+        axiosInstance.get('/chat')
+            .then((res) => setChatUsers(res.data))
+            .catch((error) => {
+                console.log("user error fetch chat", error)
+
+                if (error.response && error.response.data && error.response.data.message) {
+                    const errorMessage = error.response.data.message;
+                    toast.error(errorMessage);
+                } else {
+                    toast.error('An error occurred while user fetch chat.');
+                }
+            });
+    }, [updateUI])
+
+    console.log(chatUsers, "response");
 
 
     useEffect(() => {
@@ -79,25 +100,28 @@ const Chat: FC = () => {
 
     const handleClick = (id: any) => {
 
-        const oppoId = id;
-        console.log(oppoId, "id here")
-        setOppoId(oppoId)
+        setChatId(id);
+        fetchMessage();
 
-        try {
-            axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
-                console.log(res.data, "onclik vagaaaaaaaaaaa")
+        // const oppoId = id;
+        // console.log(oppoId, "id here")
+        // setOppoId(oppoId)
 
-                setChatId(res.data._id)
+        // try {
+        //     axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
+        //         console.log(res.data, "onclik vagaaaaaaaaaaa")
 
-                socket.emit('join chat', res.data._id)
+        //         setChatId(res.data._id)
 
-            }).catch((err) => {
-                console.log(err, "error")
-            })
+        //         socket.emit('join chat', res.data._id)
 
-        } catch (err) {
-            console.log(err, "Error")
-        }
+        //     }).catch((err) => {
+        //         console.log(err, "error")
+        //     })
+
+        // } catch (err) {
+        //     console.log(err, "Error")
+        // }
     }
 
 
@@ -107,6 +131,7 @@ const Chat: FC = () => {
             try {
                 const res = await axiosInstance.post('/message', { content: input, chatId: chatId, oppoId: oppoId });
                 const message: any = res;
+                setUpdateUI((prev) => !prev)
                 setInput("");
                 // console.log(message.data, "sendMessage")
                 socket.emit("new message", res.data)
@@ -157,6 +182,7 @@ const Chat: FC = () => {
             if (!chatId || chatId !== newMessageRecieved.chat._id) {
                 // console.log(newMessageRecieved.chat._id, "message received", chatId)
             } else {
+                setUpdateUI((prev) => !prev)
                 setMessages([...messages, newMessageRecieved]);
                 // console.log("perfect ok", newMessageRecieved);
             }
@@ -197,31 +223,36 @@ const Chat: FC = () => {
                                 {
                                     user ?
 
-                                        matched?.map((match: any, index: number) => {
-                                            // console.log(match, "ojoo")
+                                        chatUsers?.map((match: any, index: number) => {
+                                            console.log(match, "ojoo")
                                             return (
 
                                                 <button key={index}
-                                                    className={`flex flex-row h-2/6 items-center ${oppoId === match.user ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`} onClick={() => handleClick(match.user)} >
-                                                    <div
-                                                        className="flex items-center justify-center h-8 w-10 bg-indigo-200 rounded-full mx-5"
-                                                    >
-                                                        <img src={match.image[0]} alt='' className='rounded-full'></img>
-                                                    </div>
-                                                    <div className='flex-col'>
-                                                        <div className="ml-2 text-lg font-medium" >{match.name}</div>
-                                                        {/* {
-                                                            lastMessage.map((msg) => {
-                                                                console.log(msg, "lastMessage")
-                                                                return (
-                                                                    match._id === msg?.userProfile ?
-                                                                        <p className='text-xs text-gray-500'>{match.name}: {msg?.content}</p>
-                                                                        :
-                                                                        ""
-                                                                )
-                                                            })
-                                                        } */}
-                                                    </div>
+                                                    className={`flex flex-row h-2/6 items-center ${chatId === match._id ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`} onClick={() => handleClick(match._id)} >
+                                                    {
+                                                        match.users.filter((users: any) => users._id.toString() !== user._id).map((user: any) => {
+                                                            return (
+                                                                <>
+                                                                    <div className="flex items-center justify-center h-8 w-10 bg-indigo-200 rounded-full mx-5">
+                                                                        <img src={user?.picture} alt='' className='rounded-full'></img>
+                                                                    </div>
+                                                                    <div className='flex-col'>
+                                                                        <div className="ml-2 text-lg font-medium" >{user.name}</div>
+                                                                        <div
+                                                                            className=" text-xs ml-2 text-gray-500 "
+                                                                        >
+                                                                            {
+                                                                                match?.latestMessage ?
+                                                                                    ` ${match?.latestMessage?.sender?.name !== user.name ? "You" : match?.latestMessage?.sender?.name} : ${match?.latestMessage?.content}`
+                                                                                    : ''
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        })
+                                                    }
+
                                                 </button>
                                             )
                                         })
@@ -399,6 +430,7 @@ const Chat: FC = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

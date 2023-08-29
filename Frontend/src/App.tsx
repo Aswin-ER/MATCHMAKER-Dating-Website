@@ -18,6 +18,8 @@ import Matches from 'Pages/user/Match';
 import ChatPage from 'Pages/user/Chat';
 import Plans from 'Pages/user/Plans';
 import ProfileDet from 'Pages/user/profileDet';
+import AdminPremium from 'Pages/admin/adminPremium';
+import NotFoundTitle from 'Components/common/error';
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
     <Route path="/admin" element={<Admin/>} />
     <Route path="/adminHome" element={<AdminHome/>} />
     <Route path="/users" element={<AdminUsers/>} />
+    <Route path="/adminPremium" element={<AdminPremium/>} />
+    <Route path='*' element={<NotFoundTitle/>} />
 
    </Routes>
    </BrowserRouter>

@@ -71,8 +71,8 @@ const Plans: FC = () => {
                 axiosInstance.post('/payment/success', data).then((res) => {
 
                     if (res.data.success) {
-                        setUpdateUi((prev)=> !prev)
-                    }else {
+                        setUpdateUi((prev) => !prev)
+                    } else {
                         toast.error(result.data.msg);
                     }
                 })
@@ -100,8 +100,11 @@ const Plans: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/getPremiumStat').then((res) => {
-            console.log(res.data, "premiumStat");
-            setIsPremium([res.data]);
+            if (res.data.success === false) {
+                console.log(res.data)
+            } else {
+                setIsPremium([res.data]);
+            }
         })
     }, [updateUi])
 
@@ -159,11 +162,20 @@ const Plans: FC = () => {
                                                 <div>
                                                     <p className='text-2xl font-semibold font-mono text-left mb-3'>500₹ <span className='text-sm font-sans'>One Year Plan</span></p>
                                                 </div>
-                                                <button type="button"
-                                                    className="inline-block rounded bg-primary px-12 pt-3.5 pb-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                                                    data-te-ripple-init data-te-ripple-color="light" onClick={displayRazorpay}>
-                                                    Buy now
-                                                </button>
+                                                {
+                                                    user ?
+                                                        <button type="button"
+                                                            className="inline-block rounded bg-primary px-12 pt-3.5 pb-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                                                            data-te-ripple-init data-te-ripple-color="light" onClick={displayRazorpay}>
+                                                            Buy now
+                                                        </button>
+                                                        :
+                                                        <button type="button"
+                                                            className="inline-block rounded bg-primary px-12 pt-3.5 pb-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                                                            data-te-ripple-init data-te-ripple-color="light" onClick={()=> toast.info("Login to Purchase!")}>
+                                                            Buy now
+                                                        </button>
+                                                }
                                             </>
                                     }
                                 </div>

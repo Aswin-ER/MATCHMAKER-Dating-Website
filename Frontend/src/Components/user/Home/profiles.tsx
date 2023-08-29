@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '../../../api/axiosInstance';
 import Button from '../../common/button';
 import LoveIcon from '../../common/loveIcon';
-import Fancybox from '../../common/fancyBox';
 import Pagination from 'Components/common/pagination';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,11 +37,10 @@ const Profile: FC = () => {
 
     const verify: boolean | any = useSelector((state: RootState) => state.userCred.userCred?.profile);
 
-    const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
-    const [showModal, setShowModal] = useState<Boolean>(false);
     const [userDet, setUserDet] = useState([])
     const [likedProfile, setLikedProfile] = useState<string[]>([]);
     const [premium, setPremium] = useState<boolean>(false);
+    const [updateUi, setUpdateUi] = useState<boolean>(false);
 
 
     //Logged in userDetails
@@ -61,7 +59,6 @@ const Profile: FC = () => {
     };
 
 
-    const [updateUi, setUpdateUi] = useState<boolean>(false);
 
     const addToLikedCollection = (userProfile: UserProfile) => {
         axiosInstance.post('/like', userProfile).then((res) => {
@@ -70,7 +67,7 @@ const Profile: FC = () => {
                 setUpdateUi((prev) => !prev)
                 setLikedProfile(res.data.likeProfileArray || []);
                 toast.success(res.data.match)
-            } else if (res.data.LikeLimit){
+            } else if (res.data.LikeLimit) {
                 toast.info(res.data.LikeLimit);
             }
             toast.success(res.data.message)
@@ -89,12 +86,12 @@ const Profile: FC = () => {
             axiosInstance.get('/profile').then((res) => {
                 const data = res.data;
                 const filtered = data.filter((users: any) => users.user !== user._id);
-                console.log(filtered, "asas")
+                // console.log(filtered, "asas")
                 setUserDet(filtered || []);
             })
         } else {
             axiosInstance.get('/getAllUserProfile').then((res) => {
-                console.log(res.data, "log out profile")
+                // console.log(res.data, "log out profile")
                 setUserDet(res.data || []);
             })
         }
@@ -110,7 +107,7 @@ const Profile: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/getLikedProfiles').then((res) => {
-            console.log(res.data, "liked")
+            // console.log(res.data, "liked")
             setLikedProfile(res.data || []);
         }).catch((err) => {
             console.log(err)
@@ -136,7 +133,7 @@ const Profile: FC = () => {
         }
 
         axiosInstance.put('/getFilteredUsers', data).then((res) => {
-            console.log(res.data, "filtered users here");
+            // console.log(res.data, "filtered users here");
             const filtered = res.data.filter((users: any) => users.user !== user._id);
             toast.success("Filter applied successfully")
             setFilter(filtered);
@@ -162,27 +159,28 @@ const Profile: FC = () => {
         axiosInstance.get('/premiumUser').then((res) => {
             console.log(res.data);
             setPremium(res.data);
-
         })
+
     }, []);
 
 
     return (
         <>
+            <div className={`grid grid-cols-3 ${user ? 'grid-rows-2 h-130' : 'h-50'}  w-full justify-center bg-neutral-800`}>
 
-            <div className="flex max-h-none items-center justify-center bg-neutral-800 relative">
-                <h3 className='text-white lg:text-6xl font-semibold absolute lg:absolute lg:top-10 lg:mt-5 md:mt-12 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Find Your <span className='text-pink-700'>Match Here</span></h3>
+                <div className='grid lg:w-fit lg:col-start-2 my-20 mobile:w-100 md:col-start-2 md:w-fit lg:row-start-1 md:row-start-1  text-center '>
+                    <h3 className='text-white lg:text-5xl mobile:text-3xl md:text-4xl  font-semibold'>Find Your <span className='text-pink-700'>Match Here</span></h3>
+                </div>
 
                 {
                     user ?
                         <>
-
-                            <div className='absolute  lg:top-38 lg:left-144 md:top-24 md:left-22 md:mt-5 mobile:top-30 mobile:left-20'>
-                                <div className="lg:w-8/12 mx-10 lg:h-10 md:w-12/12 md:h-5 mobile:w-7/12 bg-pink-100 rounded-lg shadow-lg">
+                            <div className='grid lg:col-start-2 lg:row-start-2 lg:row-end-2 mobile:mb-40 mobile:col-start-2 mobile:mt-30 mobile:row-start-2 mobile:place-content-center md:col-start-2'>
+                                <div className="lg:w-8/12 mx-10 lg:h-10 md:w-10/12 md:h-5 mobile:w-8/12 bg-pink-100 rounded-lg shadow-lg lg:mb-80 md:mb-40 mobile:mb-40">
                                     <div className="bg-pink-800 p-3 rounded-lg shadow-md">
                                         <h2 className="text-2xl font-semibold mb-2 text-white text-center">Filters</h2>
                                         <div className="flex flex-wrap mb-4">
-                                            <div className="w-full lg:w-1/3 md:w-1/2 px-4">
+                                            <div className="w-full lg:w-1/3 md:w-full px-4">
                                                 <label className="block font-medium mb-2 text-white text-center" htmlFor="gender">Gender</label>
                                                 <select id="gender" name="gender" className="w-full p-2 border rounded-md">
                                                     <option value="">Select Gender</option>
@@ -225,17 +223,19 @@ const Profile: FC = () => {
 
                         ""
                 }
+            </div>
 
+            <div className="grid  w-full max-h-fit justify-center bg-neutral-800 ">
                 {
                     user ?
 
-                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-100 md:mt-110 mobile:mt-120 mobile:gap-16 mb-20">
+                        <div className="grid lg:gap-30 md:gap-20 mobile:gap-20 lg:grid-cols-3 md:grid-cols-2 mobile:grid-cols-1 mobile:mx-8  mb-20 w-fit md:mt-20">
 
                             {
                                 user ?
                                     curretCards.map((userProfile: UserProfile, index: number) => (
 
-                                        <div key={index} className="group relative  cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+                                        <div key={index} className="group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
                                             <div className="h-98 w-82">
                                                 <img className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={userProfile?.image?.[0]} alt="" />
                                             </div>
@@ -302,8 +302,10 @@ const Profile: FC = () => {
                             }
 
                         </div>
+
                         :
-                        <div className="grid grid-cols-1 lg:gap-30 md:grid-cols-2 lg:grid-cols-3 lg:mt-60 md:mt-110 mobile:mt-40 mobile:gap-16 mb-20">
+                       
+                        <div className="grid lg:gap-30 md:gap-20 mobile:gap-20 lg:grid-cols-3 md:grid-cols-2 mobile:grid-cols-1 mb-20 w-fit md:mt-20">
                             {
                                 user ?
                                     curretCards.map((userProfile: UserProfile, index: number) => (
@@ -375,6 +377,7 @@ const Profile: FC = () => {
                             }
 
                         </div>
+                        
                 }
 
                 {
@@ -382,17 +385,18 @@ const Profile: FC = () => {
 
                         ""
                         :
-                        <div className='flex absolute bottom-5 text-white text-lg left-60'>
-                            <a href="/plans">To see More Profiles and Unlimited Likes Click Here...</a>
+                        <div className='flex text-white text-lg '>
+                            <h1>To see More Profiles and Unlimited Likes <a href="/plans" className='text-pink-700 hover:text-pink-500'>Click Here...</a></h1>
                         </div>
                 }
 
-                <div className='flex absolute bottom-5'>
+                <div className='flex justify-center mb-10'>
                     <Pagination totalPosts={userDet.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage} />
                 </div>
-
-
             </div>
+
+
+            
         </>
 
     );

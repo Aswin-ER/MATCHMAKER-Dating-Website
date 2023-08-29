@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+  server:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    image: matchmaker-server
+    container_name: matchmaker-node-server
+    command: npm start
+    ports:
+      - "3001:3001"
+
+    depends_on:
+      - mongo
+    env_file: ./Backend/.env
+    environment:
+      - NODE_ENV=development
+      - MONGO_URL=mongodb://host.docker.internal:27017/matchmaker
+    networks:
+      - app-network
+  mongo:
+    image: mongo
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  client:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    image: myapp-client
+    container_name: matchmaker-react-client
+    command: npm start
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+    app-network:
+        driver: bridge
+
+volumes:
+    data-volume:
+    web-root:
+      driver: local

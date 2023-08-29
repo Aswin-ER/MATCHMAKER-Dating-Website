@@ -90,20 +90,18 @@ const AdminNavbar: FC = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <a
-                                    href="#"
-                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
-                                >
-                                    Membership
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
-                                >
-                                    Banner
-                                </a>
+                                <NavLink to={'/adminPremium'} style={({ isActive }) => {
+                                    return {
+                                        color: isActive ? "darkred" : "black",
+                                    };
+                                }}>
+                                    <a
+                                        href="#"
+                                        className="block py-2 pl-3 pr-4 lg:text-lg rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
+                                    >
+                                        Membership
+                                    </a>
+                                </NavLink>
                             </li>
                             <li>
                                 <a

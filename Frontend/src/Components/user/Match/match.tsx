@@ -40,7 +40,9 @@ const Match: FC = () => {
 
     useEffect(() => {
         axiosInstance.get('/getMatchedUserProfiles').then((res) => {
-            setMatchedProfile(res.data || []);
+            if(res.data.length > 0) {
+                setMatchedProfile(res.data || []);
+            }
         }).catch((err) => {
             console.log(err)
         })
@@ -49,7 +51,7 @@ const Match: FC = () => {
     // pagination 
     const lastPageIndex: number = currentPage * cardsPerPage;
     const firstPostIndex: number = lastPageIndex - cardsPerPage;
-    const curretCards = matchedProfiles.slice(firstPostIndex, lastPageIndex);
+    const curretCards = matchedProfiles?.slice(firstPostIndex, lastPageIndex);
     console.log(curretCards, "current");
 
     function openModal(userProfile: UserProfile) {
@@ -72,11 +74,6 @@ const Match: FC = () => {
             closeModal();
         }
     }
-
-    // const handleChat = (id: any)=> {
-    //     navigate(`/chat/${id}`)
-    // }
-
 
     return (
         <>
@@ -109,6 +106,7 @@ const Match: FC = () => {
                         </>
 
                         :
+                        
                         (
                             <>
                                 <div className='flex-col text-center'>

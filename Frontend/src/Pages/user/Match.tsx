@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import ProtectedPage from '../../Components/user/Navbar/protectedPage';
 import Match from 'Components/user/Match/match';
+import Footer from 'Components/user/Footer/footer';
 
 const Matches: FC = () => {
 
@@ -9,6 +10,7 @@ const Matches: FC = () => {
     <div>
      <ProtectedPage/>
      <Match/>
+     <Footer/>
     </div>
   );
 };

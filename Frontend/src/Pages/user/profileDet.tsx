@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import ProtectedPage from '../../Components/user/Navbar/protectedPage';
 import Body from '../../Components/user/ProfileDet/body';
+import Footer from 'Components/user/Footer/footer';
 
 const ProfileDet: FC = () => {
 
@@ -10,6 +11,7 @@ const ProfileDet: FC = () => {
         <>
             <ProtectedPage />
             <Body/>
+            <Footer/>
         </>
     );
 }

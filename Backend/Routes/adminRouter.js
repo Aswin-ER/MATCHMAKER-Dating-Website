@@ -22,6 +22,8 @@ router.get('/ageOfUsers', adminAuth, adminControllers.ageOfUsers);
 
 router.put('/userBlock', adminAuth, adminControllers.userBlock);
 
+router.get('/premium', adminAuth, adminControllers.adminPremium);
+
 
 
 export default router;
