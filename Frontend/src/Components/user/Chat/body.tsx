@@ -102,26 +102,6 @@ const Chat: FC = () => {
 
         setChatId(id);
         fetchMessage();
-
-        // const oppoId = id;
-        // console.log(oppoId, "id here")
-        // setOppoId(oppoId)
-
-        // try {
-        //     axiosInstance.post('/getChatId', { oppoId: oppoId }).then((res) => {
-        //         console.log(res.data, "onclik vagaaaaaaaaaaa")
-
-        //         setChatId(res.data._id)
-
-        //         socket.emit('join chat', res.data._id)
-
-        //     }).catch((err) => {
-        //         console.log(err, "error")
-        //     })
-
-        // } catch (err) {
-        //     console.log(err, "Error")
-        // }
     }
 
 
@@ -180,7 +160,8 @@ const Chat: FC = () => {
     useEffect(() => {
         socket.on('message received', (newMessageRecieved: any) => {
             if (!chatId || chatId !== newMessageRecieved.chat._id) {
-                // console.log(newMessageRecieved.chat._id, "message received", chatId)
+                console.log("failed to msg")
+                return
             } else {
                 setUpdateUI((prev) => !prev)
                 setMessages([...messages, newMessageRecieved]);
