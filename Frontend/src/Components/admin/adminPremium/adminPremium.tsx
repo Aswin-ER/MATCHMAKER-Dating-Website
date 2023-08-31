@@ -1,7 +1,6 @@
 
 import React, { FC, useEffect, useState } from 'react'
 import { adminAxiosInstance } from '../../../api/axiosInstance';
-import { toast } from 'react-toastify';
 import { FaSearch } from 'react-icons/fa';
 
 

@@ -2,6 +2,7 @@
   "name": "matchmaker",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
     "@fancyapps/ui": "^5.0.20",
