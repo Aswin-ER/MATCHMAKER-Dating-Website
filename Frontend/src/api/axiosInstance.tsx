@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://makermatch.online', 
-  withCredentials: true,
+  baseURL: 'http://makermatch.online', 
   headers: {
     'authorization': `Bearer ${localStorage.getItem('jwtToken')}`
 
@@ -10,8 +9,7 @@ export const axiosInstance = axios.create({
 })
 
 export const adminAxiosInstance = axios.create({
-  baseURL: 'https://makermatch.online', 
-  withCredentials: true,
+  baseURL: 'http://makermatch.online', 
   headers: {
     'authorization': `Bearer ${localStorage.getItem('adminToken')}` // Assuming this is the admin JWT token
   }
