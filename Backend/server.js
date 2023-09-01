@@ -17,7 +17,11 @@ app.use(express.json({
   limit: '30mb'
 }));
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://api.makermatch.online',
+};
+
+app.use(cors(corsOptions));
 
 mongoose.connect(process.env.MONGO_URL)
   .then(() => {
