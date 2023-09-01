@@ -30,7 +30,7 @@ const ProtectedPage: FC = () => {
       console.log(response);
 
       if (response.data.success) {
-        // console.log(response.data.data.name);
+        console.log("Protected page data",response.data.data.name);
         dispatch(userDet(response.data.data));
 
       } else {

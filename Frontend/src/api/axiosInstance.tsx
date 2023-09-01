@@ -18,7 +18,7 @@ export const adminAxiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log(response)
+    // console.log(response)
     if (response?.data?.message === 'jwt expired') {
       localStorage.removeItem('jwtToken');
       window.location.replace('/login');
@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
 
 adminAxiosInstance.interceptors.response.use(
   (response) => {
-    console.log(response)
+    // console.log(response)
     if (response?.data?.message === 'jwt expired') {
       localStorage.removeItem('adminToken');
       window.location.replace('/admin');
