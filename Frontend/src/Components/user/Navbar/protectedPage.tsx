@@ -27,7 +27,7 @@ const ProtectedPage: FC = () => {
     // console.log("validateToken");
 
     axiosInstance.get('/').then((response) => {
-      console.log(response);
+      console.log(response,"res");
 
       if (response.data.success) {
         console.log("Protected page data",response.data.data.name);
@@ -68,7 +68,7 @@ const ProtectedPage: FC = () => {
   useEffect(() => {
 
     axiosInstance.get('/premiumUser').then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setPremium(res.data);
 
     })

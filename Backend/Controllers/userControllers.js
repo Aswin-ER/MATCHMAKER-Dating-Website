@@ -593,7 +593,7 @@ const userController = {
       const premiumUser = await userModel.findById(req.body.userId, { premium: true});
 
       if (premiumUser.premium === false) {
-        const maxProfilesToShow = 3; // Actually 2 One is current Loged in user profile
+        const maxProfilesToShow = 6; // Actually 2 One is current Loged in user profile
         const limitedProfiles = filteredProfiles.slice(0, maxProfilesToShow);
         // console.log(limitedProfiles,"limited")
         res.send(limitedProfiles);
