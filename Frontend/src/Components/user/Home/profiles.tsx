@@ -79,7 +79,7 @@ const Profile: FC = () => {
     const [filter, setFilter] = useState<any>([]);
 
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [cardsPerPage, setCardsPerPage] = useState<number>(3);
+    const [cardsPerPage, setCardsPerPage] = useState<number>(6);
 
     useEffect(() => {
         if (user) {
