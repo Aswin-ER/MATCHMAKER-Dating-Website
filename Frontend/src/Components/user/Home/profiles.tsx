@@ -175,7 +175,7 @@ const Profile: FC = () => {
                 {
                     user ?
                         <>
-                            <div className='grid lg:col-start-2 lg:row-start-2 lg:row-end-2 mobile:mb-40 mobile:col-start-2 mobile:mt-20 mobile:row-start-2 mobile:place-content-center md:col-start-2'>
+                            <div className='grid lg:col-start-2 lg:row-start-2 lg:row-end-2 mobile:mb-40 mobile:col-start-2 mobile:mt-30 mobile:row-start-2 mobile:place-content-center md:col-start-2'>
                                 <div className="lg:w-8/12 mx-10 lg:h-10 md:w-10/12 md:h-5 mobile:w-8/12 bg-pink-100 rounded-lg shadow-lg lg:mb-80 md:mb-40 mobile:mb-40">
                                     <div className="bg-pink-800 p-3 rounded-lg shadow-md">
                                         <h2 className="text-2xl font-semibold mb-2 text-white text-center">Filters</h2>
