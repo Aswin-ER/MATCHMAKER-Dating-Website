@@ -15,7 +15,7 @@ import Footer from '../Footer/footer';
 
 var det: any = data;
 
-const ENDPOINT = 'http://api.makermatch.online';
+const ENDPOINT = 'https://api.makermatch.online';
 
 var socket: any;
 
