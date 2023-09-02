@@ -5,7 +5,7 @@ const adminAuth = (req, res, next) => {
     // console.log(req.header('authorization'), "adminAuth");
 
     let token = req.header('authorization').split(' ')[1];
-    token = token.replaceAll('"', '');
+    token = token.replace(/"/g, '');
     // console.log("adminToken:", token);
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
