@@ -15,7 +15,7 @@ import Footer from '../Footer/footer';
 
 var det: any = data;
 
-const ENDPOINT = 'https://makermatch.online';
+const ENDPOINT = 'http://api.makermatch.online';
 
 var socket: any;
 
@@ -48,11 +48,7 @@ const Chat: FC = () => {
 
     const [oppoId, setOppoId] = useState<string>();
 
-    const [matched, setMatched] = useState<any>([]);
-
     const [chatId, setChatId] = useState<any>([]);
-
-    const [lastMessage, setLastMessage] = useState<any[]>([]);
 
     const [isSocket, isSocketConnected] = useState<boolean>();
 
@@ -80,18 +76,18 @@ const Chat: FC = () => {
                     toast.error('An error occurred while user fetch chat.');
                 }
             });
-    }, [updateUI])
+    }, [])
 
-    console.log(chatUsers, "response");
+    // console.log(chatUsers, "response");
 
 
-    useEffect(() => {
-        axiosInstance.get('/getMatchedUserProfilesChat').then((res) => {
-            // console.log(res.data, "vanuuuuuuuuuu");
-            setMatched(res.data.userPro);
-            setLastMessage(res.data.message);
-        })
-    }, [messages])
+    // useEffect(() => {
+    //     axiosInstance.get('/getMatchedUserProfilesChat').then((res) => {
+    //         // console.log(res.data, "vanuuuuuuuuuu");
+    //         setMatched(res.data.userPro);
+    //         setLastMessage(res.data.message);
+    //     })
+    // }, [messages])
 
 
     const handleInput = (e: any) => {
