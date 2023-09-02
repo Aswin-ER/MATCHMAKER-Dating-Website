@@ -83,7 +83,7 @@ const LikedProfiles: FC = () => {
 
     return (
         <>
-            <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
+            <div className="flex min-h-screen items-center justify-center bg-black relative">
                 {
                     likedProfile?.filter((profile: any) => !user?.matches?.includes(profile.user)).length > 0 ?
                         <h3 className='text-white lg:text-6xl font-semibold lg:absolute lg:top-10 lg:mt-5 mobile:absolute mobile:top-0 mobile:text-4xl mobile:mt-16' >Liked <span className='text-pink-700'>Profiles</span></h3>

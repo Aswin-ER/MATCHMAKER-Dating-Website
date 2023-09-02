@@ -5,7 +5,7 @@ const Footer: FC = () => {
 
   return (
     <>
-      <footer className="footer footer-center p-10 bg-pink-100 text-base-content rounded">
+      <footer className="footer footer-center p-10 bg-pink-900 text-base-content rounded text-pink-100">
         <div className="grid grid-flow-col gap-4">
           <a className="link link-hover">About us</a>
           <a className="link link-hover">Contact</a>

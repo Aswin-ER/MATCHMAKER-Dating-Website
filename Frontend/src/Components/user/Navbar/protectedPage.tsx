@@ -77,7 +77,7 @@ const ProtectedPage: FC = () => {
 
   return (
     <div>
-      <nav className="border-gray-200 bg-pink-100 ">
+      <nav className="border-gray-900 bg-pink-100 ">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
           <a href="#" className="flex items-center">

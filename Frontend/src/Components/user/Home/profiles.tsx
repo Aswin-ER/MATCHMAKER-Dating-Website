@@ -166,16 +166,16 @@ const Profile: FC = () => {
 
     return (
         <>
-            <div className={`grid grid-cols-3 ${user ? 'grid-rows-2 h-130' : 'h-50'}  w-full justify-center bg-neutral-800`}>
+            <div className={`grid grid-cols-3 ${user ? 'grid-rows-2 h-130' : 'h-50'}  w-full justify-center bg-black`}>
 
-                <div className='grid lg:w-fit lg:col-start-2 my-20 mobile:w-100 md:col-start-2 md:w-fit lg:row-start-1 md:row-start-1  text-center '>
-                    <h3 className='text-white lg:text-5xl mobile:text-3xl md:text-4xl  font-semibold'>Find Your <span className='text-pink-700'>Match Here</span></h3>
+                <div className='grid lg:w-fit lg:col-start-2 my-20 mobile:w-100 md:col-start-2 md:w-fit lg:row-start-1 md:row-start-1 text-center'>
+                    <h3 className='text-pink-100 lg:text-5xl mobile:text-3xl md:text-4xl font-semibold block'>Find Your <span className='text-pink-700'>Match Here</span></h3>
                 </div>
 
                 {
                     user ?
                         <>
-                            <div className='grid lg:col-start-2 lg:row-start-2 lg:row-end-2 mobile:mb-40 mobile:col-start-2 mobile:mt-30 mobile:row-start-2 mobile:place-content-center md:col-start-2'>
+                            <div className='grid lg:col-start-2 lg:row-start-2 lg:row-end-2 mobile:mb-40 mobile:col-start-2 mobile:mt-20 mobile:row-start-2 mobile:place-content-center md:col-start-2'>
                                 <div className="lg:w-8/12 mx-10 lg:h-10 md:w-10/12 md:h-5 mobile:w-8/12 bg-pink-100 rounded-lg shadow-lg lg:mb-80 md:mb-40 mobile:mb-40">
                                     <div className="bg-pink-800 p-3 rounded-lg shadow-md">
                                         <h2 className="text-2xl font-semibold mb-2 text-white text-center">Filters</h2>
@@ -225,7 +225,7 @@ const Profile: FC = () => {
                 }
             </div>
 
-            <div className="grid  w-full max-h-fit justify-center bg-neutral-800 ">
+            <div className="grid  w-full max-h-fit justify-center bg-black ">
                 {
                     user ?
 

@@ -77,7 +77,7 @@ const Match: FC = () => {
 
     return (
         <>
-            <div className="flex min-h-screen items-center justify-center bg-neutral-800 relative">
+            <div className="flex min-h-screen items-center justify-center bg-black relative">
                 {
                     curretCards.length > 0 ?
 
