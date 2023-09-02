@@ -217,9 +217,6 @@ router.post('/getChatId', userAuth, chatControllers.accessChat);
 router.post('/message', userAuth, messageControllers.sendMessage);
 router.get('/message/:id', userAuth, messageControllers.allMessage);
 
-// router.post('/lastMessage', userAuth, messageControllers.lastMessage);
-
-
 // Payment
 router.post('/payment/orders', userAuth, userControllers.paymentOrders);
 router.post('/payment/success', userAuth, userControllers.paymentSuccess);

@@ -42,48 +42,10 @@ app.use('/admin', adminRouter);
 
 const server = app.listen(PORT, () => console.log('Server listening on port', PORT));
 
-
-// This code creates a new instance of a Server object from the socket.io library
-// const io = new Server(server, {
-//   pingTimeout: 3000,
-//    cors: {
-//     origin: "http://localhost:3000",
-//    },
-// });
-
-// io.on('connection', (socket)=> {
-//   console.log("connected to socket.io");
-
-//   socket.on('setup', (userData)=> {
-//     socket.join(userData);
-//   });
-
-//   socket.on('join chat', (room)=> {
-//     socket.join(room);
-//     console.log("user joined room "+ room);
-//   });
-
-//   socket.on('new message', (newMessageRecieved)=> {
-//     // console.log(newMessageRecieved.content,"new Message")
-//     const chat = newMessageRecieved.chat;
-
-//     // console.log("Chat ID:", chat);
-
-//     if(!chat.users) return console.log("chat.user is not defined");
-
-//     chat.users.forEach(user => {
-//       // console.log(newMessageRecieved.sender._id,"id hereeeee", user)
-//       if(user === newMessageRecieved.sender._id) return
-//       socket.in(user).emit("message received", newMessageRecieved);
-//     })
-//   })
-
-// })
-
 const io = new Server(server, {
   pingTimeout: 3000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://makermatch.online",
   },
 });
 
