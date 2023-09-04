@@ -6,6 +6,7 @@ import { axiosInstance } from '../../../api/axiosInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import Fancybox from 'Components/common/fancyBox';
 import Pagination from 'Components/common/pagination';
+import bodyImage from '../../../assests/3796382.jpg'
 
 
 interface UserProfile {
@@ -110,8 +111,9 @@ const Match: FC = () => {
                         (
                             <>
                                 <div className='flex-col text-center'>
-                                    <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Matches</span> Yet</h1>
-                                    <p className='text-md font-normal font-serif text-white text-center mt-5'>Yours likes will appear here. Start liking people right away.</p>
+                                    <img src={bodyImage} className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
+                                    <h1 className='lg:text-4xl md:text-3xl mobile:text-2xl font-serif text-white text-center'>No <span className='text-pink-700'>Matches</span> Yet</h1>
+                                    <p className='lg:text-md md:text-md mobile:text-sm font-normal font-serif text-white text-center mt-5'>Yours likes will appear here. Start liking people right away.</p>
                                     <Link to={'/userProfile'}><p className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>Start Liking To get Matched</p></Link>
                                 </div>
                             </>
@@ -181,7 +183,7 @@ const Match: FC = () => {
 
             </div>
         </>
-    );
+    )
 }
 
 export default Match;

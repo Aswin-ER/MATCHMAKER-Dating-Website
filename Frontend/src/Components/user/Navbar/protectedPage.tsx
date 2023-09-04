@@ -113,7 +113,7 @@ const ProtectedPage: FC = () => {
                 }} >
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg bg-pink-700 rounded lg:bg-transparent lg:p-0"
+                    className="block py-2 pl-3 pr-4 lg:text-lg bg-pink-700 rounded bg-transparent lg:p-0"
                     aria-current="page">
                     Home
                   </a>
@@ -128,7 +128,7 @@ const ProtectedPage: FC = () => {
                   }}>
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0 "
+                    className="block py-2 pl-3 pr-4 lg:text-lg rounded hover:bg-gray-100 hover:bg-transparent border-0 hover:text-pink-700 lg:p-0 "
                   >
                     Profiles
                   </a>
@@ -143,7 +143,7 @@ const ProtectedPage: FC = () => {
                   }}>
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg  rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
+                    className="block py-2 pl-3 pr-4 lg:text-lg  rounded hover:bg-gray-100 hover:bg-transparent border-0 hover:text-pink-700 lg:p-0"
                   >
                     Likes
                   </a>
@@ -158,12 +158,13 @@ const ProtectedPage: FC = () => {
                   }}>
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
+                    className="block py-2 pl-3 pr-4 lg:text-lg  rounded hover:bg-gray-100 hover:bg-transparent border-0 hover:text-pink-700 lg:p-0"
                   >
                     Matches
                   </a>
                 </NavLink>
               </li>
+
               {/* <li className='mt-1'>
                 <a
                   href="#"
@@ -172,12 +173,13 @@ const ProtectedPage: FC = () => {
                   Settings
                 </a>
               </li> */}
-              <li className='mt-1'>
-                {userName ?
 
+              <li className='mt-1'>
+
+                {userName ?
                   <a
                     href="#"
-                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-pink-700 lg:p-0"
+                    className="block py-2 pl-3 pr-4 lg:text-lg text-gray-900 rounded hover:bg-gray-100 hover:bg-transparent border-0 hover:text-pink-700 lg:p-0"
                     onClick={handleClick}
                   >
                     Logout
@@ -190,11 +192,13 @@ const ProtectedPage: FC = () => {
                     Login
                   </a>
                   </NavLink>
-
                 }
+
               </li>
               <li>
+
                 <NavLink to={'/profile'}>
+
                   {
                     userName && (
                       <div className='flex items-center'>
@@ -217,6 +221,7 @@ const ProtectedPage: FC = () => {
                               )}
                             </div>
                         }
+
                         {
                           premium ?
                             <>

@@ -157,9 +157,9 @@ const Chat: FC = () => {
     return (
         <>
             <div className="flex h-screen antialiased text-gray-800 overflow-hidden">
-                <div className="flex mobile:flex-col lg:flex-row md:flex-row h-3/4  w-full overflow-hidden">
+                <div className="flex mobile:flex-col lg:flex-row md:flex-row h-full w-full overflow-hidden">
 
-                    <div className="flex flex-col  w-64 bg-white flex-shrink-0 overflow-hidden mobile:h-100 lg:h-full md:h-full">
+                    <div className="flex flex-col  w-64 bg-white flex-shrink-0 overflow-hidden mobile:h-70 lg:h-full md:h-full">
                         <div className="flex flex-row items-center justify-center h-12 w-full overflow-hidden">
                             <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
                                 <svg
@@ -183,8 +183,8 @@ const Chat: FC = () => {
 
 
                         {/* User listing area */}
-                        <div className="flex flex-col mt-5 h-1/2">
-                            <div className="flex flex-col space-y-4 mt-4 -mx-2 h-100 overflow-y-auto">
+                        <div className="flex flex-col mt-5 h-50">
+                            <div className="flex flex-col space-y-4 mt-4 -mx-2 h-full overflow-y-auto">
 
                                 {
                                     user ?
@@ -194,7 +194,7 @@ const Chat: FC = () => {
                                             return (
 
                                                 <button key={index}
-                                                    className={`flex flex-row h-2/6 items-center ${chatId === match._id ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`} onClick={() => handleClick(match._id)} >
+                                                    className={`flex flex-row h-4/6 items-center ${chatId === match._id ? 'bg-pink-200' : 'hover:bg-pink-100'} p-2`} onClick={() => handleClick(match._id)} >
                                                     {
                                                         match.users.filter((users: any) => users._id.toString() !== user._id).map((user: any) => {
                                                             return (
@@ -239,10 +239,9 @@ const Chat: FC = () => {
 
 
                     {/* Messaging area here */}
-                    <div className="flex flex-col flex-auto h-full p-6">
-                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4 " >
-
-                            <div className="flex flex-col h-full overflow-y-auto mb-4" >
+                    <div className="flex flex-col flex-auto h-2/4 p-6 bg-white">
+                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 p-4" >
+                            <div className="flex flex-col h-100 overflow-y-scroll mb-4" >
                                 {
                                     messages.length > 0 ?
 
@@ -309,7 +308,7 @@ const Chat: FC = () => {
 
 
                             <div
-                                className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
+                                className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4 "
                             >
                                 <div>
                                     <button
@@ -338,7 +337,7 @@ const Chat: FC = () => {
                                             onChange={handleInput}
                                             onKeyDown={handleKeyDown}
                                             value={input}
-                                            className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                                            className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 text-white"
                                         />
                                         <button
                                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { UserCred, userDet } from 'Redux/slice';
 import RootState from 'Redux/rootState';
 import Pagination from 'Components/common/pagination';
+import bodyImage from '../../../assests/3818988.jpg'
 
 interface UserProfile {
     _id: string;
@@ -116,8 +117,9 @@ const LikedProfiles: FC = () => {
                                 ) : (
                                     <div className='flex items-center justify-center h-full w-full lg:mx-150'>
                                         <div className='flex flex-col items-center'>
-                                            <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
-                                            <p className='text-md font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
+                                            <img src={bodyImage} className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
+                                                <h1 className='lg:text-4xl md:text-3xl mobile:text-2xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                                <p className='lg:text-md md:text-md mobile:text-sm font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
                                             <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
                                                 Start Liking
                                             </Link>
@@ -131,8 +133,9 @@ const LikedProfiles: FC = () => {
                         :
                         <div className='flex items-center justify-center h-full w-full lg:mx-150'>
                             <div className='flex flex-col items-center'>
-                                <h1 className='text-5xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
-                                <p className='text-md font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
+                                <img src={bodyImage} className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
+                                <h1 className='lg:text-4xl md:text-3xl mobile:text-2xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
+                                <p className='lg:text-md md:text-md mobile:text-sm font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
                                 <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
                                     Start Liking
                                 </Link>
@@ -199,7 +202,7 @@ const LikedProfiles: FC = () => {
                 )}
 
                 <div className='flex absolute bottom-5'>
-                    <Pagination totalPosts={likedProfile.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage}/>
+                    <Pagination totalPosts={likedProfile.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage} />
                 </div>
             </div>
         </>
