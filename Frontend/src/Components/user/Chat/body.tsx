@@ -156,7 +156,7 @@ const Chat: FC = () => {
 
     return (
         <>
-            <div className="flex h-screen antialiased text-gray-800 overflow-hidden">
+            <div className="flex h-screen antialiased text-gray-800 overflow-hidden bg-white">
                 <div className="flex mobile:flex-col lg:flex-row md:flex-row h-full w-full overflow-hidden">
 
                     <div className="flex flex-col  w-64 bg-white flex-shrink-0 overflow-hidden mobile:h-70 lg:h-full md:h-full">
