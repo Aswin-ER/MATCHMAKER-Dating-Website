@@ -69,8 +69,8 @@ const SignUp: FC = () => {
   return (
 <GoogleOAuthProvider clientId="684475057007-2abci7ht9ppi3313g5duloq7um38qlp3.apps.googleusercontent.com">
     <div>
-      <h1 className="text-3xl lg:text-5xl font-bold text-center mt-5 dark:text-white">
-        MATCH<span className="text-3xl lg:text-5xl font-bold text-center text-pink-700 mt-6 lg:mt-16">MAKER</span>
+      <h1 className="text-3xl lg:text-4xl font-bold text-center mt-5 dark:text-white">
+        MATCH<span className="text-3xl lg:text-4xl font-bold text-center text-pink-700 mt-6 lg:mt-16">MAKER</span>
       </h1>
       <div className="container lg:w-8/12 mobile:w-10/12  xl:w-4/12 mx-auto px-4 mt-6 lg:mt-10 bg-pink-100 p-8 rounded-lg shadow-lg">
         <h1 className="text-2xl lg:text-4xl font-semibold text-center text-pink-700 underline decoration-solid uppercase">

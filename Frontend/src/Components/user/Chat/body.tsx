@@ -78,18 +78,6 @@ const Chat: FC = () => {
             });
     }, [])
 
-    // console.log(chatUsers, "response");
-
-
-    // useEffect(() => {
-    //     axiosInstance.get('/getMatchedUserProfilesChat').then((res) => {
-    //         // console.log(res.data, "vanuuuuuuuuuu");
-    //         setMatched(res.data.userPro);
-    //         setLastMessage(res.data.message);
-    //     })
-    // }, [messages])
-
-
     const handleInput = (e: any) => {
         setInput((prev) => e.target.value);
     }
@@ -169,8 +157,9 @@ const Chat: FC = () => {
     return (
         <>
             <div className="flex h-screen antialiased text-gray-800 overflow-hidden">
-                <div className="flex flex-row h-3/4  w-full overflow-hidden">
-                    <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0 overflow-hidden">
+                <div className="flex mobile:flex-col lg:flex-row md:flex-row h-3/4  w-full overflow-hidden">
+
+                    <div className="flex flex-col  w-64 bg-white flex-shrink-0 overflow-hidden mobile:h-100 lg:h-full md:h-full">
                         <div className="flex flex-row items-center justify-center h-12 w-full overflow-hidden">
                             <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
                                 <svg
@@ -192,10 +181,10 @@ const Chat: FC = () => {
                             <div className="ml-2 font-bold text-2xl text-pink-700">Matched Users</div>
                         </div>
 
-                        {/* User listing area */}
 
-                        <div className="flex flex-col mt-8 h-1/2">
-                            <div className="flex flex-col space-y-1 mt-4 -mx-2 h-100 overflow-y-auto">
+                        {/* User listing area */}
+                        <div className="flex flex-col mt-5 h-1/2">
+                            <div className="flex flex-col space-y-4 mt-4 -mx-2 h-100 overflow-y-auto">
 
                                 {
                                     user ?
@@ -250,8 +239,8 @@ const Chat: FC = () => {
 
 
                     {/* Messaging area here */}
-                    <div className="flex flex-col flex-auto h-full p-6" >
-                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4" >
+                    <div className="flex flex-col flex-auto h-full p-6">
+                        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4 " >
 
                             <div className="flex flex-col h-full overflow-y-auto mb-4" >
                                 {
