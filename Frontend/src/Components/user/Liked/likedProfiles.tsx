@@ -117,7 +117,7 @@ const LikedProfiles: FC = () => {
                                 ) : (
                                     <div className='flex items-center justify-center h-full w-full lg:mx-150'>
                                         <div className='flex flex-col items-center'>
-                                            <img src={bodyImage} className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
+                                            <img src={bodyImage} alt='' className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
                                                 <h1 className='lg:text-4xl md:text-3xl mobile:text-2xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
                                                 <p className='lg:text-md md:text-md mobile:text-sm font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
                                             <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>
@@ -133,7 +133,7 @@ const LikedProfiles: FC = () => {
                         :
                         <div className='flex items-center justify-center h-full w-full lg:mx-150'>
                             <div className='flex flex-col items-center'>
-                                <img src={bodyImage} className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
+                                <img src={bodyImage} alt='' className='lg:h-100 lg:w-130 md:h-100 md:w-130 p-10 mobile:w-90 mobile:h-70'></img>
                                 <h1 className='lg:text-4xl md:text-3xl mobile:text-2xl font-serif text-white text-center'>No <span className='text-pink-700'>Likes</span> Yet</h1>
                                 <p className='lg:text-md md:text-md mobile:text-sm font-normal font-serif text-white text-center mt-5'>Your likes will appear here. Start liking people right away.</p>
                                 <Link to='/userProfile' className='text-md font-normal font-serif text-white text-center mt-5 underline cursor-pointer hover:text-pink-700'>

@@ -51,7 +51,7 @@ const Plans: FC = () => {
             <div className="items-center flex flex-wrap">
                 <div className="w-100 ml-auto mr-auto px-4 mt-12">
                     <div id="controls-carousel" className="relative w-full" >
-                        <div className="relative h-56 overflow-hidden rounded-lg">
+                        <div className="relative h-100 overflow-hidden rounded-lg">
                             <div className="duration-700 ease-in-out" data-carousel-item>
                                 {
                                     selectedUserProfile?.image?.[0] ?
@@ -89,7 +89,7 @@ const Plans: FC = () => {
                             }
                         </div>
                         <div className='text-sm font-bold'>
-                           Tap to Zoom
+                           Tap the Image to Zoom
                         </div>
                         <button type="button" className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev onClick={handlePrevClick}>
                             <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
