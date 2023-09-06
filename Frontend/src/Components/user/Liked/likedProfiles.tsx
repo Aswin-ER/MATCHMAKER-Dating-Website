@@ -4,7 +4,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import Button from '../../common/button';
 import { axiosInstance } from '../../../api/axiosInstance';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Fancybox from 'Components/common/fancyBox';
 import { useSelector } from 'react-redux';
 import { UserCred, userDet } from 'Redux/slice';
@@ -33,11 +33,11 @@ interface UserProfile {
 
 const LikedProfiles: FC = () => {
 
+    const navigate = useNavigate();
+
     const user: UserCred | any = useSelector((state: RootState) => state.userCred.userCred);
 
     const [likedProfile, setLikedProfile] = useState<string[]>([])
-    const [selectedUserProfile, setSelectedUserProfile] = useState<any>(null);
-    const [showModal, setShowModal] = useState<Boolean>(false);
 
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [cardsPerPage, setCardsPerPage] = useState<number>(2);
@@ -45,7 +45,6 @@ const LikedProfiles: FC = () => {
     useEffect(() => {
         if (user) {
             axiosInstance.get('/getLikedUserProfiles').then((res) => {
-                // console.log(res.data,"likedProfiles")
                 setLikedProfile(res.data || []);
             }).catch((err) => {
                 console.log(err)
@@ -60,25 +59,10 @@ const LikedProfiles: FC = () => {
     const curretCards = likedProfile.slice(firstPostIndex, lastPageIndex);
     console.log(curretCards, "current");
 
-    function openModal(userProfile: UserProfile) {
-        setSelectedUserProfile(userProfile);
-        setShowModal(true);
-    }
 
-    function closeModal() {
-        setShowModal(false);
-    }
-
-    function handleClick() {
-        closeModal();
-    }
-
-    function closeModalBgClick(e: any) {
-        console.log('clicked anywhere');
-        if (e.target.id === 'modal-bg') {
-            console.log(e.target);
-            closeModal();
-        }
+    const handleProfile = (id: any)=> {
+        console.log("reached profile", id)
+        navigate(`/profileDet/${id}`);
     }
 
 
@@ -109,7 +93,7 @@ const LikedProfiles: FC = () => {
                                                 <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
                                                     <h1 className="text-2xl font-semibold text-white lg:mb-16">{profile.name} {profile.age}</h1>
                                                     <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">{profile.about}</p>
-                                                    <Button handleClick={() => openModal(profile)} text="View More" />
+                                                    <Button handleClick={() => handleProfile(profile._id)} text="View More" />
                                                 </div>
                                             </div>
                                         )
@@ -142,64 +126,6 @@ const LikedProfiles: FC = () => {
                             </div>
                         </div>
                 }
-
-                {selectedUserProfile && showModal && (
-
-                    <div
-                        id="modal-bg"
-                        className="fixed top-0 left-0 w-full h-full bg-zinc-700/50 flex flex-col justify-center items-center"
-                        onClick={closeModalBgClick}>
-                        <div className="bg-white md:w-6/12 w-10/12 max-w-screen-md rounded-lg p-4 m-4 flex flex-col relative shadow-2xl">
-                            <a onClick={closeModal} className="absolute text-2xl right-5 hover:cursor-pointer">
-                                x
-                            </a>
-                            <h1 className="text-3xl pb-8 text-center">{selectedUserProfile.name} {selectedUserProfile.age}</h1>
-
-                            <div className='flex justify-center items-center gap-5 mb-5'>
-                                {
-                                    selectedUserProfile?.image?.[0] ?
-                                        <Fancybox>
-                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[0]} ><img src={selectedUserProfile?.image?.[0]} alt='' className='w-50 h-50 border-4 border-double border-black'></img></a>
-                                        </Fancybox>
-                                        :
-                                        ""
-                                }
-
-                                {
-                                    selectedUserProfile?.image?.[1] ?
-                                        <Fancybox>
-                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[1]} ><img src={selectedUserProfile?.image?.[1]} alt='' className='w-50 h-50 border-4 border-double border-black'></img></a>
-                                        </Fancybox>
-                                        :
-                                        ""
-                                }
-
-                                {
-                                    selectedUserProfile?.image?.[2] ?
-                                        <Fancybox>
-                                            <a data-fancybox="gallery" href={selectedUserProfile?.image?.[2]} ><img src={selectedUserProfile?.image?.[2]} alt='' className='w-50 h-50 border-4 border-double border-black'></img></a>
-                                        </Fancybox>
-                                        :
-                                        ""
-                                }
-
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 ml-10">
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Gender: </span>{selectedUserProfile.gender}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Relationship Goals: </span> {selectedUserProfile.relationshipGoals}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Life Style: </span> {selectedUserProfile.lifeStyle}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Passion: </span> {selectedUserProfile.passion}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Language: </span> {selectedUserProfile.language}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Job: </span> {selectedUserProfile.job}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Company: </span> {selectedUserProfile.company}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Education: </span> {selectedUserProfile.school}</h4>
-                                <h4 className="text-xl  pb-4"><span className='font-bold font-sans text-lg'>Place: </span> {selectedUserProfile.place}</h4>
-                            </div>
-                            <Button handleClick={handleClick} text="Click Me" />
-                        </div>
-                    </div>
-
-                )}
 
                 <div className='flex absolute bottom-5'>
                     <Pagination totalPosts={likedProfile.length} cardsPerPage={cardsPerPage} setCurrentPage={setCurrentPage} />

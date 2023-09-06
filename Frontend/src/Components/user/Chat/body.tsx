@@ -337,7 +337,7 @@ const Chat: FC = () => {
                                             onChange={handleInput}
                                             onKeyDown={handleKeyDown}
                                             value={input}
-                                            className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 text-white"
+                                            className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 text-pink-700"
                                         />
                                         <button
                                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
