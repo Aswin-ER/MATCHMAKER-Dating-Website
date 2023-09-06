@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '../../../api/axiosInstance';
 import Button from '../../common/button';
 import LoveIcon from '../../common/loveIcon';
-import Pagination from 'Components/common/pagination';
 import { useNavigate } from 'react-router-dom';
 
 interface UserProfile {
@@ -95,8 +94,14 @@ const Profile: FC = () => {
             })
         } else {
             axiosInstance.get('/getAllUserProfile').then((res) => {
-                // console.log(res.data, "log out profile")
-                setUserDet(res.data || []);
+                const filtered = res.data;
+                if (filtered.length > 3) {
+                    const firstThree = filtered.slice(0, 3);
+                    setUserDet(firstThree);
+                } else {
+                    setUserDet(filtered || []);
+
+                }
             })
         }
 
