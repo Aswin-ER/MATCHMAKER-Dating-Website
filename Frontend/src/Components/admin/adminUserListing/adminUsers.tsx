@@ -28,7 +28,6 @@ const AdminUsers: FC = () => {
 
 
     const handlePrevious = () => {
-        setUpdateUI((prev) => !prev);
         setPage((p: number) => {
             if (p === 1) return page;
             return p - 1;
@@ -36,7 +35,6 @@ const AdminUsers: FC = () => {
     }
 
     const handleNext = () => {
-        setUpdateUI((prev) => !prev);
         setPage((p: number) => {
             if (p === pageCount) return p;
             return p + 1;
