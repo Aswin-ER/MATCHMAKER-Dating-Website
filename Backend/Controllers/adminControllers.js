@@ -26,12 +26,21 @@ const adminControllers = {
         }
     },
 
-    getUsers: async (req, res) => {
-
+    getUsers: async (req, res) => {  
         try {
-            const users = await User.find();
-            // console.log(users, "admin users found");
-            res.status(200).send(users);
+            const itemsPerPage = 3;
+            const page = req.query.page || 1;
+            const skip = (page - 1 ) * itemsPerPage;
+
+            const user = await User.find({});
+            const count = user.length;
+            console.log(count,"count here")
+            
+            const users = await User.find({}).limit(itemsPerPage).skip(skip);
+            const pageCount = Math.ceil(count / itemsPerPage);
+            console.log(pageCount,"page count here")
+            // console.log(users,"users here")
+            res.status(200).send({ users: users, pagination: pageCount });
 
         } catch {
             res.status(500).send({ err: "No users found" });
@@ -123,12 +132,17 @@ const adminControllers = {
 
     adminPremium:async (req, res)=> {
         try{
+            const itemsPerPage = 3;
+            const page = req.query.page || 1;
+            const skip = (page - 1) * itemsPerPage;
+            
+            const admin = await premium.find({});
+            const count = admin.length;
 
-            const Adminpremium = await premium.find({}).populate('user').populate('payment_transaction');
+            const Adminpremium = await premium.find({}).populate('user').populate('payment_transaction').limit(itemsPerPage).skip(skip);
+            const pageCount = Math.ceil(count / itemsPerPage);
 
-            console.log(Adminpremium,"wohooooooo");
-
-            res.status(200).send(Adminpremium);
+            res.status(200).send({ Adminpremium: Adminpremium, pagination: pageCount });
 
 
         }catch(err){

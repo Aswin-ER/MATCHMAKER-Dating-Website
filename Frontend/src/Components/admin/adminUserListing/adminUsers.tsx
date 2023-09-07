@@ -1,37 +1,55 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { FC, useEffect, useState } from 'react'
 import { adminAxiosInstance } from '../../../api/axiosInstance';
 import { toast } from 'react-toastify';
 import { FaSearch } from 'react-icons/fa';
 
-// import { useNavigate } from 'react-router-dom';
-
 
 const AdminUsers: FC = () => {
 
 
     const [users, setUsers] = useState<any>([]);
+    const [update, setUpdateUI] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(1);
+    const [pageCount, setPageCount] = useState<number>(0);
     const [filteredUsers, setFilteredUsers] = useState<any>([]);
 
-
     useEffect(() => {
-        adminAxiosInstance.get('/admin/users').then((res) => {
-            console.log(res.data, "user details here");
-            setUsers(res.data);
+        adminAxiosInstance.get(`/admin/users?page=${page}`).then((res) => {
+            setPageCount(res.data?.pagination);
+            setUsers(res.data?.users);
+
         }).catch((err) => {
             console.log(err, "Error")
         })
 
-    }, [])
+    }, [update, page])
+
+
+    const handlePrevious = () => {
+        setUpdateUI((prev) => !prev);
+        setPage((p: number) => {
+            if (p === 1) return page;
+            return p - 1;
+        });
+    }
+
+    const handleNext = () => {
+        setUpdateUI((prev) => !prev);
+        setPage((p: number) => {
+            if (p === pageCount) return p;
+            return p + 1;
+        })
+    }
+
 
 
     const handleClick = (user: any) => {
 
         adminAxiosInstance.put('/admin/userBlock', user).then((res) => {
             toast.success(res.data.message);
-            setTimeout(() => {
-                window.location.href = '/users'
-            }, 2000)
+            setUpdateUI((prev) => !prev);
         })
     }
 
@@ -44,9 +62,8 @@ const AdminUsers: FC = () => {
     };
 
     const handleSearchClick = () => {
-        handleSearch(filteredUsers); // Replace searchQuery with your state name
+        handleSearch(filteredUsers); 
     };
-
 
     return (
         <>
@@ -65,7 +82,7 @@ const AdminUsers: FC = () => {
                         className="bg-pink-600 text-white p-2 rounded-md"
                         onClick={handleSearchClick}
                     >
-                        <FaSearch/>
+                        <FaSearch />
                     </button>
                 </div>
                 {
@@ -144,6 +161,14 @@ const AdminUsers: FC = () => {
                             </div>
                         </div>
                 }
+                <div className='flex justify-center pt-10'>
+                    <button className='bg-pink-700 p-1 mx-10' disabled={page === 1} onClick={handlePrevious} >
+                        Previous
+                    </button>
+                    <button className='bg-pink-700 p-1' disabled={page === pageCount} onClick={handleNext} >
+                        Next
+                    </button>
+                </div>
             </div>
         </>
     )

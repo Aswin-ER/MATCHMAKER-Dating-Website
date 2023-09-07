@@ -102,7 +102,7 @@ const Match: FC = () => {
                                         </div>
                                             <button className='bg-pink-800 text-white font-semibold text-lg w-full h-10 cursor-pointer hover:bg-pink-500' onClick={() => navigate('/chat')}>Click Here to Message...</button>
                                         </div>
-                                    ))};
+                                    ))}
                             </div>
                         </>
 
