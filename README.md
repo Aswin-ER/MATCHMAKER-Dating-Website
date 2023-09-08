@@ -6,7 +6,7 @@ MatchMaker Dating Website is a web application that combines a React frontend wi
 This project is deployed in a distributed manner:
 
 - *Frontend*: The frontend is hosted on Vercel and accessible at [makermatch.online](https://makermatch.online).
-- *Backend*: The backend is hosted on AWS EC2 and accessible at [api.onlyfriends.fun](https://api.makermatch.online).
+- *Backend*: The backend is hosted on AWS EC2 and accessible at [api.makermatch.online](https://api.makermatch.online).
 
 ## Features
 
