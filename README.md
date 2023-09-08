@@ -37,7 +37,7 @@ This project is deployed in a distributed manner:
   - NodeMailer
   - Cloudinary
   - Multer
-  - Mongosh 
+  - Mongoose
   - JSON Web Tokens (JWT) for authentication
   - Socket.IO for real-time communication
 
@@ -50,7 +50,7 @@ To run the project locally, follow these steps:
 1. Clone the repository:
 
    bash
-   git clone https://github.com/your-username/react-social-media.git
+   git clone https://github.com/Aswin-ER/MATCHMAKER-Dating-Website.git
    
 2. Change directory to client folder:
 
