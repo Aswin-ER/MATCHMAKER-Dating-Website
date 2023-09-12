@@ -24,7 +24,10 @@ const VerifyNumber:FC = () => {
         }else{
             axiosInstance.post('/sendOtp', { phoneNumber:phonenumber }).then((res)=> {
                 if(res.data.success){
-                    navigate(`/verifyOtp/${phonenumber}`);
+                    toast.success('OTP Send Successfully');
+                    setTimeout(() => {
+                        navigate(`/verifyOtp/${phonenumber}`);
+                    }, 3000);
                 }else{
                     toast.error(res.data.err)
                 }

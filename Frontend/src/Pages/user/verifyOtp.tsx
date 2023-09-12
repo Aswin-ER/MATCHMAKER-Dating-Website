@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { axiosInstance } from 'api/axiosInstance';
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 
 const VerifyOtp: FC = () => {
-
-    const navigate = useNavigate();
 
     const { phonenumber } = useParams();
 
