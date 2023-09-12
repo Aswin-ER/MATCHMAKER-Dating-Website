@@ -46,7 +46,7 @@ const userController = {
       const newUser = await userModel.create({
         name,
         email,
-        phoneNumber,
+        phoneNumber: phoneNumber,
         password: hashedPassword,
         status: true,
       });
