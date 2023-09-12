@@ -11,18 +11,33 @@ import crypto from 'crypto';
 import payment from '../Model/payment.js';
 import premium from '../Model/premium.js';
 import chat from '../Model/chat.js';
+import twilio from 'twilio';
+import dotenv from 'dotenv';
+dotenv.config();
+
+
+// Twilio-configuration
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client =  twilio(accountSid, authToken);
 
 
 const userController = {
 
   signup: async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, phoneNumber, password } = req.body;
 
     try {
 
       const existingUser = await userModel.findOne({ email });
+      const phoneNumberExists = await userModel.findOne({ phoneNumber });
+      // console.log(phoneNumberExists,"exists");
       if (existingUser) {
         return res.send({ err: 'User already exists' });
+      }
+
+      if (phoneNumberExists){
+        return res.send({ err: 'Phone number already exists'});
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -31,6 +46,7 @@ const userController = {
       const newUser = await userModel.create({
         name,
         email,
+        phoneNumber,
         password: hashedPassword,
         status: true,
       });
@@ -75,6 +91,41 @@ const userController = {
     }
   },
 
+  sendOtp:async (req, res)=> {
+    const phone = req.body;
+    console.log("reached here", phone.phoneNumber)
+    const user = await userModel.findOne({ phoneNumber: phone.phoneNumber });
+    if(user){
+      client.verify.v2.services("VA7ef1b38c123d6d8de4e63d54b6e2b4e6")
+        .verifications.create({ to: "+91" + phone.phoneNumber, channel: "sms" }).then(() => {
+          // req.session.userDetailes = req.body;
+          // res.render("users/otpVerify", { user: true, phone });
+          res.status(200).send({ success: true, phone: phone.phoneNumber });
+        }).catch((err) => console.log(err));
+    }else{
+      res.send({ err: 'Phone number not found' });
+    }
+  },
+
+  verifyOtp:(req, res)=> {
+    const { otp, phonenumber } = req.body;
+    const phone = parseInt(phonenumber);
+    console.log(phone,"parsed phonenumber")
+
+    client.verify.v2.services("VA7ef1b38c123d6d8de4e63d54b6e2b4e6")
+      .verificationChecks.create({ to: "+91" + phone, code: otp })
+      .then(async(verification_check) => {
+        if(verification_check.status === "approved"){
+          const user = await userModel.findOne({ phoneNumber: phone })
+          console.log(user,"verified");
+          let token;
+          token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+          res.status(200).send({ success: true, token: token });
+        }else{
+          res.send({err: "Invalid OTP"})
+        }
+      })
+  },
 
   getUser: async (req, res) => {
     // console.log("working....", req.body.userId);
@@ -215,7 +266,6 @@ const userController = {
       // console.log(userDet,"userDet")
       res.status(200).json(userDet);
     } catch (error) {
-      // If there's an error while fetching user profiles, handle it here.
       console.error('Error fetching user profiles:', error);
       res.status(500).json({ error: 'Failed to fetch user profiles.' });
     }
@@ -291,7 +341,7 @@ const userController = {
 
             // console.log(createdChat, "chat created");
 
-            res.status(200).send({ match: "Congratulations, it's a match!🎉", likeProfileArray });
+            res.status(200).send({ match: "Congratulations, it's a match!🎉❤️", likeProfileArray });
 
           } else {
             console.log("no match")
@@ -329,7 +379,6 @@ const userController = {
             }
 
           }
-
 
         } else {
 
@@ -454,7 +503,6 @@ const userController = {
   },
 
   getMatchedUserProfiles: async (req, res) => {
-
     try {
       const userId = new mongoose.Types.ObjectId(req.body.userId);
       const matchedUsers = await User.find({ matches: userId });
@@ -463,9 +511,7 @@ const userController = {
       res.status(200).send(matchedUserProfiles);
 
     } catch (err) {
-
       console.log(err, "error here");
-
     }
   },
 

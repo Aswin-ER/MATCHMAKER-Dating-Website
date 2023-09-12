@@ -26,6 +26,7 @@
     "nodemailer": "^6.9.3",
     "razorpay": "^2.9.1",
     "socket.io": "^4.7.2",
+    "twilio": "^4.17.0",
     "uninstall": "^0.0.0"
   },
   "devDependencies": {

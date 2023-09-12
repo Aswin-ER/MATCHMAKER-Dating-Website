@@ -53,16 +53,13 @@ io.on('connection', (socket) => {
   console.log("User connected to socket.io");
 
   socket.on('setup', (userData) => {
-    // Validate and sanitize userData before using it
     // console.log(userData,"userdata");
-
-    const roomName = userData; // For example, assume userData is the room name
+    const roomName = userData;
     socket.join(roomName);
   });
 
 
   socket.on('join chat', (room) => {
-    // Validate and sanitize room name before joining
     if (socket.room) {
       socket.disconnect(socket.room);
       console.log("disconnect room", socket.room);

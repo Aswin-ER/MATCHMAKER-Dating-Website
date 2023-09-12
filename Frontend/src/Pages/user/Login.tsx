@@ -27,8 +27,8 @@ const Login: FC = () => {
     password: Yup.string().required('Password is required'),
   });
 
-  const handleClick = () => {
 
+  const handleClick = () => {
     validationSchema.validate({ email, password }, { abortEarly: false }).then(() => {
 
       axiosInstance.post('/login', { email: email, password: password }).then((res) => {
@@ -66,7 +66,9 @@ const Login: FC = () => {
     })
   }
 
-
+  const handleOtp = () => {
+    navigate('/verifyNumber');
+  }
 
   return (
 
@@ -112,6 +114,12 @@ const Login: FC = () => {
               </button>
               <p className='lg:text-lg font-semibold text-center py-3 dark:text-black'>OR</p>
 
+              <button type='button' onClick={handleOtp} className="w-full lg:px-1 py-2 mobile:text-sm text-lg lg:text-sm font-medium text-white transition-colors duration-200 transform bg-pink-700 rounded-lg hover:bg-pink-600 focus:outline-none focus:bg-pink-600">
+                Login With OTP
+              </button>
+              <p className='lg:text-lg font-semibold text-center py-3 dark:text-black'>OR</p>
+
+
               <div className='flex w-full justify-center items-center'>
                 <GoogleLogin
                   onSuccess={credentialResponse => {
@@ -122,9 +130,9 @@ const Login: FC = () => {
                         setTimeout(() => {
                           window.location.href = '/'
                         }, 2000)
-                      } else if(res.data.message) {
+                      } else if (res.data.message) {
                         toast.error(res.data.message)
-                      }else{
+                      } else {
                         navigate('/signUp');
                       }
 

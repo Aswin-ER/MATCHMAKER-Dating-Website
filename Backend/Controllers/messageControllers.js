@@ -46,16 +46,6 @@ const messageControllers = {
 
     allMessage: async (req, res) => {
         try {
-            // console.log(req.params.id, "chatId");
-            // const ids = req.params.id.split(',');
-
-            // Now you have an array of IDs
-            // console.log(ids, "chatId");
-            // let length = ids.length;
-            // console.log(length, "chatId");
-
-            // let message = [];
-            // for (let i = 0; i < ids.length; i++) {
             const message = await Message.find({ chat: req.params.id }).populate('sender', 'name email')
                 .populate('chat').populate('userProfile', 'image')
             // }

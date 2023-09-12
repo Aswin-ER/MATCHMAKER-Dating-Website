@@ -5,11 +5,12 @@ WORKDIR src/app
 COPY package*.json ./
 
 RUN npm install -g serve
+
 RUN npm ci
+
 COPY . .
 
 RUN npm run build
-
 
 EXPOSE 3000
 

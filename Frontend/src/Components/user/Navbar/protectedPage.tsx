@@ -37,6 +37,7 @@ const ProtectedPage: FC = () => {
         console.log('No user found');
 
       }
+      
     })
   }
 

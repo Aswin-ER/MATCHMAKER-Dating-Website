@@ -16,6 +16,8 @@ const router = express.Router();
 // Login and signup
 router.post('/signup', userControllers.signup);
 router.post('/login', userControllers.login);
+router.post('/sendOtp', userControllers.sendOtp);
+router.post('/verifyOtp', userControllers.verifyOtp);
 
 // HomePage
 router.get('/', userAuth, userControllers.getUser);
@@ -205,7 +207,6 @@ router.put('/getFilteredUsers', userAuth, userControllers.getFilteredUsers);
 
 // Matched Profiles 
 router.get('/getMatchedUserProfiles', userAuth, userControllers.getMatchedUserProfiles);
-router.get('/getMatchedUserProfilesChat', userAuth, chatControllers.getMatchedUserProfiles);
 
 
 router.get('/profile', userAuth, userControllers.profile);

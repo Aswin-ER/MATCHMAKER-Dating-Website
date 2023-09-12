@@ -20,6 +20,8 @@ import Plans from 'Pages/user/Plans';
 import ProfileDet from 'Pages/user/profileDet';
 import AdminPremium from 'Pages/admin/adminPremium';
 import NotFoundTitle from 'Components/common/error';
+import VerifyNumber from 'Pages/user/verifyNumber';
+import VerifyOtp from 'Pages/user/verifyOtp';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
     <Route path='/' element={<Home/>}></Route>
     <Route path='/signUp' element={<SignUp/>}></Route>
     <Route path='/login' element={<Login/>}></Route>
+    <Route path='/verifyNumber' element={<VerifyNumber/>}></Route>
+    <Route path='/verifyOtp/:phonenumber' element={<VerifyOtp/>}></Route>
     <Route path='/forgot' element={<Forgot/>}></Route>
     <Route path="/password-reset/:userId/:token" Component={NewPass} />
 
