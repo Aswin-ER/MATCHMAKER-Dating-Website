@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { FC, useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance } from '../../../api/axiosInstance';
 import { UserCred, userDet } from '../../../Redux/slice';
@@ -14,6 +14,7 @@ import { AiFillStar } from 'react-icons/ai'
 const ProtectedPage: FC = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [image, setImages] = useState<string>('');
@@ -48,6 +49,8 @@ const ProtectedPage: FC = () => {
     if (localStorage.getItem('jwtToken')) {
       // console.log(localStorage.getItem('jwtToken'));
       validateToken();
+    }else{
+      navigate('/login')
     }
   }, []);
 
